@@ -7,7 +7,7 @@ interface IconButtonProps {
 
 export default function IconButton({ iconClass, action }: IconButtonProps) {
     return (
-        <button type="button" className="text-3xl" onClick={action}>
+        <button type="button" className={`flex-row ${iconClass}`} onClick={action}>
             <i className={iconClass}></i>
         </button>
     );
