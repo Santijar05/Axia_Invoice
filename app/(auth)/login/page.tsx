@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import ScreenLogin from "@/modules/auth/ScreenLogin"
+import ScreenLogin from "@/modules/auth/login/ScreenLogin"
 
 export const metadata: Metadata = {
   title: "Login for pets",
@@ -11,6 +11,10 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
 
-  return <ScreenLogin />
+  return(
+    <div className="flex justify-center items-center">
+      <ScreenLogin />
+    </div>
+  );
 
 }
