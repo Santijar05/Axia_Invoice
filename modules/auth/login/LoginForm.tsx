@@ -3,9 +3,9 @@
 import React, { useState }  from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginScheme } from "../../schemes/loginScheme";
-import Input from "../atoms/Input";
-import CustomButton from "../atoms/CustomButton";
+import { loginScheme } from "../../../schemes/loginScheme";
+import Input from "../../../components/atoms/Input";
+import CustomButton from "../../../components/atoms/CustomButton";
 
 type LoginFormData = {
   email: string;
@@ -30,7 +30,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <form
-      className="w-full flex flex-col items-center p-6"
+      className="w-full items-center p-6 mt-10"
       onSubmit={handleSubmit}
     >
       <Input
