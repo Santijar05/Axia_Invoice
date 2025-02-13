@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState }  from "react";
+import Link from "next/link";
+import Input from "../atoms/Input";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import CustomButton from "../atoms/CustomButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginScheme } from "../../schemes/loginScheme";
-import Input from "../atoms/Input";
-import CustomButton from "../atoms/CustomButton";
+import { AppleIcon, GoogleIcon } from "../atoms/icons";
 
 type RegisterFormData = {
   name: string;
@@ -72,11 +74,39 @@ const RegisterForm: React.FC = () => {
       {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
       <CustomButton 
-        text='Registrarse'
-        color='bg-danger'
+        text='Create account'
+        color='bg-secondary'
+        wsize='w-1/2'
         onClickButton={() => {}}
         typeButton='submit'
       />
+
+      <div className="justify-center pt-7 flex flex-row gap-2">
+        <p className="text-white text-center">Joined us before?</p>
+        <Link href="/login" className="text-tertiary">
+          Login
+        </Link>
+      </div>
+
+      <div className="flex flex-row space-x-5 mt-2">
+        <CustomButton 
+          text='Google'
+          icon={GoogleIcon}
+          color='bg-secondary'
+          wsize='w-11/12'
+          onClickButton={() => {}}
+          typeButton='submit'
+        />
+
+        <CustomButton 
+          text='Apple'
+          icon={AppleIcon}
+          color='bg-secondary'
+          wsize='w-11/12'
+          onClickButton={() => {}}
+          typeButton='submit'
+        />
+      </div>
     </form>
   );
 };

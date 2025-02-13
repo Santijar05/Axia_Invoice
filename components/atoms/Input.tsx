@@ -19,7 +19,7 @@ export default function Input({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="w-80 flex items-center border border-gray-300 rounded px-4 py-2 mb-2">
+    <div className="w-1/2 flex items-center border border-gray-300 rounded px-4 py-2 mb-2">
       {IconComponent && <IconComponent className="text-gray-500 mr-2" />}
       
       <input
@@ -37,9 +37,9 @@ export default function Input({
           className="text-gray-500 ml-2"
         >
           {showPassword ? (
-								<PasswordNoVisibleIcon color='black' />
+								<PasswordNoVisibleIcon color='white' />
 							) : (
-								<PasswordVisibleIcon color='black' />
+								<PasswordVisibleIcon color='white' />
 					)}
         </button>
       )}
