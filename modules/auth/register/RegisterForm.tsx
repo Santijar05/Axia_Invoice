@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import Input from "../atoms/Input";
+import Input from "../../../components/atoms/Input";
 import React from "react";
 import { useForm } from "react-hook-form";
-import CustomButton from "../atoms/CustomButton";
+import CustomButton from "../../../components/atoms/CustomButton";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginScheme } from "../../schemes/loginScheme";
-import { AppleIcon, GoogleIcon } from "../atoms/icons";
+import { loginScheme } from "../../../schemes/loginScheme";
+import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
 import { registerUser } from "@/lib/api_services";
 
 type RegisterFormData = {
