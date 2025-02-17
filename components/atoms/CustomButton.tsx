@@ -30,3 +30,17 @@ export default function CustomButton({
     </button>
   );
 }
+<<<<<<< HEAD
+  
+export default function CustomButton({ text, color, onClickButton, typeButton }: CustomButtonProps) {
+    return (
+        <button     
+            className={"bg-blueP p-2 rounded text-center my-2 text-white font-bold w-full"}
+            type={`${typeButton || 'button'}`}
+        > 
+            { text }
+        </button>
+    )
+}
+=======
+>>>>>>> bead380d7d192809122f60ec546937d80d19652e
