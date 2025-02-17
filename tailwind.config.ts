@@ -10,7 +10,18 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        blueP: "#395BA5"
+        primary: "#215a6d",
+        blueP: "#395BA5",
+        secondary: {
+          DEFAULT: '#2d2d29',
+          100: '#ff901',
+          200: '#18D99B'
+        },
+        tertiary:{
+          DEFAULT: '#3ca2a2',
+          100: '#92c7a3',
+          200: '#0009DB'
+        }
       },
     },
   },

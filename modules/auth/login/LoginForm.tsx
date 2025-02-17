@@ -3,9 +3,9 @@
 import React, { useState }  from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginScheme } from "../../schemes/loginScheme";
-import Input from "../atoms/Input";
-import CustomButton from "../atoms/CustomButton";
+import { loginScheme } from "../../../schemes/loginScheme";
+import Input from "../../../components/atoms/Input";
+import CustomButton from "../../../components/atoms/CustomButton";
 import Image from 'next/image';
 
 type LoginFormData = {
@@ -31,7 +31,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <form
-      className="w-full flex flex-col items-center p-6"
+      className="w-full items-center p-6 mt-10"
       onSubmit={handleSubmit}
     >
       <div className="mb-4 w-full">
@@ -56,6 +56,7 @@ const LoginForm: React.FC = () => {
       <div className="mb-4 w-full">
         <CustomButton 
           text='ENTER THE SYSTEM'
+          wsize='10px'
           color='bg-danger'
           onClickButton={() => {}}
           typeButton='submit'
