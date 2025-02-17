@@ -1,14 +1,15 @@
 "use client";
 
-import Link from "next/link";
-import Input from "../../../components/atoms/Input";
 import React from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
-import CustomButton from "../../../components/atoms/CustomButton";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginScheme } from "../../../schemes/loginScheme";
-import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
+
 import { registerUser } from "@/lib/api_services";
+import Input from "../../../components/atoms/Input";
+import { registerScheme } from "@/schemes/registerScheme";
+import CustomButton from "../../../components/atoms/CustomButton";
+import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
 
 type RegisterFormData = {
   name: string;
@@ -23,7 +24,7 @@ const RegisterForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>({
-    resolver: zodResolver(loginScheme),
+    resolver: zodResolver(registerScheme),
   });
 
   const onSubmit = async (data: RegisterFormData) => {

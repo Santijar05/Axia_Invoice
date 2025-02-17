@@ -1,6 +1,7 @@
 import React from "react";
-import LoginForm from "./LoginForm";
 import Image from "next/image";
+
+import LoginForm from "./LoginForm";
 
 const LoginBox: React.FC = () => {
     return (

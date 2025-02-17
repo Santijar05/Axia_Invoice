@@ -1,5 +1,6 @@
 import React from "react";
-import RegisterBox from "@/components/organisms/RegisterBox";
+
+import RegisterBox from "./RegisterBox";
 
 const ScreenRegister: React.FC = () => {
   return (
