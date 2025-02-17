@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import Input from "../atoms/Input";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import CustomButton from "../atoms/CustomButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginScheme } from "../../schemes/loginScheme";
 import { AppleIcon, GoogleIcon } from "../atoms/icons";
+import { registerUser } from "@/lib/api_services";
 
 type RegisterFormData = {
   name: string;
@@ -18,58 +19,66 @@ type RegisterFormData = {
 
 const RegisterForm: React.FC = () => {
   const {
+    register,
+    handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(loginScheme),
   });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [name, setName] = useState("");
+  const onSubmit = async (data: RegisterFormData) => {
+    console.log("Submitting form with data:", data);
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Name:", name);
-    console.log("Phone number:", phone);
+    try {
+      const response = await registerUser({
+        email: data.email,
+        name: data.name,
+        password: data.password,
+        phone: data.phone,
+      });
+
+      if (response.success) {
+        console.log("Register successful:", response);
+      } else {
+        console.error("Register failed:", response.message);
+        alert(`Register failed: ${response.message}`);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      alert("An unexpected error occurred. Please try again.");
+    }
   };
 
   return (
     <form
       className="w-full flex flex-col items-center p-6"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         placeholder="Name"
         type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        {...register("name")}
       />
       {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
 
       <Input
         placeholder="Phone number"
         type="number"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
+        {...register("phone")} 
       />
       {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
 
       <Input
         placeholder="Email"
         type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        {...register("email")} 
       />
       {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
       <Input
         placeholder="Password"
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        {...register("password")}  
       />
       {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
@@ -95,7 +104,7 @@ const RegisterForm: React.FC = () => {
           color='bg-secondary'
           wsize='w-11/12'
           onClickButton={() => {}}
-          typeButton='submit'
+          typeButton='button'
         />
 
         <CustomButton 
@@ -104,7 +113,7 @@ const RegisterForm: React.FC = () => {
           color='bg-secondary'
           wsize='w-11/12'
           onClickButton={() => {}}
-          typeButton='submit'
+          typeButton='button'
         />
       </div>
     </form>

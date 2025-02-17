@@ -4,7 +4,7 @@ import { PasswordNoVisibleIcon, PasswordVisibleIcon } from "./icons";
 type InputProps = {
   placeholder: string;
   type?: string;
-  value: string;
+  value?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   icon?: React.ElementType;
 };
