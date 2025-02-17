@@ -38,54 +38,67 @@ const RegisterForm: React.FC = () => {
 
   return (
     <form
-      className="w-full flex flex-col items-center p-6"
+      className="w-full items-center p-6 mt-10"
       onSubmit={handleSubmit}
     >
-      <Input
-        placeholder="Name"
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+      <div className="mb-4 w-full">
+        <Input
+          placeholder="Name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+      </div>
 
-      <Input
-        placeholder="Phone number"
-        type="number"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-      />
+      <div className="mb-4 w-full">
+        <Input
+          placeholder="Phone number"
+          type="number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
       {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
+      </div>
 
-      <Input
-        placeholder="Email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <div className="mb-4 w-full">
+        <Input
+          placeholder="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
       {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-
-      <Input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <div className="mb-4 w-full">
+        <Input
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
       {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
-      <CustomButton 
+      <CustomButton
         text='Create account'
         color='bg-secondary'
-        wsize='w-1/2'
+        wsize='w-full'
         onClickButton={() => {}}
         typeButton='submit'
       />
 
       <div className="justify-center pt-7 flex flex-row gap-2">
-        <p className="text-white text-center">Joined us before?</p>
-        <Link href="/login" className="text-tertiary">
+        <p className="text-center">Joined us before?</p>
+        <Link href="/login" className="text-tertiary text-secondary">
           Login
         </Link>
+      </div>
+
+      <div className="relative flex items-center w-full my-4">
+        <span className="flex-grow border-t border-gray-300"></span>
+        <span className="px-2 text-gray-500 text-sm">or continue with</span>
+        <span className="flex-grow border-t border-gray-300"></span>
       </div>
 
       <div className="flex flex-row space-x-5 mt-2">

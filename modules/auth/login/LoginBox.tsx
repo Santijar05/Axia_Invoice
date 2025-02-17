@@ -1,5 +1,5 @@
 import React from "react";
-import LoginForm from "./LoginForm";
+import LoginForm from "../../../components/molecules/LoginForm";
 import Image from "next/image";
 
 const LoginBox: React.FC = () => {

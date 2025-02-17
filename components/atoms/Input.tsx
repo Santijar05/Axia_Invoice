@@ -19,7 +19,7 @@ export default function Input({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="w-1/2 flex items-center border border-gray-300 rounded px-4 py-2 mb-2">
+    <div className="w-full flex items-center border border-gray-300 rounded px-4 py-2 mb-2">
       {IconComponent && <IconComponent className="text-gray-500 mr-2" />}
       
       <input

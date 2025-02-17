@@ -3,10 +3,10 @@
 import React, { useState }  from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginScheme } from "../../../schemes/loginScheme";
-import Input from "../../../components/atoms/Input";
-import CustomButton from "../../../components/atoms/CustomButton";
-import Image from 'next/image';
+import { loginScheme } from "../../schemes/loginScheme";
+import Input from "../atoms/Input";
+import CustomButton from "../atoms/CustomButton";
+import { AppleIcon, GoogleIcon } from "../atoms/icons";
 
 type LoginFormData = {
   email: string;
@@ -54,17 +54,17 @@ const LoginForm: React.FC = () => {
       {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
       <div className="mb-4 w-full">
-        <CustomButton 
-          text='ENTER THE SYSTEM'
-          wsize='10px'
-          color='bg-danger'
+        <CustomButton
+          text='Create account'
+          color='bg-secondary'
+          wsize='w-full'
           onClickButton={() => {}}
           typeButton='submit'
         />
       </div>
 
-      <div className="flex justify-between w-full text-sm text-blueP mt-2">
-        <a href="#">Create account</a>
+      <div className="flex justify-between w-full text-sm text-secondary mt-2">
+        <a href="/register">Create account</a>
         <a href="#">Forgot password?</a>
       </div>
 
@@ -74,14 +74,24 @@ const LoginForm: React.FC = () => {
         <span className="flex-grow border-t border-gray-300"></span>
       </div>
 
-      <div className="btn-wrapper text-center">
-        <button className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center hover:font-bold text-xs ease-linear transition-all duration-150" type="button">
-          <Image width={50} height={50} alt="..." className="w-5 mr-1" src="https://demos.creative-tim.com/notus-js/assets/img/github.svg" /> Github
-        </button>
-        <button className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center hover:font-bold text-xs ease-linear transition-all duration-150" type="button" >
-          <Image width={50} height={50} alt="..." className="w-5 mr-1" src="/Images/logoapple.com.png" /> Apple
-        </button>
-
+      <div className="flex flex-row space-x-5 mt-2">
+        <CustomButton 
+          text='Google'
+          icon={GoogleIcon}
+          color='bg-secondary'
+          wsize='w-11/12'
+          onClickButton={() => {}}
+          typeButton='submit'
+        />
+      
+        <CustomButton 
+          text='Apple'
+          icon={AppleIcon}
+          color='bg-secondary'
+          wsize='w-11/12'
+          onClickButton={() => {}}
+          typeButton='submit'
+        />
       </div>
     </form>
   );

@@ -1,9 +1,9 @@
 import { Metadata } from "next"
-import ScreenLogin from "@/modules/auth/login/ScreenLogin"
+import ScreenLogin from "@/modules/auth/ScreenLogin"
 
 export const metadata: Metadata = {
-  title: "Login for pets",
-  description: "Login to your account to access your pets",
+  title: "Login",
+  description: "Login to your account to access your Axia",
   alternates: {
     canonical: 'https://mydomain.com/login'
   }
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
 
   return(
-    <div className="flex justify-center items-center">
+    <div className="w-full">
       <ScreenLogin />
     </div>
   );
