@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginScheme } from "../../../schemes/loginScheme";
 import Input from "../../../components/atoms/Input";
 import CustomButton from "../../../components/atoms/CustomButton";
+import { loginUser } from "@/lib/api_services";
 
 type LoginFormData = {
   email: string;
@@ -14,42 +15,62 @@ type LoginFormData = {
 
 const LoginForm: React.FC = () => {
   const {
+    register,
+    handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginScheme),
   });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const onSubmit = async (data: LoginFormData) => {
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const response = await loginUser(data);
+
+      if (!response.success) {
+        setErrorMessage(response.message);
+        return;
+      }
+
+      console.log("Inicio de sesión exitoso:", response);
+      
+      // Redirigir al dashboard
+      window.location.href = "/dashboard";
+    } catch (error) {
+      console.log(error)
+      setErrorMessage("Error de conexión. Inténtalo nuevamente.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form
       className="w-full items-center p-6 mt-10"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        {...register("email")}
       />
       {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
       <Input
         placeholder="Password"
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        {...register("password")}
       />
       {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
+      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+      
       <CustomButton 
-        text='ENTER THE SYSTEM'
+        text={loading ? "Loading..." : "ENTER THE SYSTEM"}
         color='bg-danger'
         onClickButton={() => {}}
         typeButton='submit'

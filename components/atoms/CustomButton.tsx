@@ -2,7 +2,7 @@ import React from "react";
 
 interface CustomButtonProps {
   text: string;
-  wsize: string;
+  wsize?: string;
   color: string;
   typeButton?: "button" | "submit";
   onClickButton: () => void;
