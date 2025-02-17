@@ -7,8 +7,8 @@ interface CustomButtonProps {
   
 export default function CustomButton({ text, color, onClickButton, typeButton }: CustomButtonProps) {
     return (
-        <button 
-            className={"bg-blue-500 p-2 rounded text-center my-2 text-white font-bold w-full"}
+        <button     
+            className={"bg-blueP p-2 rounded text-center my-2 text-white font-bold w-full"}
             type={`${typeButton || 'button'}`}
         > 
             { text }
