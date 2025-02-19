@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import ScreenLogin from "@/modules/auth/ScreenLogin"
+import ScreenLogin from "@/modules/auth/login/ScreenLogin"
 
 export const metadata: Metadata = {
   title: "Login",
