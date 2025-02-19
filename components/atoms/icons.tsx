@@ -1,7 +1,10 @@
-import { AiOutlineLogin } from "react-icons/ai";
+
 import { FaUser } from "react-icons/fa"; 
-import { FiMail, FiEye, FiEyeOff } from "react-icons/fi"; 
 import { BsLock } from "react-icons/bs"; 
+import { FaApple } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
+import { AiOutlineLogin } from "react-icons/ai";
+import { FiMail, FiEye, FiEyeOff } from "react-icons/fi"; 
 
 export const LoginIcon: React.FC<{ color: string }> = ({ color }) => (
 	<AiOutlineLogin size={24} color={color} />
@@ -26,3 +29,8 @@ export const PasswordVisibleIcon: React.FC<{ color: string }> = ({ color }) => (
 export const PasswordNoVisibleIcon: React.FC<{ color: string }> = ({ color }) => (
 	<FiEyeOff size={18} color={color} />
 );
+
+export const AppleIcon = () => <FaApple size={25} color="white" />;
+
+export const GoogleIcon = () => <FaGoogle size={25} color="white" />;
+
