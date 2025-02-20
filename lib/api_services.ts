@@ -1,14 +1,15 @@
 import {
     ApiError,
     ApiResponse,
-    UserData,
+	UserDataLogin,
+	UserDataRegister,
 } from "../types/Api";
 
 const url = "virtual-pro-y.win";
 console.log("Hola23", `https://${url}/api/v1/users/me`);
 
 export const registerUser = async (
-    userData: UserData
+    userData: UserDataRegister
 ): Promise<ApiResponse> => {
 	console.log("yo", JSON.stringify(userData));
 
@@ -46,7 +47,7 @@ export const registerUser = async (
     }
 };
 
-export const loginUser = async (userData: UserData): Promise<ApiResponse> => {
+export const loginUser = async (userData: UserDataLogin): Promise<ApiResponse> => {
 	try {
 		const response = await fetch(`https://${url}/api/v1/users/login`, {
 			method: "POST",

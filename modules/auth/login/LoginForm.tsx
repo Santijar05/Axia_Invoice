@@ -1,16 +1,14 @@
 "use client";
+
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginScheme } from "../../../schemes/loginScheme"; // Ajusta la ruta según la ubicación real
-import Input from "../../../components/atoms/Input";
-import CustomButton from "../../../components/atoms/CustomButton";
-<<<<<<< HEAD
-import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
-=======
+import { useForm } from "react-hook-form";
+
 import { loginUser } from "@/lib/api_services";
-import Image from 'next/image';
->>>>>>> ff81fabccc58d53e9ff9f78fc7a5a0026df76916
+import Input from "../../../components/atoms/Input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginScheme } from "../../../schemes/loginScheme"; 
+import CustomButton from "../../../components/atoms/CustomButton";
+import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
 
 type LoginFormData = {
   email: string;
@@ -26,33 +24,6 @@ const LoginForm: React.FC = () => {
     resolver: zodResolver(loginScheme),
   });
 
-<<<<<<< HEAD
-  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    console.log(data);
-  };
-
-  return (
-    <>
-      <form className="w-full flex flex-col items-center p-6" onSubmit={handleSubmit(onSubmit)}>
-        <Input placeholder="Email" {...register("email")} />
-        {errors.email && (
-          <p className="text-red-500 text-sm">{errors.email.message}</p>
-        )}
-
-        <Input placeholder="Password" type="password" {...register("password")} />
-        {errors.password && (
-          <p className="text-red-500 text-sm">{errors.password.message}</p>
-        )}
-
-        <CustomButton
-          text="ENTER THE SYSTEM"
-          color="bg-secondary"
-          wsize="w-full"
-          typeButton="submit"
-          onClickButton={() => {}}
-        />
-      </form>
-=======
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -102,11 +73,11 @@ const LoginForm: React.FC = () => {
       
       <CustomButton 
         text={loading ? "Loading..." : "ENTER THE SYSTEM"}
-        color='bg-danger'
+        color='bg-secondary'
+        wsize="w-full"
         onClickButton={() => {}}
         typeButton='submit'
       />
->>>>>>> ff81fabccc58d53e9ff9f78fc7a5a0026df76916
 
       <div className="flex justify-between w-full text-sm text-blueP mt-2">
         <a href="#">Create account</a>
@@ -138,7 +109,7 @@ const LoginForm: React.FC = () => {
           typeButton="button"
         />
       </div>
-    </>
+    </form> 
   );
 };
 

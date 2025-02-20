@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image';
 
 import RegisterBox from "./RegisterBox";
 
@@ -19,11 +20,12 @@ const ScreenRegister: React.FC = () => {
         }}
       >
         <div className="absolute top-4 right-4 w-12 sm:w-16 md:w-20">
-          <img 
+          <Image 
             src="/Images/logo_blanco.png" 
             alt="Logo" 
-            className=""
-            style={{width:'20%', marginLeft: '82%'}} 
+            width={80} 
+            height={80} 
+            className="w-full"
           />
         </div>
       </div>

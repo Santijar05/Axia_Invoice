@@ -1,4 +1,9 @@
-export interface UserData {
+export interface UserDataLogin {
+    email: string;
+    password: string;
+}
+
+export interface UserDataRegister {
     name: string;
     email: string;
     phone: string;
@@ -8,7 +13,7 @@ export interface UserData {
 export interface ApiResponse {
     success: boolean;
     message: string;
-    user?: UserData; 
+    user?: UserDataRegister; 
     token?: string;
     errors?: ErrorInterface [];
 }
