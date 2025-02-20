@@ -7,7 +7,7 @@ import { loginUser } from "@/lib/api_services";
 import Input from "../../../components/atoms/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginScheme } from "../../../schemes/loginScheme"; 
-import CustomButton from "../../../components/atoms/CustomButton";
+import CustomButton from "../../../components/molecules/CustomButton";
 import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
 
 type LoginFormData = {

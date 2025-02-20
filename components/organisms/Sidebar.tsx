@@ -1,19 +1,31 @@
-import React from 'react';
-import MenuItem from '../molecules/MenuItem';
+import React from "react";
+import { User, FileText, Lock, Home, Bell, BarChart } from "lucide-react";
+import Link from "next/link";
 
-interface SidebarProps {
-    asideOpen: boolean;
-}
-
-export default function Sidebar({ asideOpen }: SidebarProps) {
-    if (!asideOpen) return null;
-    return (
-        <aside className="flex w-72 flex-col space-y-2 border-r-2 border-gray-200 bg-white p-2" style={{ height: '90.5vh' }}>
-            <MenuItem iconClass="bx bx-home" label="Dashboard" />
-            <MenuItem iconClass="bx bx-cart" label="Cart" />
-            <MenuItem iconClass="bx bx-shopping-bag" label="Shopping" />
-            <MenuItem iconClass="bx bx-heart" label="My Favourite" />
-            <MenuItem iconClass="bx bx-user" label="Profile" />
-        </aside>
-    );
+export default function Sidebar({ isOpen }: { isOpen: boolean }) {
+  return (
+    <aside
+      className={`bg-white border-r min-h-[calc(100vh-64px)] flex flex-col py-4 gap-6 transition-all duration-300 ${
+        isOpen ? "w-56 px-4" : "w-16 items-center"
+      }`}
+    >
+      {[
+        { icon: User, label: "Profile" },
+        { icon: FileText, label: "Documents" },
+        { icon: Home, label: "Home" },
+        { icon: Lock, label: "Security" },
+        { icon: Bell, label: "Notifications" },
+        { icon: BarChart, label: "Analytics" },
+      ].map(({ icon: Icon, label }, index) => (
+        <Link
+          key={index}
+          href="#"
+          className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50 transition-all"
+        >
+          <Icon className="h-5 w-5 text-gray-600" />
+          {isOpen && <span className="text-gray-600">{label}</span>}
+        </Link>
+      ))}
+    </aside>
+  );
 }
