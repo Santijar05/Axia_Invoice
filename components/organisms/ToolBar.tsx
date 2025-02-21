@@ -3,13 +3,15 @@ import { CirclePlus, Printer} from "lucide-react";
 
 import SearchBar from "../molecules/SearchBar";
 import CustomButton from "../molecules/CustomButton";
-import CustomModal from "./CustomModal";
+import CustomModal from "@/components/organisms/CustomModal";
 
 interface ToolbarProps {
     title: string, 
+    formComponent: React.ReactNode,
+    formTitle: string,
 }
 
-export default function Toolbar({title}: ToolbarProps) {
+export default function Toolbar({title, formComponent, formTitle}: ToolbarProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
@@ -40,7 +42,9 @@ export default function Toolbar({title}: ToolbarProps) {
                 </div>
             </div>
 
-            <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={formTitle}>
+                {formComponent} 
+            </CustomModal>
         </div>
     );
 }
