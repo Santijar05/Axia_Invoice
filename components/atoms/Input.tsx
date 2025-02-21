@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from "react";
-import { PasswordNoVisibleIcon, PasswordVisibleIcon } from "./icons";
+import { Eye, EyeOff } from "lucide-react";
 
 type InputProps = {
   placeholder: string;
@@ -30,9 +30,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             className="text-gray-500 ml-2"
           >
             {showPassword ? (
-              <PasswordNoVisibleIcon color="white" />
+              <Eye color="black" size={25}/>
             ) : (
-              <PasswordVisibleIcon color="white" />
+              <EyeOff color="black" size={20}/>
             )}
           </button>
         )}

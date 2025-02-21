@@ -1,6 +1,6 @@
 import React from "react";
-import { User, FileText, Lock, Home, Bell, BarChart } from "lucide-react";
 import Link from "next/link";
+import { User, FileText, Lock, Home, Bell, BarChart } from "lucide-react";
 
 export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   return (

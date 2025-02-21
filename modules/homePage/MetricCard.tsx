@@ -1,4 +1,4 @@
-import Card from "@/components/molecules/Card"
+import Card from "@/components/atoms/Card"
 
 export default function MetricCards() {
   const metrics = [
