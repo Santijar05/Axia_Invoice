@@ -73,8 +73,7 @@ const LoginForm: React.FC = () => {
       
       <CustomButton 
         text={loading ? "Loading..." : "ENTER THE SYSTEM"}
-        color='bg-secondary'
-        wsize="w-full"
+        style="w-full text-white bg-secondary"
         onClickButton={() => {}}
         typeButton='submit'
       />
@@ -94,8 +93,7 @@ const LoginForm: React.FC = () => {
         <CustomButton
           text="Google"
           icon={GoogleIcon}
-          color="bg-secondary"
-          wsize="w-11/12"
+          style="w-11/12 text-white bg-secondary"
           onClickButton={() => {}}
           typeButton="button"
         />
@@ -103,8 +101,7 @@ const LoginForm: React.FC = () => {
         <CustomButton
           text="Apple"
           icon={AppleIcon}
-          color="bg-secondary"
-          wsize="w-11/12"
+          style="w-11/12 text-white bg-secondary"
           onClickButton={() => {}}
           typeButton="button"
         />

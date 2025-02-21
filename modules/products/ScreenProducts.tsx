@@ -13,7 +13,6 @@ export default function ScreenProducts() {
                 barInternal: "Test",
                 product: "Test",
                 brand: "Test",
-                presentation: "Test",
                 sMin: "Test",
                 stock: "Test",
                 pPurchase: "Test",
@@ -24,10 +23,12 @@ export default function ScreenProducts() {
 
   return (
     <HomeBox>
-        <Toolbar/>
+        <Toolbar
+            title="Products"
+        />
         <CustomTable 
             title= "" 
-            headers= {["Bar/Internal", "Product", "Brand", "Presentation", "S. Min", "Stock", "P. Purchase", "Price"]}
+            headers= {["Bar/Internal", "Product", "Brand", "S. Min", "Stock", "P. Purchase", "Price"]}
             options={true} 
             products={products}
         />

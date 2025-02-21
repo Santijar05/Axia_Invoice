@@ -5,10 +5,11 @@ type InputProps = {
   placeholder: string;
   type?: string;
   icon?: React.ElementType;
+  disable?: boolean; 
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ placeholder, type = "text", icon: IconComponent, ...rest }, ref) => {
+  ({ placeholder, type, icon: IconComponent, disable = false, ...rest }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
@@ -17,9 +18,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         
         <input
           ref={ref}
-          type={type === "password" && !showPassword ? "password" : "text"}
+          type={type === "password" && !showPassword ? "password" : type}
           placeholder={placeholder}
-          className="flex-1 outline-none text-black bg-transparent"
+          className={`flex-1 outline-none bg-transparent text-black ${
+            disable ? "input-disable text-gray-500" : ""
+          }`}
+          disabled={disable}
           {...rest}
         />
 

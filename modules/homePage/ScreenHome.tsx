@@ -16,7 +16,6 @@ export default function DashboardPage() {
         distributor: "Test",
         product: "Test",
         brand: "Test",
-        presentation: "Test",
         batch: "Test",
         stock: "Test",
         price: "Test",
@@ -29,7 +28,7 @@ export default function DashboardPage() {
       <MetricCards />
       <CustomTable 
         title= "Lastest products" 
-        headers= {["Bar/Internal", "Product", "Brand", "Presentation", "S. Min", "Stock", "Price"]}
+        headers= {["Bar/Internal", "Product", "Brand", "S. Min", "Stock", "Price"]}
         options={false} 
         products={products} 
       />

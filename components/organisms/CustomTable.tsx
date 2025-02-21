@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import {FilePenLine, Eye, QrCode } from "lucide-react";
+import {FilePenLine, Eye, QrCode, Menu } from "lucide-react";
 
-import DropdownMenu from "../molecules/DropdownMenu";
+import Dropdown from "../molecules/Dropdown";
 
 interface CustomTableProps {
   title: string;
@@ -13,6 +13,10 @@ interface CustomTableProps {
 export default function CustomTable({ title, headers, options, products }: CustomTableProps) {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
+  const handleToggle = (index: number) => {
+    setOpenDropdown(openDropdown === index ? null : index);
+  };
+  
   const dropdownOptions = [
     { text: "Edit", icon: <FilePenLine size={20}/> },
     { text: "Bar code", icon: <QrCode size={20} /> },
@@ -46,10 +50,12 @@ export default function CustomTable({ title, headers, options, products }: Custo
 
                 {options && (
                   <td className="p-3 text-black relative">
-                    <DropdownMenu
-                      options={dropdownOptions}
-                      isOpen={openDropdown === index}
-                      onToggle={() => setOpenDropdown(openDropdown === index ? null : index)}
+                    <Dropdown
+                      icon={<Menu color="black" size={25} />}
+                      options={dropdownOptions} 
+                      useIconButton={true}
+                      isOpen={openDropdown === index} 
+                      onToggle={() => handleToggle(index)}
                     />
                   </td>
                 )}
