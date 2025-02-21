@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Menu } from "lucide-react";
 import SearchBar from "@/components/molecules/SearchBar";
 import Sidebar from "@/components/organisms/Sidebar";
+import Footer from "@/components/organisms/Footer";
 
 export default function HomeBox({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -26,6 +27,8 @@ export default function HomeBox({ children }: { children: React.ReactNode }) {
         <Sidebar isOpen={isSidebarOpen} />
         <main className="flex-1 p-6">{children}</main>
       </div>
+
+      <Footer/>
     </div>
   );
 }

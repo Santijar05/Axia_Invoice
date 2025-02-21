@@ -13,20 +13,20 @@ export default function CustomTable() {
 
   return (
     <div className="bg-white rounded-lg shadow-sm mb-8">
-      <h2 className="text-lg font-semibold p-4 border-b">Latest products</h2>
+      <h2 className="text-2xl font-semibold p-4 border-b text-black">Latest products</h2>
       
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
 
           <thead className="bg-gray-100 border-b">
             <tr>
-              <th className="p-3 text-left">Distributor</th>
-              <th className="p-3 text-left">Product</th>
-              <th className="p-3 text-left">Brand</th>
-              <th className="p-3 text-left">Presentation</th>
-              <th className="p-3 text-left">Batch</th>
-              <th className="p-3 text-left">Stock</th>
-              <th className="p-3 text-left">Price</th>
+              <th className="p-3 text-left text-medium text-black">Distributor</th>
+              <th className="p-3 text-left text-medium text-black">Product</th>
+              <th className="p-3 text-left text-medium text-black">Brand</th>
+              <th className="p-3 text-left text-medium text-black">Presentation</th>
+              <th className="p-3 text-left text-medium text-black">Batch</th>
+              <th className="p-3 text-left text-medium text-black">Stock</th>
+              <th className="p-3 text-left text-medium text-black">Price</th>
             </tr>
           </thead>
 
@@ -34,13 +34,13 @@ export default function CustomTable() {
           <tbody>
             {products.map((product, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="p-3">{product.distributor}</td>
-                <td className="p-3">{product.product}</td>
-                <td className="p-3">{product.brand}</td>
-                <td className="p-3">{product.presentation}</td>
-                <td className="p-3">{product.batch}</td>
-                <td className="p-3 bg-blue-400 text-white">{product.stock}</td>
-                <td className="p-3">{product.price}</td>
+                <td className="p-3 text-black">{product.distributor}</td>
+                <td className="p-3 text-black">{product.product}</td>
+                <td className="p-3  text-black">{product.brand}</td>
+                <td className="p-3  text-black">{product.presentation}</td>
+                <td className="p-3  text-black">{product.batch}</td>
+                <td className="p-3 bg-blue-400  text-black">{product.stock}</td>
+                <td className="p-3  text-black">{product.price}</td>
               </tr>
             ))}
           </tbody>
