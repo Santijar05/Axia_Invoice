@@ -2,13 +2,12 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-
-import { loginUser } from "@/lib/api_services";
 import Input from "../../../components/atoms/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginScheme } from "../../../schemes/loginScheme"; 
 import CustomButton from "../../../components/molecules/CustomButton";
 import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
+import { loginUser } from "@/request/access";
 
 type LoginFormData = {
   email: string;
@@ -34,15 +33,9 @@ const LoginForm: React.FC = () => {
     try {
       const response = await loginUser(data);
 
-      if (!response.success) {
-        setErrorMessage(response.message);
-        return;
-      }
-
       console.log("Inicio de sesión exitoso:", response);
       
-      // Redirigir al dashboard
-      window.location.href = "/dashboard";
+      window.location.href = "/";
     } catch (error) {
       console.log(error)
       setErrorMessage("Error de conexión. Inténtalo nuevamente.");
