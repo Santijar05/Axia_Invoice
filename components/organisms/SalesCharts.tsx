@@ -22,29 +22,26 @@ export default function SalesCharts() {
 
   const lineOptions: ChartOptions<"line"> = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: "bottom",
-      },
+      legend: { position: "bottom" },
       title: {
         display: true,
-        text: "COMPARISON OF SALES AND PURCHASES FOR THE YEAR 2025",
       },
     },
     scales: {
-      y: {
-        type: "linear",
-        grid: {
-          display: true, // Asegura que la cuadrícula se muestre
-          drawOnChartArea: false, // Esto es válido en Chart.js v3+
-          drawTicks: false,
-        },
-      },
       x: {
         type: "category",
+        ticks: { autoSkip: false }, // Asegura que se muestren todas las etiquetas
+        grid: { display: false }, // Desactiva la cuadrícula en el eje X
+      },
+      y: {
+        type: "linear",
+        beginAtZero: true,
+        grid: { drawOnChartArea: false, drawTicks: false },
       },
     },
-  };  
+  }  
   
   const lineData = {
     labels: months,
@@ -94,20 +91,23 @@ export default function SalesCharts() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div className="bg-white p-4 rounded-lg shadow-sm">
+    <div className="w-full flex flex-col gap-8">
+      <div className="bg-white p-10 pb-14 rounded-lg shadow-sm w-full h-[400px]">
+        <h3 className="text-sm font-medium mb-4 text-center text-black">COMPARISON OF SALES AND PURCHASES FOR THE YEAR 2025</h3>
         <Line options={lineOptions} data={lineData} />
       </div>
+
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white p-4 rounded-lg shadow-sm">
-          <h3 className="text-sm font-medium mb-4 text-center">SALES FOR THE YEAR 2025</h3>
+        <div className="bg-white p-16 rounded-lg shadow-sm">
+          <h3 className="text-sm font-medium mb-4 text-center text-black">SALES FOR THE YEAR 2025</h3>
           <Bar options={barOptions} data={salesData} />
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm">
-          <h3 className="text-sm font-medium mb-4 text-center">PURCHASES FOR THE YEAR 2025</h3>
+        <div className="bg-white p-16 rounded-lg shadow-sm">
+          <h3 className="text-sm font-medium mb-4 text-center text-black">PURCHASES FOR THE YEAR 2025</h3>
           <Bar options={barOptions} data={purchasesData} />
         </div>
       </div>
+
     </div>
   )
 }

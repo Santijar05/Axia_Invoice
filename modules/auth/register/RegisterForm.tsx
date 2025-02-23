@@ -6,10 +6,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { registerUser } from "@/lib/api_services";
+import Input from "../../../components/atoms/Input";
 import { registerScheme } from "@/schemes/registerScheme";
 import CustomButton from "../../../components/molecules/CustomButton";
 import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
-import Input from "../../../components/atoms/Input";
 
 type RegisterFormData = {
   name: string;
@@ -89,8 +89,7 @@ const RegisterForm: React.FC = () => {
 
       <CustomButton
         text="Create account"
-        color="bg-secondary"
-        wsize="w-full"
+        style="w-full text-white bg-secondary"
         onClickButton={() => {}}
         typeButton="submit"
       />
@@ -106,8 +105,7 @@ const RegisterForm: React.FC = () => {
         <CustomButton
           text="Google"
           icon={GoogleIcon}
-          color="bg-secondary"
-          wsize="w-11/12"
+          style="w-11/12 text-white bg-secondary"
           onClickButton={() => {}}
           typeButton="button"
         />
@@ -115,8 +113,7 @@ const RegisterForm: React.FC = () => {
         <CustomButton
           text="Apple"
           icon={AppleIcon}
-          color="bg-secondary"
-          wsize="w-11/12"
+          style="w-11/12 text-white bg-secondary"
           onClickButton={() => {}}
           typeButton="button"
         />
