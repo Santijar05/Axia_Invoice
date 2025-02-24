@@ -5,6 +5,7 @@ import { Menu } from "lucide-react";
 
 import Sidebar from "@/components/organisms/Sidebar";
 import Footer from "@/components/molecules/Footer";
+import SearchBar from "../molecules/SearchBar";
 
 export default function HomeBox({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -21,7 +22,7 @@ export default function HomeBox({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="flex items-center gap-4">
-          {/*<SearchBar />*/}
+          <SearchBar />
         </div>
       </header>
 

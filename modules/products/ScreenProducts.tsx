@@ -14,7 +14,6 @@ export default function ScreenProducts() {
                 barInternal: "Test",
                 product: "Test",
                 brand: "Test",
-                sMin: "Test",
                 stock: "Test",
                 pPurchase: "Test",
                 price: "Test",
@@ -31,7 +30,7 @@ export default function ScreenProducts() {
         />
         <CustomTable 
             title= "" 
-            headers= {["Bar/Internal", "Product", "Brand", "S. Min", "Stock", "P. Purchase", "Price"]}
+            headers= {["Bar/Internal", "Product", "Brand", "Stock", "P. Purchase", "Price"]}
             options={true} 
             products={products}
         />
