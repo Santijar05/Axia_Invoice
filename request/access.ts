@@ -2,7 +2,7 @@ import { UserDataLogin } from "@/types/Api";
 import { UserDataRegister } from "@/types/Api";
 
 export const loginUser = async (body: UserDataLogin): Promise<Response> => {
-  const url = '';
+  const url = 'http://localhost:3001/api/v1/users/login';
 
   const headersOptions = {
     method: 'POST',
@@ -18,7 +18,7 @@ export const loginUser = async (body: UserDataLogin): Promise<Response> => {
 };
 
 export const registerUser = async (body: UserDataRegister): Promise<Response> => {
-  const url = '';
+  const url = 'http://localhost:3001';
 
   const headersOptions = {
     method: 'POST',
