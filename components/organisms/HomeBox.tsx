@@ -5,24 +5,27 @@ import { Menu } from "lucide-react";
 
 import Sidebar from "@/components/organisms/Sidebar";
 import Footer from "@/components/molecules/Footer";
-import SearchBar from "../molecules/SearchBar";
+import CustomButton from "../atoms/CustomButton";
 
 export default function HomeBox({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-[#1e3c8b] text-white p-4 flex items-center justify-between">
-        
+      <header className="bg-tertiary text-white flex items-center justify-between">
+      
         <div className="flex items-center gap-2">
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-            <Menu className="h-6 w-6 cursor-pointer" />
-          </button>
+          <CustomButton
+            onClickButton={() => setIsSidebarOpen(!isSidebarOpen)}
+            icon={() => <Menu/>}
+            text=""
+            iconColor="h-6 w-6 cursor-pointer"
+          />
           <span className="font-bold text-lg">AXIA</span>
         </div>
 
         <div className="flex items-center gap-4">
-          <SearchBar />
+          {/*<SearchBar />*/}
         </div>
       </header>
 

@@ -4,7 +4,7 @@ export default function Boxlayout({
     children: React.ReactNode;
 }){
     return (
-        <main className="h-[100dvh] flex justify-center items-center bg-white">
+        <main className="h-[100dvh] flex justify-center items-center bg-black">
             { children }
         </main>
     );

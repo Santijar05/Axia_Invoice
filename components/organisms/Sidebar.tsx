@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
-  User, FileText, Home, Truck, ShoppingCart, ChevronDown, ChevronUp, HandCoins 
+  User, Home, Truck, ShoppingCart, ChevronDown, ChevronUp, HandCoins, ArchiveRestore
 } from "lucide-react";
 
 export default function Sidebar({ isOpen }: { isOpen: boolean }) {
@@ -27,7 +27,15 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
         { label: "Manage Cash", href: "/box/manage-cash" },
       ],
     },
-    { icon: FileText, label: "Products", href: "/products" },
+    { 
+      icon: ArchiveRestore, 
+      label: "Store",
+      subOptions: [
+        { label: "Brands", href: "/store/brands" },
+        { label: "Categories", href: "/store/categories" },
+        { label: "Products", href: "/store/products" },
+      ],
+    },
     { 
       icon: Truck, 
       label: "Sales",

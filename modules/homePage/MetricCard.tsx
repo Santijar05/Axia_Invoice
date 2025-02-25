@@ -8,7 +8,7 @@ export default function MetricCards() {
     { title: "SERVICE", description: "78,458", color: "bg-[#1e3c8b]" },
     { title: "SUPPLIERS", description: "245", color: "bg-[#1e3c8b]" },
     { title: "CUSTOMERS", description: "1,589", color: "bg-blue-400" },
-    { title: "MOST WELL KNOWN IN 30 DAYS", description: "15,789", color: "bg-[#1e3c8b]" },
+    { title: "BEST KNOWN IN 30 DAYS", description: "15,789", color: "bg-[#1e3c8b]" },
     { title: "PENDING ORDERS", description: "458", color: "bg-blue-400" },
   ];
 

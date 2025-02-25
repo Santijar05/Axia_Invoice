@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import Input from "../../../components/atoms/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginScheme } from "../../../schemes/loginScheme"; 
-import CustomButton from "../../../components/molecules/CustomButton";
+import CustomButton from "../../../components/atoms/CustomButton";
 import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
 import { loginUser } from "@/request/access";
 
