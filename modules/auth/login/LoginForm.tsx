@@ -8,6 +8,8 @@ import { loginScheme } from "../../../schemes/loginScheme";
 import CustomButton from "../../../components/atoms/CustomButton";
 import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
 import { loginUser } from "@/request/access";
+import Cookies from "js-cookie"; 
+import { useRouter } from "next/navigation"; 
 
 type LoginFormData = {
   email: string;
@@ -25,6 +27,7 @@ const LoginForm: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
@@ -33,9 +36,14 @@ const LoginForm: React.FC = () => {
     try {
       const response = await loginUser(data);
 
-      console.log("Inicio de sesión exitoso:", response);
+      if (response.status === 200) {
+        const data = await response.json();
+        const token = data.token;
+        Cookies.set("authToken", token )
+
+        router.push("/");
+      }
       
-      window.location.href = "/";
     } catch (error) {
       console.log(error)
       setErrorMessage("Error de conexión. Inténtalo nuevamente.");
@@ -45,61 +53,63 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form
-      className="w-full items-center p-6 mt-10"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <Input
-        placeholder="Email"
-        {...register("email")}
-      />
-      {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-
-      <Input
-        placeholder="Password"
-        type="password"
-        {...register("password")}
-      />
-      {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-
-      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
-      
-      <CustomButton 
-        text={loading ? "Loading..." : "ENTER THE SYSTEM"}
-        style="w-full text-white bg-secondary"
-        onClickButton={() => {}}
-        typeButton='submit'
-      />
-
-      <div className="flex justify-between w-full text-sm text-blueP mt-2">
-        <a href="#">Create account</a>
-        <a href="#">Forgot password?</a>
-      </div>
-
-      <div className="relative flex items-center w-full my-4">
-        <span className="flex-grow border-t border-gray-300"></span>
-        <span className="px-2 text-gray-500 text-sm">or continue with</span>
-        <span className="flex-grow border-t border-gray-300"></span>
-      </div>
-
-      <div className="flex flex-row space-x-5 mt-2">
-        <CustomButton
-          text="Google"
-          icon={GoogleIcon}
-          style="w-11/12 text-white bg-secondary"
-          onClickButton={() => {}}
-          typeButton="button"
+    <>
+      <form
+        className="w-full items-center p-6 mt-10"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Input
+          placeholder="Email"
+          {...register("email")}
         />
+        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
-        <CustomButton
-          text="Apple"
-          icon={AppleIcon}
-          style="w-11/12 text-white bg-secondary"
-          onClickButton={() => {}}
-          typeButton="button"
+        <Input
+          placeholder="Password"
+          type="password"
+          {...register("password")}
         />
-      </div>
-    </form> 
+        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+
+        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+        
+        <CustomButton 
+          text={loading ? "Loading..." : "ENTER THE SYSTEM"}
+          style="w-full text-white bg-secondary"
+          onClickButton={() => {}}
+          typeButton='submit'
+        />
+      </form> 
+
+        <div className="flex justify-between w-full text-sm text-blueP mt-2">
+          <a href="#">Create account</a>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <div className="relative flex items-center w-full my-4">
+          <span className="flex-grow border-t border-gray-300"></span>
+          <span className="px-2 text-gray-500 text-sm">or continue with</span>
+          <span className="flex-grow border-t border-gray-300"></span>
+        </div>
+
+        <div className="flex flex-row space-x-5 mt-2">
+          <CustomButton
+            text="Google"
+            icon={GoogleIcon}
+            style="w-11/12 text-white bg-secondary"
+            onClickButton={() => {}}
+            typeButton="button"
+          />
+
+          <CustomButton
+            text="Apple"
+            icon={AppleIcon}
+            style="w-11/12 text-white bg-secondary"
+            onClickButton={() => {}}
+            typeButton="button"
+          />
+        </div>
+      </>
   );
 };
 
