@@ -15,15 +15,6 @@ export const registerScheme = z.object({
 			.email({message: "Please enter a valid email"})
 			.max(40),
 
-	phone: z.string()
-			.nonempty({ message: "Phone is required" })
-			.max(10, {message: "Phone number 10 numbers"})
-			.min(10, {message: "Phone number 10 numbers"})
-			.refine(
-				(value) => /^[0-9]+$/.test(value ?? ""),
-				{ message: "Phone only numbers" }
-			  ),
-
 	password: z.string()
 				.nonempty({ message: "Password is required" })
 				.min(8, {message: "Password must be at least 8 characters long"})
