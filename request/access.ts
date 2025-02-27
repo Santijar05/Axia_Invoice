@@ -18,7 +18,8 @@ export const loginUser = async (body: UserDataLogin): Promise<Response> => {
 };
 
 export const registerUser = async (body: UserDataRegister): Promise<Response> => {
-  const url = 'http://localhost:3001';
+  console.log("registerUser function called with:", body);
+  const url = 'http://localhost:3001/api/v1/users/new-user';
 
   const headersOptions = {
     method: 'POST',
@@ -28,7 +29,12 @@ export const registerUser = async (body: UserDataRegister): Promise<Response> =>
     },
   };
 
-  const response = await fetch(url, headersOptions);
-
-  return response;
+  try {
+    const response = await fetch(url, headersOptions);
+    console.log("Response received:", response.status);
+    return response;
+  } catch (error) {
+    console.error("Error in registerUser:", error);
+    throw error;
+  }
 };
