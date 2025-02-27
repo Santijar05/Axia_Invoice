@@ -35,11 +35,12 @@ const LoginForm: React.FC = () => {
     setLoading(true);
     setErrorMessage("");
 
-    try {
+    try {                
       const response = await loginUser(data);
 
       if (response.status === 200) {
         const responseData = await response.json();
+        console.log(response.json());
         const token = responseData.token;
         const userRole = responseData.user?.role;
 
