@@ -61,7 +61,7 @@ export default function ContentHero() {
               Generate high-quality content in an instant with the power of AI. 
               Delivering precision, creativity, and consistency to elevate your brand effortlessly.
             </p>
-            <button className="bg-homePrimary hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105" >
+            <button className="bg-homePrimary hover:bg-primary text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105" >
               Get Started Now
             </button>
           </div>
