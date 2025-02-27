@@ -1,16 +1,17 @@
 "use client";
 
+import Link from 'next/link';
+import Cookies from "js-cookie"; 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation"; 
+
+import { loginUser } from "@/request/access";
 import Input from "../../../components/atoms/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginScheme } from "../../../schemes/loginScheme"; 
 import CustomButton from "../../../components/atoms/CustomButton";
 import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
-import { loginUser } from "@/request/access";
-import Cookies from "js-cookie"; 
-import { useRouter } from "next/navigation"; 
-import Link from 'next/link';
 
 type LoginFormData = {
   email: string;
@@ -80,11 +81,12 @@ const LoginForm: React.FC = () => {
           <CustomButton 
             text={loading ? "Loading..." : "ENTER THE SYSTEM"}
             style="w-full text-white bg-secondary"
-            onClickButton={() => {}}
+            onClickButton={() => router.replace("/employee")}
             typeButton='submit'
           />
         </div>
       </form> 
+
       <div className="w-full items-center pl-3 pr-3">
         <div className="flex justify-between w-full text-sm text-secondary mt-2">
           <Link rel="stylesheet" href="/register"><p>Create account</p></Link>

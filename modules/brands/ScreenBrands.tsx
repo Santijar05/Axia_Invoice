@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react'
 
 import CustomTable from '@/components/organisms/CustomTable';
-import HomeBox from '@/components/organisms/HomeBox';
 import Toolbar from '@/components/organisms/ToolBar';
 import BrandForm from './BrandForm';
 
@@ -21,7 +20,7 @@ export default function ScreenBrands() {
     }, []);
   
     return (
-        <HomeBox>
+        <>
             <Toolbar
                 title="Poduct Brands"
                 formComponent={<BrandForm/>}
@@ -33,7 +32,7 @@ export default function ScreenBrands() {
                 options={true} 
                 products={products}
             />
-        </HomeBox>
+        </>
     )
   
 }

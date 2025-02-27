@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { registerUser } from "@/lib/api_services";
@@ -20,6 +21,8 @@ type RegisterFormData = {
 };
 
 const RegisterForm: React.FC = () => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -101,11 +104,12 @@ const RegisterForm: React.FC = () => {
         <CustomButton
           text="Create account"
           style="w-full text-white bg-secondary"
-          onClickButton={() => {}}
+          onClickButton={() => router.replace("/admin")}
           typeButton="submit"
         />
       </div>
     </form>
+
     <div className="w-full items-center pl-3 pr-3">
       <div className="justify-center pt-7 flex flex-row gap-2">
         <p className="text-sm text-center">Joined us before?</p>

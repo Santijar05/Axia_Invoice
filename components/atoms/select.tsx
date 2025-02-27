@@ -19,11 +19,13 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           <option value="" disabled>
             Selecciona una opción
           </option>
+
           {options.map((option) => (
             <option key={option.value} value={option.value} className="text-black">
               {option.label}
             </option>
           ))}
+          
         </select>
       </div>
     );

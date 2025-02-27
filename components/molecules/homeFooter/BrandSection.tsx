@@ -14,9 +14,11 @@ export const BrandSection: React.FC = () => {
                     height={40}
                 />
             </div>
+
             <p className="text-sm text-gray-400">
                 Innovando la gestión empresarial: tu aliado <br></br> en facturación, inventario y análisis de datos.
             </p>
+            
             <div className="mt-4 flex space-x-4">
                 {/* Iconos de redes sociales */}
                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">

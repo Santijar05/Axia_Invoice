@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 
 import CustomTable from "@/components/organisms/CustomTable"
-import HomeBox from "../../components/organisms/HomeBox"
 import Toolbar from "@/components/organisms/ToolBar";
 import ProductForm from "./ProductForm";
 
@@ -31,7 +30,7 @@ export default function ScreenProducts() {
     }, []);
 
   return (
-    <HomeBox>
+    <div>
         <Toolbar
             title="Products"
             formComponent={<ProductForm/>}
@@ -43,6 +42,6 @@ export default function ScreenProducts() {
             options={true} 
             products={products}
         />
-    </HomeBox>
+    </div>
   )
 }
