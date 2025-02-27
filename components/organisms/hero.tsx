@@ -11,7 +11,7 @@
     }, []);
 
     return (
-        <section className="relative w-full h-screen text-white flex flex-col justify-center items-center">
+        <section className="relative w-full h-screen text-white flex flex-col justify-center items-center mt--10">
         <Image 
             src="/Images/fondoHerooo.png" 
             alt="Background Image" 

@@ -1,7 +1,6 @@
 export default function MisionVision() {
     return (
       <section className="relative overflow-hidden bg-black py-20 flex flex-col items-center justify-center mt-20">
-        {/* Fondo con gradiente radial y desenfoque */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/30 via-black/90 to-black opacity-95 blur-[100px]" />
   
         <div className="z-10 max-w-4xl px-4 mb-8 text-center mb-20">
