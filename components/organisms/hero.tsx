@@ -1,6 +1,7 @@
     'use client';
     import { useEffect, useState } from "react";
     import Image from "next/image";
+    import Link from "next/link";
 
     const Hero = () => {
     const [isMounted, setIsMounted] = useState(false);
@@ -35,9 +36,11 @@
             <div className={`mt-6 space-x-4 transition-opacity duration-1000 ease-in-out delay-500 ${
             isMounted ? 'opacity-100' : 'opacity-0'
             }`}>
-            <button className="bg-homePrimary px-6 py-2 rounded-lg text-white font-semibold">
-                Empezar
-            </button>
+            <Link href={"/register"}> 
+                <button className="bg-homePrimary px-6 py-2 rounded-lg text-white font-semibold">
+                    Empezar
+                </button>
+            </Link>
             <button className="border border-homePrimary px-6 py-2 rounded-lg text-homePrimary font-semibold">
                 Learn More
             </button>

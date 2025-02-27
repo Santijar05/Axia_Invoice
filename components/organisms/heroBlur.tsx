@@ -43,7 +43,7 @@ export default function HeroBlur() {
       }, []);
     
       useEffect(() => {
-        const threshold = isMobile ? 0.3 : 0.5; 
+        const threshold = isMobile ? 0.3 : 0.4; 
     
         const observer = new IntersectionObserver(
           ([entry]) => {
