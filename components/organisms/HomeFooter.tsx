@@ -10,8 +10,8 @@ export default function HomeFooter({style}: HomeFooterProps) {
     const quickLinks = [
         { href: "/", label: "Home" },
         { href: "/services", label: "Services" },
-        { href: "/blog", label: "Blog" },
-        { href: "/contact", label: "Contact" },
+        { href: "/aboutus", label: "Sobre Nosotros" },
+        { href: "/contactus", label: "Contact" },
     ]
 
     const copyrightLinks = [

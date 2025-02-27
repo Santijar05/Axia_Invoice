@@ -39,11 +39,20 @@ const LoginForm: React.FC = () => {
       const response = await loginUser(data);
 
       if (response.status === 200) {
-        const data = await response.json();
-        const token = data.token;
-        Cookies.set("authToken", token )
+        const responseData = await response.json();
+        const token = responseData.token;
+        const userRole = responseData.user?.role;
 
-        router.push("/");
+        Cookies.set("authToken", token )
+        Cookies.set("userRole", userRole)
+
+        if (userRole === "ADMIN") {
+          router.push("/admin");
+        } else if (userRole === "USER") {
+          router.push("/employee");
+        } else {
+          router.push("");
+        }
       }
       
     } catch (error) {
