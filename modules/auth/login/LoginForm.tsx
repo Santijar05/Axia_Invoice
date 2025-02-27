@@ -10,6 +10,7 @@ import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
 import { loginUser } from "@/request/access";
 import Cookies from "js-cookie"; 
 import { useRouter } from "next/navigation"; 
+import Link from 'next/link';
 
 type LoginFormData = {
   email: string;
@@ -55,34 +56,38 @@ const LoginForm: React.FC = () => {
   return (
     <>
       <form
-        className="w-full items-center p-6 mt-10"
+        className="w-full items-center pl-3 pr-3 mt-12"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Input
-          placeholder="Email"
-          {...register("email")}
-        />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        <div className="w-full mb-3">
+          <Input
+            placeholder="Email"
+            {...register("email")}
+          />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        </div>
 
-        <Input
-          placeholder="Password"
-          type="password"
-          {...register("password")}
-        />
-        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+        <div className="w-full mb-7">
+          <Input
+            placeholder="Password"
+            type="password"
+            {...register("password")}
+          />
+          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+        </div>
 
-        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
-        
-        <CustomButton 
-          text={loading ? "Loading..." : "ENTER THE SYSTEM"}
-          style="w-full text-white bg-secondary"
-          onClickButton={() => {}}
-          typeButton='submit'
-        />
+        <div className="w-full">
+          <CustomButton 
+            text={loading ? "Loading..." : "ENTER THE SYSTEM"}
+            style="w-full text-white bg-secondary"
+            onClickButton={() => {}}
+            typeButton='submit'
+          />
+        </div>
       </form> 
-
-        <div className="flex justify-between w-full text-sm text-blueP mt-2">
-          <a href="#">Create account</a>
+      <div className="w-full items-center pl-3 pr-3">
+        <div className="flex justify-between w-full text-sm text-secondary mt-2">
+          <Link rel="stylesheet" href="/register"><p>Create account</p></Link>
           <a href="#">Forgot password?</a>
         </div>
 
@@ -109,7 +114,8 @@ const LoginForm: React.FC = () => {
             typeButton="button"
           />
         </div>
-      </>
+      </div>
+    </>
   );
 };
 
