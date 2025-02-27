@@ -1,7 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { ClipboardPenLine } from 'lucide-react';
 import React from "react";
-import CustomButton from "../molecules/CustomButton";
+import CustomButton from "../atoms/CustomButton";
 
 interface CustomModalProps {
     isOpen: boolean;
@@ -25,9 +25,10 @@ export default function CustomModal({ isOpen, onClose, title, children }: Custom
                         </div>
 
                         {children}
+
                         <div className="col-span-2 flex justify-end gap-2 mt-4">
-                            <CustomButton text="Cerrar" style="border text-gray-500 bg-white hover:bg-gray-300" typeButton="button" onClickButton={onClose} />
-                            <CustomButton text="Guardar" style="border bg-white text-gray-500 hover:bg-gray-300" typeButton="submit" onClickButton={onClose} />
+                            <CustomButton text="Close" style="border text-gray-500 bg-white hover:bg-gray-300" typeButton="button" onClickButton={onClose} />
+                            <CustomButton text="Keep" style="border bg-white text-gray-500 hover:bg-gray-300" typeButton="submit" onClickButton={onClose} />
                         </div>
                     </div>
 

@@ -5,7 +5,6 @@ import { useEffect, useState } from "react"
 import MetricCards from "@/modules/homePage/MetricCard"
 import HomeBox from "../../components/organisms/HomeBox"
 import CustomTable from "@/components/organisms/CustomTable"
-import SalesCharts from "@/components/organisms/SalesCharts"
 
 export default function DashboardPage() {
   const [products, setProducts] = useState<{ [key: string]: string }[]>([]);
@@ -16,7 +15,6 @@ export default function DashboardPage() {
         distributor: "Test",
         product: "Test",
         brand: "Test",
-        batch: "Test",
         stock: "Test",
         price: "Test",
       })
@@ -26,13 +24,14 @@ export default function DashboardPage() {
   return (
     <HomeBox>
       <MetricCards />
-      <CustomTable 
-        title= "Lastest products" 
-        headers= {["Bar/Internal", "Product", "Brand", "S. Min", "Stock", "Price"]}
-        options={false} 
-        products={products} 
-      />
-      <SalesCharts />
+      <div className="pt-10">
+        <CustomTable 
+          title= "Lastest products" 
+          headers= {["Bar/Internal", "Product", "Brand", "Stock", "Price"]}
+          options={false} 
+          products={products} 
+        />
+      </div>
     </HomeBox>
   )
 }

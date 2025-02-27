@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CirclePlus, Printer} from "lucide-react";
 
 import SearchBar from "../molecules/SearchBar";
-import CustomButton from "../molecules/CustomButton";
+import CustomButton from "../atoms/CustomButton";
 import CustomModal from "@/components/organisms/CustomModal";
 
 interface ToolbarProps {
@@ -22,7 +22,7 @@ export default function Toolbar({title, formComponent, formTitle}: ToolbarProps)
                 <div className="flex gap-3">
                     <CustomButton
                         text="Agregar Nuevo/a" 
-                        style="px-4 py-2 rounded-lg text-white bg-[#1e3c8b] hover:bg-blue-800" 
+                        style="px-4 py-2 rounded-lg text-white bg-tertiary hover:bg-blue-800" 
                         icon={CirclePlus} 
                         onClickButton={() => setIsModalOpen(true)}
                     />
