@@ -27,7 +27,7 @@ export default function HomeFooter({style}: HomeFooterProps) {
     ]
 
     return (
-        <footer className={`${style} py-12 mt-20`}>
+        <footer className={`${style} py-12 mt-10`}>
             <div className="max-w-6xl mx-auto px-4 md:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-20">
                     <BrandSection />
@@ -44,10 +44,10 @@ export default function HomeFooter({style}: HomeFooterProps) {
                         links={socialLinks}
                     />
                 </div>
-
+                
                 {/* Copyright */}
                 <div className="mt-10 border-t border-gray-800 pt-4 text-center text-sm">
-                    &copy;{new Date().getFullYear()} Axia. All Rights Reserved.
+                    &copy;{new Date().getFullYear()} Axia. All Rights Reserved by Juan Campos Santi Jime.
                 </div>
             </div>
         </footer>

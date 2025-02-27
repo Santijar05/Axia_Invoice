@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { FaFileInvoiceDollar, FaMoneyCheckAlt, FaChartLine, FaUniversity } from 'react-icons/fa';
 
-import CardHeroBlur from '@/modules/home/heroBlur/cardHeroBlur';
+import CardHeroBlur from './cardHeroBlur';
 
 export default function HeroBlur() {
   const [isVisible, setIsVisible] = useState(false);
@@ -46,7 +46,7 @@ export default function HeroBlur() {
   }, []);
     
   useEffect(() => {
-    const threshold = isMobile ? 0.3 : 0.5; 
+    const threshold = isMobile ? 0.3 : 0.4; 
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -76,7 +76,8 @@ export default function HeroBlur() {
           isVisible 
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-10'
-        }`}>
+          }`}
+        >
           Axia Invoice Simplifica tu facturación y contabilidad
         </h1>
         
@@ -84,7 +85,8 @@ export default function HeroBlur() {
           isVisible 
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-10'
-        }`}>
+          }`}
+        >
           Emite facturas electrónicas, gestiona tus cobros y lleva tu contabilidad de forma intuitiva y eficiente.
         </p>
         
@@ -92,7 +94,7 @@ export default function HeroBlur() {
           isVisible 
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-10'
-        }`}
+          }`}
         >
           <div>
             <div className="max-w-6xl mx-auto">

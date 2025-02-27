@@ -23,7 +23,7 @@ export default function ContentHero() {
   }, []);
   
   useEffect(() => {
-    const threshold = isMobile ? 0.25 : 0.4; 
+    const threshold = isMobile ? 0.25 : 0.3; 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
@@ -58,17 +58,16 @@ export default function ContentHero() {
           style={{ transitionDelay: "150ms" }}
         >
           <h2 className="text-homePrimary-100 text-4xl font-bold mb-4 leading-tight">
-            Generate Quality Content Instantly
+            Revolutionizing Financial Management
           </h2>
 
           <p className="text-gray-300 mb-6 text-lg leading-relaxed">
-            Generate high-quality content in an instant with the power of AI. 
-            Delivering precision, creativity, and consistency to elevate your brand effortlessly.
+            At Axia we transform accounting and electronic billing with innovative and secure solutions. We optimize business processes to drive growth and productivity for our clients in a constantly evolving financial world.
           </p>
 
           <CustomButton 
             text="Get Started Now" 
-            style="bg-homePrimary hover:bg-primary text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105" 
+            style="bg-homePrimary hover:bg-primary text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105" 
           />
         </div>
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
     const [isMounted, setIsMounted] = useState(false);
@@ -39,10 +40,12 @@ export default function Hero() {
                     isMounted ? 'opacity-100' : 'opacity-0'
                     }`}
                 >
-                    <button className="bg-homePrimary px-6 py-2 rounded-lg text-white font-semibold">
-                        Empezar
-                    </button>
-                    
+                    <Link href={"/register"}> 
+                        <button className="bg-homePrimary px-6 py-2 rounded-lg text-white font-semibold">
+                            Empezar
+                        </button>
+                    </Link>
+
                     <button className="border border-homePrimary px-6 py-2 rounded-lg text-homePrimary font-semibold">
                         Learn More
                     </button>
