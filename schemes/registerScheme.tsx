@@ -24,11 +24,8 @@ export const registerScheme = z.object({
 					{ message: "Password must contain at least one letter, one number, and one special character from the allowed list (@, ., -, _, !, #, $, %, &)" }
 				),
  
-	confirmPassword: z.string()
+/* 	confirmPassword: z.string()
 						.min(8, {message: "Confirm password is required"})
-						.max(20),
+						.max(20), */
 
-}).refine((data) => data.password === data.confirmPassword, {
-	message: "Passwords do not match",
-	path: ["confirmPassword"],
-});
+})
