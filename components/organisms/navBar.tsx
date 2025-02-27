@@ -19,7 +19,7 @@ const Navbar = () => {
           <ul className="flex space-x-8 font-medium">
             <li><Link href="/home" className="font-semibold text-white hover:text-homePrimary">Inicio</Link></li>
             <li><Link href="/aboutus" className="font-semibold text-white hover:text-homePrimary">Sobre Nosotros</Link></li>
-            <li><Link href="#" className="font-semibold text-white hover:text-homePrimary">Contactanos</Link></li>
+            <li><Link href="/contactus" className="font-semibold text-white hover:text-homePrimary">Contactanos</Link></li>
           </ul>
         </div>
 
