@@ -12,14 +12,19 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: "#215a6d",
-        blueP: "#395BA5",
+        homePrimary: {
+          DEFAULT: '#1E3C8b',
+          100: '#FFFFFF',
+          200: '#ADADAE',
+          300: '#1A172B',
+        },
         secondary: {
           DEFAULT: '#2d2d29',
           100: '#ff901',
           200: '#18D99B'
         },
         tertiary:{
-          DEFAULT: '#3ca2a2',
+          DEFAULT: '#1e3c8b',
           100: '#92c7a3',
           200: '#0009DB'
         }
