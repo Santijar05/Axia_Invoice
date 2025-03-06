@@ -1,11 +1,10 @@
 "use client";
 
 import Link from 'next/link';
-import Cookies from "js-cookie"; 
+import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation"; 
-
 import { loginUser } from "@/request/access";
 import Input from "../../../components/atoms/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,6 +43,7 @@ const LoginForm: React.FC = () => {
         const token = responseData.token;
         const userRole = responseData.user?.role;
 
+        localStorage.setItem("authToken", token);
         Cookies.set("authToken", token )
         Cookies.set("userRole", userRole)
 
