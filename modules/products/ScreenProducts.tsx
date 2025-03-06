@@ -1,8 +1,6 @@
-"use client"
-
+'use client'
 import { useEffect, useState } from "react";
-
-import CustomTable from "@/components/organisms/CustomTable"
+import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
 import ProductForm from "./ProductForm";
 import { getListproducts } from "@/lib/api-products";
@@ -10,36 +8,42 @@ import { ProductDAO } from "@/types/Api";
 
 export default function ScreenProducts() {
     const [products, setProducts] = useState<{ [key: string]: string }[]>([]);
-
+    
     useEffect(() => {
-        getListproducts().then((res) => {
-            if (res.data) {
-                // Transform ProductDAO array into the format expected by CustomTable
-                const formattedProducts = res.data.map((product: ProductDAO) => ({
-                    id: product.id,
-                    name: product.name,
-                    supplier: product.supplier, 
-                    tax: product.tax.toString(),
-                    stock: product.stock.toString(),
-                    purchasePrice: product.purchasePrice.toString(),
-                    salePrice: product.salePrice.toString(),
-                }));
-                setProducts(formattedProducts);
+        const fetchProducts = async () => {
+            try {
+                const res = await getListproducts();
+                if (res && Array.isArray(res)) {
+                    const formattedProducts = res.map((product: ProductDAO) => ({
+                        id: product.id,
+                        name: product.name,
+                        supplier: product.supplier.name,
+                        tax: product.tax.toString(),
+                        stock: product.stock.toString(),
+                        purchasePrice: product.purchasePrice.toString(),
+                        salePrice: product.salePrice.toString(),
+                    }));
+                    setProducts(formattedProducts);
+                }
+            } catch (err) {
+                console.log('Error al obtener productos', err);
             }
-        });
+        };
+        fetchProducts();
     }, []);
 
     return (
-        <div>
+        <div className="container mx-auto">
             <Toolbar
                 title="Products"
-                formComponent={<ProductForm/>}
+                formComponent={<ProductForm />}
                 formTitle="Ingrese producto"
             />
-            <CustomTable 
-                title="" 
+            
+            <CustomTable
+                title=""
                 headers={["Bar/Internal", "Product", "Supplier", "Tax", "Stock", "P. Purchase", "Price"]}
-                options={true} 
+                options={true}
                 products={products}
             />
         </div>

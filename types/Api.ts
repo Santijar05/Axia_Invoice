@@ -10,8 +10,11 @@ export interface UserDataRegister {
     password: string;
 }
 
+export interface Supplier {
+    name:string
+}
 export interface ProductDAO {
-    supplier: string;
+    supplier: Supplier;
     name: string;
     id: string;
     salePrice: number;
