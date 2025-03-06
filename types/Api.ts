@@ -6,7 +6,7 @@ export interface UserDataLogin {
 export interface UserDataRegister {
     name: string;
     email: string;
-    phone: string;
+    role: string;
     password: string;
 }
 
