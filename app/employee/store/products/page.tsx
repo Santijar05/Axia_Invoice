@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   }
 }
 
-export default function LoginPage() {
+export default function ProductPage() {
 
     return(
         <div className="w-full h-full">

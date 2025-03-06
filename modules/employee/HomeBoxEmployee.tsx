@@ -3,10 +3,8 @@
 import React, { useState } from "react";
 import { Menu } from "lucide-react";
 
-import { standardFooterPlatform } from "@/utils/tokens";
 import CustomButton from "../../components/atoms/CustomButton";
 import SidebarEmployee from "./SidebarEmployee";
-import HomeFooter from "../../components/organisms/HomeFooter";
 
 export default function HomeBoxEmployee({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -34,8 +32,6 @@ export default function HomeBoxEmployee({ children }: { children: React.ReactNod
         <SidebarEmployee isOpen={isSidebarOpen} />
         <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
-
-      <HomeFooter style={standardFooterPlatform} />
     </div>
   );
 }

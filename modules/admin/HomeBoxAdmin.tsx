@@ -2,10 +2,9 @@
 
 import React, { useState } from "react";
 import { Menu } from "lucide-react";
+
 import CustomButton from "../../components/atoms/CustomButton";
 import SidebarAdmin from "./SidebarAdmin";
-import HomeFooter from "../../components/organisms/HomeFooter";
-import { standardFooterPlatform } from "@/utils/tokens";
 
 export default function HomeBoxAdmin({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -30,7 +29,7 @@ export default function HomeBoxAdmin({ children }: { children: React.ReactNode }
         <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
 
-      <HomeFooter style={standardFooterPlatform} />
+      {/*<HomeFooter style={standardFooterPlatform} />*/}
     </div>
   );
 }
