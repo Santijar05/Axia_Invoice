@@ -10,6 +10,22 @@ export interface UserDataRegister {
     password: string;
 }
 
+export interface ProductDAO {
+    supplier: string;
+    name: string;
+    id: string;
+    salePrice: number;
+    purchasePrice: number;
+    tax: number;
+    stock: number;
+}
+
+export interface StandarDAO {
+    status: number;
+    message: string;
+    data: ProductDAO[];
+}
+
 export interface ApiResponse {
     success: boolean;
     message: string;
