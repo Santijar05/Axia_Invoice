@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CirclePlus, Printer} from "lucide-react";
 
-import SearchBar from "../molecules/SearchBar";
+import SearchBarUniversal from "../molecules/SearchBar";
 import CustomButton from "../atoms/CustomButton";
 import CustomModal from "@/components/organisms/CustomModal";
 
@@ -9,9 +9,10 @@ interface ToolbarProps {
     title: string, 
     formComponent: React.ReactNode,
     formTitle: string,
+    onSearch?: (searchTerm: string) => void;
 }
 
-export default function Toolbar({title, formComponent, formTitle}: ToolbarProps) {
+export default function Toolbar({title, formComponent, formTitle, onSearch}: ToolbarProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
@@ -33,15 +34,7 @@ export default function Toolbar({title, formComponent, formTitle}: ToolbarProps)
                         icon={Printer} 
                     />
                 </div>
-
             </div>
-
-            <div className="flex justify-between items-center">
-                <div className="flex items-center rounded-lg py-1 w-72">
-                    <SearchBar/>
-                </div>
-            </div>
-
             <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={formTitle}>
                 {formComponent} 
             </CustomModal>

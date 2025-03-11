@@ -1,40 +1,45 @@
-import { UserDataLogin } from "@/types/Api";
-import { UserDataRegister } from "@/types/Api";
+import { UserDataLogin, UserDataRegister } from "@/types/Api";
 
-export const loginUser = async (body: UserDataLogin): Promise<Response> => {
-  const url = 'http://localhost:3001/api/v1/users/login';
+const API_BASE_URL = 'http://localhost:3001/api/v1/users';
 
-  const headersOptions = {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json", 
-    },
-  };
+const fetchWithCredentials = async (url: string, options: RequestInit): Promise<Response> => {
+  const response = await fetch(url, {
+    ...options,
+    credentials: 'include', 
+  });
 
-  const response = await fetch(url, headersOptions);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ message: 'Error desconocido' }));
+    throw new Error(errorData.message || 'Error en la solicitud');
+  }
 
   return response;
 };
 
-export const registerUser = async (body: UserDataRegister): Promise<Response> => {
-  console.log("registerUser function called with:", body);
-  const url = 'http://localhost:3001/api/v1/users/new-user';
+export const loginUser = async (body: UserDataLogin): Promise<Response> => {
+  const url = `${API_BASE_URL}/login`;
 
-  const headersOptions = {
+  const headersOptions: RequestInit = {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
-      "Content-Type": "application/json", 
+      "Content-Type": "application/json",
     },
   };
 
-  try {
-    const response = await fetch(url, headersOptions);
-    console.log("Response received:", response.status);
-    return response;
-  } catch (error) {
-    console.error("Error in registerUser:", error);
-    throw error;
-  }
+  return fetchWithCredentials(url, headersOptions);
+};
+
+export const registerUser = async (body: UserDataRegister): Promise<Response> => {
+  const url = `${API_BASE_URL}/new-user`;
+
+  const headersOptions: RequestInit = {
+    method: 'POST',
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  return fetchWithCredentials(url, headersOptions);
 };
