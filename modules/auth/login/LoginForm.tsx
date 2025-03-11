@@ -1,7 +1,6 @@
 "use client";
 
 import Link from 'next/link';
-import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation"; 
@@ -39,25 +38,23 @@ const LoginForm: React.FC = () => {
 
       if (response.status === 200) {
         const responseData = await response.json();
-        console.log(response.json());
-        const token = responseData.token;
         const userRole = responseData.user?.role;
 
-        localStorage.setItem("authToken", token);
-        Cookies.set("authToken", token )
-        Cookies.set("userRole", userRole)
-
-        if (userRole === "ADMIN") {
+        // Redirigir según el rol del usuario
+        if (userRole === "ADMIN" || userRole === "SUPERADMIN") {
           router.push("/admin");
         } else if (userRole === "USER") {
           router.push("/employee");
-        } else {
-          router.push("");
+        }else {
+          router.push("/");
         }
+      } else {
+        // Manejar respuesta de error
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || "Error de autenticación");
       }
-      
     } catch (error) {
-      console.log(error)
+      console.error(error);
       setErrorMessage("Error de conexión. Inténtalo nuevamente.");
     } finally {
       setLoading(false);
@@ -87,19 +84,25 @@ const LoginForm: React.FC = () => {
           {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
         </div>
 
+        {errorMessage && (
+          <div className="w-full mb-4">
+            <p className="text-red-500 text-sm">{errorMessage}</p>
+          </div>
+        )}
+
         <div className="w-full">
           <CustomButton 
             text={loading ? "Loading..." : "ENTER THE SYSTEM"}
             style="w-full text-white bg-secondary"
-            onClickButton={() => router.replace("/employee")}
             typeButton='submit'
+            disabled={loading}
           />
         </div>
       </form> 
 
       <div className="w-full items-center pl-3 pr-3">
         <div className="flex justify-between w-full text-sm text-secondary mt-2">
-          <Link rel="stylesheet" href="/register"><p>Create account</p></Link>
+          <Link href="/register">Create account</Link>
           <a href="#">Forgot password?</a>
         </div>
 

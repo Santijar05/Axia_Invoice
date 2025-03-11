@@ -9,9 +9,10 @@ interface CustomTableProps {
   headers: string[];
   options?: boolean;
   products: { [key: string]: string }[];
+  onRowClick?: (product: string) => void;
 }
 
-export default function CustomTable({ title, headers, options, products }: CustomTableProps) {
+export default function CustomTable({ title, headers, options, products, onRowClick }: CustomTableProps) {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -30,11 +31,11 @@ export default function CustomTable({ title, headers, options, products }: Custo
   const paginatedProducts = products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm mb-8 pl-4 pr-4">
+    <div className="bg-white rounded-lg shadow-sm mb-8 pl-4 pr-4 flex flex-col h-full">
       <h2 className="text-2xl font-semibold p-4 border-b text-black top-0 bg-white z-10">{title}</h2>
 
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse table-fixed">
+        <table className="w-full border-collapse table-fixed h-full">
 
           <thead className="bg-gray-100 border-b ">
             <tr>
@@ -47,7 +48,7 @@ export default function CustomTable({ title, headers, options, products }: Custo
 
           <tbody>
             {paginatedProducts.map((product, index) => (
-              <tr key={index} className="border-b hover:bg-gray-50">
+              <tr key={index} className="border-b hover:bg-gray-50" onClick={() => onRowClick && onRowClick(product.id)}>
 
                 {Object.values(product).map((value, idx) => (
                   <td key={idx} className="p-3 text-black break-words">{value}</td>
@@ -64,7 +65,6 @@ export default function CustomTable({ title, headers, options, products }: Custo
                     />
                   </td>
                 )}
-
               </tr>
             ))}
           </tbody>
