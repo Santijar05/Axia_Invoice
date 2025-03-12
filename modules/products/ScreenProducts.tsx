@@ -1,24 +1,33 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
 import ProductForm from "./ProductForm";
 import { getListproducts } from "@/lib/api-products";
 import { ProductDAO } from "@/types/Api";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 
 export default function ScreenProducts() {
     const router = useRouter();
     const [products, setProducts] = useState<{ [key: string]: string }[]>([]);
+    const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]); // Nuevo estado para productos iniciales
     const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const initialFetchDone = useRef(false);
     
     useEffect(() => {
-        fetchAllProducts();
+        if (!initialFetchDone.current) {
+            fetchAllProducts();
+            initialFetchDone.current = true;
+        }
     }, []);
 
     const fetchAllProducts = async () => {
+        if (isLoading) return;
+        
+        setIsLoading(true);
         try {
             const res = await getListproducts();
             if (res && Array.isArray(res)) {
@@ -26,6 +35,8 @@ export default function ScreenProducts() {
             }
         } catch (err) {
             console.log('Error al obtener productos', err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -39,19 +50,17 @@ export default function ScreenProducts() {
             purchasePrice: product.purchasePrice.toString(),
             salePrice: product.salePrice.toString(),
         }));
+        setInitialProducts(formattedProducts); // Guardar productos iniciales
         setProducts(formattedProducts);
     };
 
     const handleProductsFound = (foundProducts: ProductDAO[]) => {
         if (foundProducts.length > 0) {
             formatAndSetProducts(foundProducts);
+        } else if (searchQuery) {
+            setProducts([]);
         } else {
-            // Only fetch all products if search is empty
-            if (!searchQuery) {
-                fetchAllProducts();
-            } else {
-                setProducts([]);
-            }
+            setProducts(initialProducts);
         }
     };
 
@@ -75,6 +84,8 @@ export default function ScreenProducts() {
                     onSearchChange={(query: string) => setSearchQuery(query)}
                     />
             </div>
+            
+            {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando productos...</p>}
             
             <CustomTable
                 title=""

@@ -38,8 +38,8 @@ export const getListproductsByName = async (name: string) => {
   });
 };
 
-export const getProductById = async (id: string) => {
-  const url = `${envVariables.API_URL}/products/${id}`;
+export const getProductById = async (productId: string) => {
+  const url = `${envVariables.API_URL}/products/${productId}`;
   console.log('Fetching product by ID:', url);
 
   return fetchWithCredentials(url, {
