@@ -1,6 +1,7 @@
 import { envVariables } from "@/utils/config";
+import { ProductDAO } from "@/types/Api";
 
-const fetchWithCredentials = async (url: string, options: RequestInit): Promise<any> => {
+const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promise<T> => {
   const response = await fetch(url, {
     ...options,
     credentials: 'include', 
@@ -11,14 +12,14 @@ const fetchWithCredentials = async (url: string, options: RequestInit): Promise<
     throw new Error(errorData.message || 'Error en la solicitud');
   }
 
-  return response.json();
+  return response.json() as Promise<T>;
 };
 
-export const getListproducts = async () => {
+export const getListproducts = async (): Promise<ProductDAO[]> => {
   const url = `${envVariables.API_URL}/products`;
   console.log('Fetching products from:', url);
 
-  return fetchWithCredentials(url, {
+  return fetchWithCredentials<ProductDAO[]>(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -26,11 +27,11 @@ export const getListproducts = async () => {
   });
 };
 
-export const getListproductsByName = async (name: string) => {
+export const getListproductsByName = async (name: string): Promise<ProductDAO[]> => {
   const url = `${envVariables.API_URL}/products/search?name=${encodeURIComponent(name)}`;
   console.log('Searching products by name:', url);
 
-  return fetchWithCredentials(url, {
+  return fetchWithCredentials<ProductDAO[]>(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -38,11 +39,11 @@ export const getListproductsByName = async (name: string) => {
   });
 };
 
-export const getProductById = async (id: string) => {
+export const getProductById = async (id: string): Promise<ProductDAO> => {
   const url = `${envVariables.API_URL}/products/${id}`;
   console.log('Fetching product by ID:', url);
 
-  return fetchWithCredentials(url, {
+  return fetchWithCredentials<ProductDAO>(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
