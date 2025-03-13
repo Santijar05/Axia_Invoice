@@ -1,18 +1,21 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import { getProductById } from "@/lib/api-products";
+import { getListproducts, getProductById, getPublicProducts } from "@/lib/api-products";
 import ProductDetailServer from "@/modules/products/ProductDetail/ProductDetailServer";
 import { ProductDAO } from "@/types/Api";
 import { envVariables } from "@/utils/config";
 
 interface ProductPageProps {
-  params: { productId: string };
+    params: { productId: string };
+}
+
+interface StaticParams {
+    productId: string;
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
     try {
-        // Correcto: await al objeto params completo
         const { productId } = await params;
         const product = await getProduct(productId);
         
@@ -31,14 +34,11 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 const getProduct = async (id: string): Promise<ProductDAO> => {
     try {
         const url = `${envVariables.API_URL}/products/${id}`;
-        console.log('Fetching product by ID (server):', url);
         const cookieStore = await cookies();
         const cookieHeader = cookieStore.getAll()
         .map(c => `${c.name}=${c.value}`)
         .join('; ');
-        
-        console.log('Available cookies:', cookieStore.getAll().map(c => c.name));
-        
+                
         const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -60,9 +60,20 @@ const getProduct = async (id: string): Promise<ProductDAO> => {
     }
 };
 
-export async function generateStaticParams() {
-    return [];
-}
+
+export const generateStaticParams = async (): Promise<StaticParams[]> => {
+    try {
+        const products: ProductDAO[] = await getPublicProducts(); 
+        
+        return products.slice(0, 5).map((product: ProductDAO) => ({ 
+            productId: product.id 
+        }));
+    } catch (error) {
+        console.error("Error pre-generando páginas de productos:", error);
+        return [];
+    }
+};
+
 
 export default async function ProductDetailEmployee({ params }: ProductPageProps) {
     const { productId } = await params;
