@@ -1,14 +1,16 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import { getListproducts, getProductById, getPublicProducts } from "@/lib/api-products";
+import { getPublicProducts } from "@/lib/api-products";
 import ProductDetailServer from "@/modules/products/ProductDetail/ProductDetailServer";
 import { ProductDAO } from "@/types/Api";
 import { envVariables } from "@/utils/config";
 
 interface ProductPageProps {
-    params: { productId: string };
-}
+    params: {
+      productId: string;
+    };
+  }
 
 interface StaticParams {
     productId: string;
@@ -63,19 +65,22 @@ const getProduct = async (id: string): Promise<ProductDAO> => {
 
 export const generateStaticParams = async (): Promise<StaticParams[]> => {
     try {
-        const products: ProductDAO[] = await getPublicProducts(); 
+        console.log("Iniciando generación de páginas estáticas...");
+        const products = await getPublicProducts();
+        console.log(`Obtenidos ${products.length} productos para pre-renderizado`);
         
-        return products.slice(0, 5).map((product: ProductDAO) => ({ 
-            productId: product.id 
-        }));
+        return products.slice(0, 5).map((product : ProductDAO) => {
+            console.log(`Generando página para producto: ${product.id}`);
+            return { productId: product.id };
+        });
     } catch (error) {
-        console.error("Error pre-generando páginas de productos:", error);
+        console.error("Error:", error);
         return [];
     }
 };
 
 
-export default async function ProductDetailEmployee({ params }: ProductPageProps) {
+export default async function ProductDetailAdmin({ params }: ProductPageProps) {
     const { productId } = await params;
     return <ProductDetailServer productId={productId} />;
 }

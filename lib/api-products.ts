@@ -1,67 +1,60 @@
 import { envVariables } from "@/utils/config";
+import { ProductDAO } from "@/types/Api";
 
-const fetchWithCredentials = async (url: string, options: RequestInit): Promise<any> => {
+type ApiResponse<T = unknown> = {
+  data?: T;
+  message?: string;
+  status?: number;
+};
+
+const getFetchOptions = (method: string, headers: Record<string, string> = {}): RequestInit => ({
+  method,
+  headers: {
+    'Content-Type': 'application/json',
+    ...headers,
+  },
+});
+
+const fetchWithCredentials = async <T = unknown>(url: string, options: RequestInit): Promise<ApiResponse<T>> => {
   const response = await fetch(url, {
     ...options,
-    credentials: 'include', 
+    credentials: 'include',
   });
 
   if (!response.ok) {
-    const errorData = await response.json();
+    const errorData: ApiResponse = await response.json();
     throw new Error(errorData.message || 'Error en la solicitud');
   }
 
   return response.json();
 };
 
-export const getListproducts = async () => {
+export const getListproducts = async (): Promise<ApiResponse<ProductDAO[]>> => {
   const url = `${envVariables.API_URL}/products`;
   console.log('Fetching products from:', url);
 
-  return fetchWithCredentials(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  return fetchWithCredentials<ProductDAO[]>(url, getFetchOptions('GET'));
 };
 
-export const getListproductsByName = async (name: string) => {
+export const getListproductsByName = async (name: string): Promise<ApiResponse<ProductDAO[]>> => {
   const url = `${envVariables.API_URL}/products/search?name=${encodeURIComponent(name)}`;
   console.log('Searching products by name:', url);
 
-  return fetchWithCredentials(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  return fetchWithCredentials<ProductDAO[]>(url, getFetchOptions('GET'));
 };
 
-export const getProductById = async (productId: string) => {
+export const getProductById = async (productId: string): Promise<ApiResponse<ProductDAO>> => {
   const url = `${envVariables.API_URL}/products/${productId}`;
   console.log('Fetching product by ID:', url);
 
-  return fetchWithCredentials(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  return fetchWithCredentials<ProductDAO>(url, getFetchOptions('GET'));
 };
 
-// Función para obtener productos sin autenticación (para SSG)
-export const getPublicProducts = async () => {
+export const getPublicProducts = async (): Promise<ApiResponse<ProductDAO[]>> => {
   const url = `${envVariables.API_URL}/products/public/list`;
   console.log('Fetching public products from:', url);
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    // Sin credentials: 'include'
-  });
+  const response = await fetch(url, getFetchOptions('GET'));
 
   if (!response.ok) {
     throw new Error('Error al obtener productos públicos');
@@ -70,18 +63,11 @@ export const getPublicProducts = async () => {
   return response.json();
 };
 
-// Función para obtener un producto por ID sin autenticación (para SSG)
-export const getPublicProductById = async (productId: string) => {
+export const getPublicProductById = async (productId: string): Promise<ApiResponse<ProductDAO>> => {
   const url = `${envVariables.API_URL}/products/public/${productId}`;
   console.log('Fetching public product by ID:', url);
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    // Sin credentials: 'include'
-  });
+  const response = await fetch(url, getFetchOptions('GET'));
 
   if (!response.ok) {
     throw new Error('Error al obtener producto público');
@@ -89,4 +75,3 @@ export const getPublicProductById = async (productId: string) => {
 
   return response.json();
 };
-

@@ -1,18 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { getListproductsByName } from "@/lib/api-products";
 import { ProductDAO } from "@/types/Api";
-import Input from "../atoms/Input";
-import CustomButton from "../atoms/CustomButton";
+import Input from "@/components/atoms/Input";
+import CustomButton from "@/components/atoms/CustomButton";
 
 interface SearchBarUniversalProps {
   onProductsFound?: (products: ProductDAO[]) => void;
   onAddToCart?: (product: ProductDAO) => void;
   showResults?: boolean;
   placeholder?: string;
-  onSearchChange: (query: string) => void;
 }
 
 const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
@@ -26,29 +25,22 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Función de debounce para evitar demasiadas solicitudes mientras el usuario escribe
-  function debounce<F extends (...args: any[]) => any>(func: F, wait: number): (...args: Parameters<F>) => void {
-    let timeout: ReturnType<typeof setTimeout> | null = null;
-    
-    return function(...args: Parameters<F>) {
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), wait);
-    };
-  }
+  useEffect(() => {
+    // Si el término de búsqueda es muy corto, no hacer nada
+    if (!searchTerm || searchTerm.length < 2) {
+      setProducts([]);
+      if (onProductsFound) onProductsFound([]);
+      return;
+    }
 
-  const debounceSearch = useCallback(
-    debounce(async (term: string) => {
-      if (!term || term.length < 2) {
-        setProducts([]);
-        if (onProductsFound) onProductsFound([]);
-        return;
-      }
-
+    // Configurar un temporizador para realizar la búsqueda después de 500ms
+    const timeoutId = setTimeout(async () => {
       setIsLoading(true);
       setError(null);
 
       try {
-        const fetchedProducts = await getListproductsByName(term);
+        const response = await getListproductsByName(searchTerm);
+        const fetchedProducts = response.data; // Assuming the product list is in the 'data' field
         setProducts(fetchedProducts || []);
         if (onProductsFound) onProductsFound(fetchedProducts || []);
       } catch (err) {
@@ -59,13 +51,11 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
       } finally {
         setIsLoading(false);
       }
-    }, 500),
-    [onProductsFound]
-  );
+    }, 500); // Esperar 500ms antes de realizar la búsqueda
 
-  useEffect(() => {
-    debounceSearch(searchTerm);
-  }, [searchTerm, debounceSearch]);
+    // Limpiar el temporizador si el término de búsqueda cambia antes de que se complete el tiempo
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, onProductsFound]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
