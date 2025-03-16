@@ -11,6 +11,7 @@ interface ToolbarProps {
 
 export default function Toolbar({title, formComponent, formTitle}: ToolbarProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
 
     return (
         <div className="p-4 bg-white shadow">

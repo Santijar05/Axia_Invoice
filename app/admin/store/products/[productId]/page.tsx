@@ -65,19 +65,22 @@ const getProduct = async (id: string): Promise<ProductDAO> => {
 
 export const generateStaticParams = async (): Promise<StaticParams[]> => {
     try {
-        const products: ProductDAO[] = await getPublicProducts(); 
+        console.log("Iniciando generación de páginas estáticas...");
+        const products = await getPublicProducts();
+        console.log(`Obtenidos ${products.length} productos para pre-renderizado`);
         
-        return products.slice(0, 5).map((product: ProductDAO) => ({ 
-            productId: product.id 
-        }));
+        return products.slice(0, 5).map((product : ProductDAO) => {
+            console.log(`Generando página para producto: ${product.id}`);
+            return { productId: product.id };
+        });
     } catch (error) {
-        console.error("Error pre-generando páginas de productos:", error);
+        console.error("Error:", error);
         return [];
     }
 };
 
 
-export default async function ProductDetailEmployee({ params }: ProductPageProps) {
+export default async function ProductDetailAdmin({ params }: ProductPageProps) {
     const { productId } = await params;
     return <ProductDetailServer productId={productId} />;
 }

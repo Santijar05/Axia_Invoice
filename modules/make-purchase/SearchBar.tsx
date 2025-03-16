@@ -5,7 +5,6 @@ import { useShoppingCart } from "@/store/ShoppingCart";
 import CustomButton from "@/components/atoms/CustomButton";
 import { ProductDAO } from "@/types/Api";
 
-// Empty array for now
 const mockProducts: ProductDAO[] = [
   // Add mock products here as needed
 ];
@@ -19,14 +18,27 @@ const SearchBar: React.FC = () => {
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleAddToCart = (product: ProductDAO) => {
+    addToCart({ 
+      id: Number(product.id), 
+      name: product.name,
+      price: product.salePrice, 
+      quantity: 1 
+    });
+  };
+
   return (
     <div className="p-4 bg-gray-100 rounded-lg">
       <input
         type="text"
         placeholder="Buscar productos..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="p-2 border border-gray-300 rounded w-full mb-4"
+        onChange={handleSearchChange}
+        className="p-2 border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       
       {searchTerm && filteredProducts.length > 0 ? (

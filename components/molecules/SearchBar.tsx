@@ -4,8 +4,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Search } from "lucide-react";
 import { getListproductsByName } from "@/lib/api-products";
 import { ProductDAO } from "@/types/Api";
-import Input from "../atoms/Input";
-import CustomButton from "../atoms/CustomButton";
+import Input from "@/components/atoms/Input";
+import CustomButton from "@/components/atoms/CustomButton";
 
 interface SearchBarUniversalProps {
   onProductsFound?: (products: ProductDAO[]) => void;

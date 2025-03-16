@@ -17,6 +17,7 @@ interface StaticParams {
 }
 
 
+
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
     try {
         const { productId } = await params;
@@ -65,13 +66,21 @@ const getProduct = async (id: string): Promise<ProductDAO> => {
 
 export const generateStaticParams = async (): Promise<StaticParams[]> => {
     try {
-        const products: ProductDAO[] = await getPublicProducts(); 
-        
-        return products.slice(0, 5).map((product: ProductDAO) => ({ 
-            productId: product.id
-        }));
+        console.log("Iniciando generación de páginas estáticas...");
+        const products = await getPublicProducts();
+        console.log("Obtenidos los productos para pre-renderizado");
+
+        if (!products || !products.data) {
+            console.error("No se encontraron productos");
+            return [];
+        }
+
+        return products.data.slice(0, 5).map((product: ProductDAO) => {
+            console.log(`Generando página para producto: ${product.id}`);
+            return { productId: product.id };
+        });
     } catch (error) {
-        console.error("Error pre-generando páginas de productos:", error);
+        console.error("Error:", error);
         return [];
     }
 };
