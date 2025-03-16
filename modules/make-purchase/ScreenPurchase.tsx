@@ -1,19 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { useShoppingCart } from "@/store/ShoppingCart";
 import CustomButton from "@/components/atoms/CustomButton";
-import SearchBarUniversal from "@/components/molecules/SearchBar";
 import { ProductDAO } from "@/types/Api";
+import SearchBarUniversal from "@/components/molecules/SearchBar";
 
 export default function ScreenPurchase() {
   const { cart, addToCart, removeFromCart, clearCart } = useShoppingCart();
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  // Add state for search query
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleAddToCart = (product: ProductDAO) => {
     addToCart({
-      id: parseInt(product.id), // Convertir a número si ShoppingCart espera un número
+      id: parseInt(product.id),
       name: product.name,
       price: product.salePrice,
       quantity: 1
@@ -30,6 +32,7 @@ export default function ScreenPurchase() {
             onAddToCart={handleAddToCart} 
             showResults={true}
             placeholder="Buscar productos para comprar..."
+            onSearchChange={(query) => setSearchQuery(query)}
           />
         </div>
         

@@ -6,7 +6,6 @@ import ProductForm from "./ProductForm";
 import { getListproducts } from "@/lib/api-products";
 import { ProductDAO } from "@/types/Api";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 
 export default function ScreenProducts() {

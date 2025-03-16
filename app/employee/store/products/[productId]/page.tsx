@@ -1,18 +1,20 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import { getListproducts, getProductById, getPublicProducts } from "@/lib/api-products";
+import { getPublicProducts } from "@/lib/api-products";
 import ProductDetailServer from "@/modules/products/ProductDetail/ProductDetailServer";
 import { ProductDAO } from "@/types/Api";
 import { envVariables } from "@/utils/config";
 
+export const dynamic = 'force-dynamic';
+
 interface ProductPageProps {
-  params: { productId: string };
+    params: Promise<{ productId: string }>;
 }
 
 interface StaticParams {
     productId: string;
-  }
+}
 
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {

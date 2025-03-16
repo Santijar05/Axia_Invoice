@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Search } from "lucide-react";
 import { getListproductsByName } from "@/lib/api-products";
 import { ProductDAO } from "@/types/Api";
@@ -15,6 +15,17 @@ interface SearchBarUniversalProps {
   onSearchChange: (query: string) => void;
 }
 
+function debounce<U extends unknown[], R>(
+  func: (...args: U) => R,
+  wait: number
+): (...args: U) => void {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  return (...args: U): void => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
+
 const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   onProductsFound,
   onAddToCart,
@@ -26,40 +37,29 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Función de debounce para evitar demasiadas solicitudes mientras el usuario escribe
-  function debounce<F extends (...args: any[]) => any>(func: F, wait: number): (...args: Parameters<F>) => void {
-    let timeout: ReturnType<typeof setTimeout> | null = null;
-    
-    return function(...args: Parameters<F>) {
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), wait);
-    };
-  }
-
-  const debounceSearch = useCallback(
-    debounce(async (term: string) => {
-      if (!term || term.length < 2) {
-        setProducts([]);
-        if (onProductsFound) onProductsFound([]);
-        return;
-      }
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const fetchedProducts = await getListproductsByName(term);
-        setProducts(fetchedProducts || []);
-        if (onProductsFound) onProductsFound(fetchedProducts || []);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError("Error al buscar productos");
-        setProducts([]);
-        if (onProductsFound) onProductsFound([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 500),
+  const debounceSearch = useMemo(
+    () =>
+      debounce(async (term: string) => {
+        if (!term || term.length < 2) {
+          setProducts([]);
+          if (onProductsFound) onProductsFound([]);
+          return;
+        }
+        setIsLoading(true);
+        setError(null);
+        try {
+          const fetchedProducts = await getListproductsByName(term);
+          setProducts(fetchedProducts || []);
+          if (onProductsFound) onProductsFound(fetchedProducts || []);
+        } catch (err) {
+          console.error("Error fetching products:", err);
+          setError("Error al buscar productos");
+          setProducts([]);
+          if (onProductsFound) onProductsFound([]);
+        } finally {
+          setIsLoading(false);
+        }
+      }, 500),
     [onProductsFound]
   );
 
@@ -85,9 +85,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
       {showResults && (
         <div className="mt-2">
           {isLoading && <p className="text-gray-500 text-sm">Buscando...</p>}
-          
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          
           {searchTerm && products.length > 0 ? (
             <ul className="bg-white border border-gray-300 rounded-md shadow-sm max-h-60 overflow-auto">
               {products.map((product) => (
@@ -102,7 +100,6 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                       <span className="ml-2">Stock: {product.stock}</span>
                     </div>
                   </div>
-                  
                   {onAddToCart && (
                     <CustomButton
                       text="Agregar"
