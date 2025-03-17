@@ -13,6 +13,8 @@ export async function middleware(request: Request) {
 
   // Definición de rutas públicas
   const publicRoutes = ["/login", "/register"];
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isEmployeeRoute = pathname.startsWith("/employee");
 
   let userRole = null;
 
@@ -50,10 +52,6 @@ export async function middleware(request: Request) {
         }
       }
 
-      // Validar acceso según el rol
-      const isAdminRoute = pathname.startsWith("/admin");
-      const isEmployeeRoute = pathname.startsWith("/employee");
-
       if (userRole === "EMPLOYEE") {
 
         if (!isEmployeeRoute) {
@@ -82,9 +80,7 @@ export async function middleware(request: Request) {
   return NextResponse.next();
 }
 
-// Aplicar middleware en todas las rutas excepto API y archivos estáticos
+// Aplicar middleware solo a las ramas /admin/* y /employee/*, login, register
 export const config = {
-    matcher: [
-      "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:jpg|jpeg|png|gif|svg|ico|css|js)).*)"
-    ],
+    matcher: ["/admin/:path*", "/employee/:path*", "/login", "/register"],
 };
