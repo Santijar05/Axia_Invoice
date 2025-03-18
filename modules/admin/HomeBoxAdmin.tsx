@@ -10,9 +10,9 @@ export default function HomeBoxAdmin({ children }: { children: React.ReactNode }
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-black">
       {/* Header */}
-      <header className="bg-tertiary text-white flex items-center justify-between p-4">
+      <header className="bg-black dark:bg-gray-900 text-white flex items-center justify-between p-4">
         <div className="flex items-center gap-2">
           <CustomButton
             onClickButton={() => setIsSidebarOpen(!isSidebarOpen)}

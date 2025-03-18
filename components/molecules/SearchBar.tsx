@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { Search } from "lucide-react";
+
 import { getListproductsByName } from "@/lib/api-products";
 import { ProductDAO } from "@/types/Api";
 import Input from "@/components/atoms/Input";
@@ -12,7 +13,7 @@ interface SearchBarUniversalProps {
   onAddToCart?: (product: ProductDAO) => void;
   showResults?: boolean;
   placeholder?: string;
-  onSearchChange: (query: string) => void;
+  onSearchChange?: (query: string) => void;
 }
 
 function debounce<U extends unknown[], R>(
@@ -81,7 +82,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
           onChange={handleSearch}
         />
       </div>
-      
+
       {showResults && (
         <div className="mt-2">
           {isLoading && <p className="text-gray-500 text-sm">Buscando...</p>}
@@ -120,3 +121,4 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
 };
 
 export default SearchBarUniversal;
+
