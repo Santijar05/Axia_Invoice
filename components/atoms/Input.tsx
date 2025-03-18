@@ -22,7 +22,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           type={type === "password" ? (showPassword ? "text" : "password") : type}
           placeholder={placeholder}
-          className={`flex-1 outline-none bg-transparent text-black w-full ${
+          className={`flex-1 outline-none bg-transparent text-white w-full ${
             disable ? "input-disable text-gray-500" : ""
           }`}
           disabled={disable}
@@ -36,9 +36,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             className="text-gray-500 ml-2"
           >
             {showPassword ? (
-              <Eye color="black" size={25} />
+              <Eye color="white" size={25} />
             ) : (
-              <EyeOff color="black" size={25} />
+              <EyeOff color="white" size={25} />
             )}
           </button>
         )}
