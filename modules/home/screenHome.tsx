@@ -15,19 +15,19 @@ const ScreenHome: React.FC = () => {
         <Hero />
       </div>
 
-      <div style={{marginTop: "3px"}}> 
+      <div className="mt-1"> 
         <HeroBlur />
       </div>
 
-      <div style={{marginTop: "3px"}}> 
+      <div className="mt-1"> 
         <ContentHero />
       </div>
 
-      <div style={{marginTop: "3px"}}> 
+      <div className="mt-1"> 
         <PricingSection />
       </div>
 
-      <div style={{marginTop: "3px"}}> 
+      <div className="mt-1"> 
         <HomeFooter 
           style="bg-black text-white "
         /> 

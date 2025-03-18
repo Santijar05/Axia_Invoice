@@ -1,12 +1,12 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
-import ProductForm from "./ProductForm";
 import { getListproducts } from "@/lib/api-products";
 import { ProductDAO } from "@/types/Api";
-import { useRouter } from "next/navigation";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
+import ProductForm from "./ProductForm";
 
 export default function ScreenProducts() {
     const router = useRouter();

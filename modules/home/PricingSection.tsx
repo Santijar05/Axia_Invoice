@@ -96,11 +96,9 @@ export const PricingSection: React.FC = () => {
     >
       {/* Fondo con imagen (rotación en base al estado 'rotate') */}
       <div
-        className="absolute inset-0 z-0"
-        style={{
-          transform: rotate ? 'rotate(55deg)' : 'rotate(0deg)',
-          transition: 'transform 2s ease-in-out',
-        }}
+        className={`absolute inset-0 z-0 ${
+          rotate ? 'animate-[spin_10s_linear_infinite]' : ''
+        }`}
       >
         <Image
           src={pricingBg}
