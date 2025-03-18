@@ -1,47 +1,98 @@
-"use client"
-
-import { useEffect, useState } from "react";
-
-import CustomTable from "@/components/organisms/CustomTable"
+'use client'
+import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
+import { getListproducts } from "@/lib/api-products";
+import { ProductDAO } from "@/types/Api";
+import SearchBarUniversal from "@/components/molecules/SearchBar";
 import ProductForm from "./ProductForm";
 
 export default function ScreenProducts() {
+    const router = useRouter();
     const [products, setProducts] = useState<{ [key: string]: string }[]>([]);
+    const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]); // Nuevo estado para productos iniciales
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const initialFetchDone = useRef(false);
     
     useEffect(() => {
-        setProducts([
-            { barInternal: "001", product: "Apple", brand: "Brand A", stock: "100", pPurchase: "1.00", price: "1.50" },
-            { barInternal: "002", product: "Banana", brand: "Brand B", stock: "150", pPurchase: "0.80", price: "1.20" },
-            { barInternal: "003", product: "Orange", brand: "Brand C", stock: "120", pPurchase: "1.10", price: "1.60" },
-            { barInternal: "004", product: "Grapes", brand: "Brand D", stock: "80", pPurchase: "2.00", price: "2.50" },
-            { barInternal: "005", product: "Peach", brand: "Brand E", stock: "60", pPurchase: "1.50", price: "2.00" },
-            { barInternal: "006", product: "Mango", brand: "Brand F", stock: "90", pPurchase: "1.70", price: "2.30" },
-            { barInternal: "007", product: "Pineapple", brand: "Brand G", stock: "50", pPurchase: "2.50", price: "3.00" },
-            { barInternal: "008", product: "Strawberry", brand: "Brand H", stock: "70", pPurchase: "1.80", price: "2.20" },
-            { barInternal: "009", product: "Blueberry", brand: "Brand I", stock: "40", pPurchase: "3.00", price: "3.50" },
-            { barInternal: "010", product: "Kiwi", brand: "Brand J", stock: "85", pPurchase: "1.90", price: "2.40" },
-            { barInternal: "011", product: "Papaya", brand: "Brand K", stock: "95", pPurchase: "2.10", price: "2.70" },
-            { barInternal: "012", product: "Cherry", brand: "Brand L", stock: "65", pPurchase: "2.80", price: "3.30" },
-            { barInternal: "013", product: "Plum", brand: "Brand M", stock: "110", pPurchase: "1.60", price: "2.10" },
-            { barInternal: "014", product: "Watermelon", brand: "Brand N", stock: "30", pPurchase: "3.20", price: "3.80" },
-            { barInternal: "015", product: "Cantaloupe", brand: "Brand O", stock: "55", pPurchase: "2.60", price: "3.10" }
-        ]);
+        if (!initialFetchDone.current) {
+            fetchAllProducts();
+            initialFetchDone.current = true;
+        }
     }, []);
 
-  return (
-    <div>
-        <Toolbar
-            title="Products"
-            formComponent={<ProductForm/>}
-            formTitle="Ingrese producto"
-        />
-        <CustomTable 
-            title= "" 
-            headers= {["Bar/Internal", "Product", "Brand", "Stock", "P. Purchase", "Price"]}
-            options={true} 
-            products={products}
-        />
-    </div>
-  )
+    const fetchAllProducts = async () => {
+        if (isLoading) return;
+        
+        setIsLoading(true);
+        try {
+            const res = await getListproducts();
+            if (res && Array.isArray(res)) {
+                formatAndSetProducts(res);
+            }
+        } catch (err) {
+            console.log('Error al obtener productos', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const formatAndSetProducts = (productList: ProductDAO[]) => {
+        const formattedProducts = productList.map((product: ProductDAO) => ({
+            id: product.id,
+            name: product.name,
+            supplier: product.supplier.name,
+            tax: product.tax.toString(),
+            stock: product.stock.toString(),
+            purchasePrice: product.purchasePrice.toString(),
+            salePrice: product.salePrice.toString(),
+        }));
+        setInitialProducts(formattedProducts); // Guardar productos iniciales
+        setProducts(formattedProducts);
+    };
+
+    const handleProductsFound = (foundProducts: ProductDAO[]) => {
+        if (foundProducts.length > 0) {
+            formatAndSetProducts(foundProducts);
+        } else if (searchQuery) {
+            setProducts([]);
+        } else {
+            setProducts(initialProducts);
+        }
+    };
+
+    const handleRowClick = (productId: string) => {
+        router.push(`/admin/store/products/${productId}`);
+    }
+
+    return (
+        <div className="container mx-auto">
+            <Toolbar
+                title="Products"
+                formComponent={<ProductForm />}
+                formTitle="Ingrese producto"
+            />
+            
+            <div className="mb-4 mt-4 w-72">
+                <SearchBarUniversal 
+                    onProductsFound={handleProductsFound} 
+                    showResults={false}
+                    placeholder="Buscar por nombre..."
+                    onSearchChange={(query: string) => setSearchQuery(query)}
+                    />
+            </div>
+            
+            {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando productos...</p>}
+            
+            <CustomTable
+                title=""
+                headers={["Bar/Internal", "Product", "Supplier", "Tax", "Stock", "P. Purchase", "Price"]}
+                options={true}
+                products={products}
+                onRowClick={handleRowClick}
+            />
+        </div>
+    );
 }

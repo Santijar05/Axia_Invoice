@@ -1,11 +1,9 @@
 "use client";
 
 import Link from 'next/link';
-import Cookies from "js-cookie"; 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation"; 
-
 import { loginUser } from "@/request/access";
 import Input from "../../../components/atoms/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,24 +38,23 @@ const LoginForm: React.FC = () => {
 
       if (response.status === 200) {
         const responseData = await response.json();
-        console.log(response.json());
-        const token = responseData.token;
         const userRole = responseData.user?.role;
 
-        Cookies.set("authToken", token )
-        Cookies.set("userRole", userRole)
-
-        if (userRole === "ADMIN") {
+        // Redirigir según el rol del usuario
+        if (userRole === "ADMIN" || userRole === "SUPERADMIN") {
           router.push("/admin");
         } else if (userRole === "USER") {
           router.push("/employee");
-        } else {
-          router.push("");
+        }else {
+          router.push("/");
         }
+      } else {
+        // Manejar respuesta de error
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || "Error de autenticación");
       }
-      
     } catch (error) {
-      console.log(error)
+      console.error(error);
       setErrorMessage("Error de conexión. Inténtalo nuevamente.");
     } finally {
       setLoading(false);
@@ -72,7 +69,7 @@ const LoginForm: React.FC = () => {
       >
         <div className="w-full mb-3">
           <Input
-            placeholder="Email"
+            placeholder="Correo electrónico"
             {...register("email")}
           />
           {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
@@ -80,32 +77,37 @@ const LoginForm: React.FC = () => {
 
         <div className="w-full mb-7">
           <Input
-            placeholder="Password"
+            placeholder="Contraseña"
             type="password"
             {...register("password")}
           />
           {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
         </div>
 
+        {errorMessage && (
+          <div className="w-full mb-4">
+            <p className="text-red-500 text-sm">{errorMessage}</p>
+          </div>
+        )}
+
         <div className="w-full">
           <CustomButton 
-            text={loading ? "Loading..." : "ENTER THE SYSTEM"}
-            style="w-full text-white bg-secondary"
-            onClickButton={() => router.replace("/employee")}
+            text={loading ? "Loading..." : "INGRESAR"}
+            style="w-full text-white bg-homePrimary"
             typeButton='submit'
+            disabled={loading}
           />
         </div>
       </form> 
 
       <div className="w-full items-center pl-3 pr-3">
-        <div className="flex justify-between w-full text-sm text-secondary mt-2">
-          <Link rel="stylesheet" href="/register"><p>Create account</p></Link>
-          <a href="#">Forgot password?</a>
+        <div className="flex justify-between w-full text-sm text-white mt-2">
+          <Link href="/register">olvidaste tu contraseña?</Link>
         </div>
 
         <div className="relative flex items-center w-full my-4">
           <span className="flex-grow border-t border-gray-300"></span>
-          <span className="px-2 text-gray-500 text-sm">or continue with</span>
+          <span className="px-2 text-white text-sm">o continuar con</span>
           <span className="flex-grow border-t border-gray-300"></span>
         </div>
 
@@ -113,7 +115,7 @@ const LoginForm: React.FC = () => {
           <CustomButton
             text="Google"
             icon={GoogleIcon}
-            style="w-11/12 text-white bg-secondary"
+            style="w-11/12 text-white bg-homePrimary"
             onClickButton={() => {}}
             typeButton="button"
           />
@@ -121,7 +123,7 @@ const LoginForm: React.FC = () => {
           <CustomButton
             text="Apple"
             icon={AppleIcon}
-            style="w-11/12 text-white bg-secondary"
+            style="w-11/12 text-white bg-homePrimary"
             onClickButton={() => {}}
             typeButton="button"
           />

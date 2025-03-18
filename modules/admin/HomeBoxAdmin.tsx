@@ -2,18 +2,17 @@
 
 import React, { useState } from "react";
 import { Menu } from "lucide-react";
+
 import CustomButton from "../../components/atoms/CustomButton";
 import SidebarAdmin from "./SidebarAdmin";
-import HomeFooter from "../../components/organisms/HomeFooter";
-import { standardFooterPlatform } from "@/utils/tokens";
 
 export default function HomeBoxAdmin({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-black">
       {/* Header */}
-      <header className="bg-tertiary text-white flex items-center justify-between p-4">
+      <header className="bg-black dark:bg-gray-900 text-white flex items-center justify-between p-4">
         <div className="flex items-center gap-2">
           <CustomButton
             onClickButton={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -30,7 +29,7 @@ export default function HomeBoxAdmin({ children }: { children: React.ReactNode }
         <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
 
-      <HomeFooter style={standardFooterPlatform} />
+      {/*<HomeFooter style={standardFooterPlatform} />*/}
     </div>
   );
 }
