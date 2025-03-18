@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { CirclePlus, Printer} from "lucide-react";
-
 import CustomButton from "../atoms/CustomButton";
 import CustomModal from "@/components/organisms/CustomModal";
 
@@ -8,11 +7,11 @@ interface ToolbarProps {
     title: string, 
     formComponent: React.ReactNode,
     formTitle: string,
-    onSearch?: (searchTerm: string) => void;
 }
 
 export default function Toolbar({title, formComponent, formTitle}: ToolbarProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
 
     return (
         <div className="p-4 bg-black shadow">

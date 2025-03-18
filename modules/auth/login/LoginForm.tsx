@@ -69,7 +69,7 @@ const LoginForm: React.FC = () => {
       >
         <div className="w-full mb-3">
           <Input
-            placeholder="Email"
+            placeholder="Correo electrónico"
             {...register("email")}
           />
           {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
@@ -77,7 +77,7 @@ const LoginForm: React.FC = () => {
 
         <div className="w-full mb-7">
           <Input
-            placeholder="Password"
+            placeholder="Contraseña"
             type="password"
             {...register("password")}
           />
@@ -92,8 +92,8 @@ const LoginForm: React.FC = () => {
 
         <div className="w-full">
           <CustomButton 
-            text={loading ? "Loading..." : "ENTER THE SYSTEM"}
-            style="w-full text-white bg-secondary"
+            text={loading ? "Loading..." : "INGRESAR"}
+            style="w-full text-white bg-homePrimary"
             typeButton='submit'
             disabled={loading}
           />
@@ -101,14 +101,13 @@ const LoginForm: React.FC = () => {
       </form> 
 
       <div className="w-full items-center pl-3 pr-3">
-        <div className="flex justify-between w-full text-sm text-secondary mt-2">
-          <Link href="/register">Create account</Link>
-          <a href="#">Forgot password?</a>
+        <div className="flex justify-between w-full text-sm text-white mt-2">
+          <Link href="/register">olvidaste tu contraseña?</Link>
         </div>
 
         <div className="relative flex items-center w-full my-4">
           <span className="flex-grow border-t border-gray-300"></span>
-          <span className="px-2 text-gray-500 text-sm">or continue with</span>
+          <span className="px-2 text-white text-sm">o continuar con</span>
           <span className="flex-grow border-t border-gray-300"></span>
         </div>
 
@@ -116,7 +115,7 @@ const LoginForm: React.FC = () => {
           <CustomButton
             text="Google"
             icon={GoogleIcon}
-            style="w-11/12 text-white bg-secondary"
+            style="w-11/12 text-white bg-homePrimary"
             onClickButton={() => {}}
             typeButton="button"
           />
@@ -124,7 +123,7 @@ const LoginForm: React.FC = () => {
           <CustomButton
             text="Apple"
             icon={AppleIcon}
-            style="w-11/12 text-white bg-secondary"
+            style="w-11/12 text-white bg-homePrimary"
             onClickButton={() => {}}
             typeButton="button"
           />

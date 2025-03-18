@@ -39,8 +39,8 @@ export const getListproductsByName = async (name: string): Promise<ProductDAO[]>
   });
 };
 
-export const getProductById = async (id: string): Promise<ProductDAO> => {
-  const url = `${envVariables.API_URL}/products/${id}`;
+export const getProductById = async (productId: string) => {
+  const url = `${envVariables.API_URL}/products/${productId}`;
   console.log('Fetching product by ID:', url);
 
   return fetchWithCredentials<ProductDAO>(url, {
@@ -50,3 +50,44 @@ export const getProductById = async (id: string): Promise<ProductDAO> => {
     },
   });
 };
+
+// Función para obtener productos sin autenticación (para SSG)
+export const getPublicProducts = async () => {
+  const url = `${envVariables.API_URL}/products/public/list`;
+  console.log('Fetching public products from:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // Sin credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener productos públicos');
+  }
+
+  return response.json();
+};
+
+// Función para obtener un producto por ID sin autenticación (para SSG)
+export const getPublicProductById = async (productId: string) => {
+  const url = `${envVariables.API_URL}/products/public/${productId}`;
+  console.log('Fetching public product by ID:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // Sin credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener producto público');
+  }
+
+  return response.json();
+};
+

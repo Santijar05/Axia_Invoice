@@ -6,22 +6,22 @@ interface CustomButtonProps {
   typeButton?: "button" | "submit";
   onClickButton?: () => void;
   icon?: React.ElementType; 
-  iconColor?: string; 
+  iconColor?: string;
   disabled?: boolean; 
 }
 
 export default function CustomButton({
   text,
   style,
-  disabled,
   onClickButton,
   typeButton = "button",
   icon: IconComponent,
   iconColor = "white",
+  disabled = false,
 }: CustomButtonProps) {
   return (
     <button
-      className={`${style} px-5 py-2 rounded text-center my-2 font-medium flex items-center justify-center gap-2`}
+      className={`${style} px-5 py-2 rounded text-center my-2 font-medium flex items-center justify-center gap-2 ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
       type={typeButton}
       onClick={onClickButton}
       disabled={disabled}

@@ -1,8 +1,3 @@
 export default function CategoriesPage() {
-
-    return(
-      <div className="w-full">
-      </div>
-    );
-  
-}
+    return <div>Suppliers Page</div>;
+  }

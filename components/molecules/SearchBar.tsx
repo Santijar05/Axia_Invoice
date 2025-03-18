@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Search } from "lucide-react";
 
 import { getListproductsByName } from "@/lib/api-products";
-import CustomButton from "../atoms/CustomButton";
 import { ProductDAO } from "@/types/Api";
-import Input from "../atoms/Input";
+import Input from "@/components/atoms/Input";
+import CustomButton from "@/components/atoms/CustomButton";
 
 interface SearchBarUniversalProps {
   onProductsFound?: (products: ProductDAO[]) => void;
@@ -16,16 +16,16 @@ interface SearchBarUniversalProps {
   onSearchChange?: (query: string) => void;
 }
 
-const useDebounce = (callback: (term: string) => void, delay: number) => {
-  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-
-  return (term: string) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      callback(term);
-    }, delay);
+function debounce<U extends unknown[], R>(
+  func: (...args: U) => R,
+  wait: number
+): (...args: U) => void {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  return (...args: U): void => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
   };
-};
+}
 
 const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   onProductsFound,
@@ -38,31 +38,31 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchProducts = async (term: string) => {
-    if (!term || term.length < 2) {
-      setProducts([]);
-      onProductsFound?.([]);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const fetchedProducts = await getListproductsByName(term);
-      setProducts(fetchedProducts || []);
-      onProductsFound?.(fetchedProducts || []);
-    } catch (err) {
-      console.error("Error fetching products:", err);
-      setError("Error al buscar productos");
-      setProducts([]);
-      onProductsFound?.([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const debounceSearch = useDebounce(fetchProducts, 500);
+  const debounceSearch = useMemo(
+    () =>
+      debounce(async (term: string) => {
+        if (!term || term.length < 2) {
+          setProducts([]);
+          if (onProductsFound) onProductsFound([]);
+          return;
+        }
+        setIsLoading(true);
+        setError(null);
+        try {
+          const fetchedProducts = await getListproductsByName(term);
+          setProducts(fetchedProducts || []);
+          if (onProductsFound) onProductsFound(fetchedProducts || []);
+        } catch (err) {
+          console.error("Error fetching products:", err);
+          setError("Error al buscar productos");
+          setProducts([]);
+          if (onProductsFound) onProductsFound([]);
+        } finally {
+          setIsLoading(false);
+        }
+      }, 500),
+    [onProductsFound]
+  );
 
   useEffect(() => {
     debounceSearch(searchTerm);
@@ -101,7 +101,6 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                       <span className="ml-2">Stock: {product.stock}</span>
                     </div>
                   </div>
-
                   {onAddToCart && (
                     <CustomButton
                       text="Agregar"
@@ -122,3 +121,4 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
 };
 
 export default SearchBarUniversal;
+
