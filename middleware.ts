@@ -15,7 +15,6 @@ export async function middleware(request: Request) {
 
   const { setRole } = useUserStore.getState();
 
-  // Definición de rutas públicas
   const publicRoutes = ["/login", "/register"];
   const routesClients = ["/", "/aboutus", "/contactus"];
 
@@ -30,7 +29,6 @@ export async function middleware(request: Request) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Manejo del token
   if (authToken) {
     try {
       const decoded: any = jwtDecode(authToken);
@@ -41,7 +39,6 @@ export async function middleware(request: Request) {
 
       setRole(userRole); // Guardar el rol en Zustand
 
-      // Verificar si el token ha expirado (24 horas desde iat)
       const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000;
       if (decoded.iat && Date.now() > decoded.iat * 1000 + MILLISECONDS_IN_A_DAY) {
         console.log("Token expirado. Redirigiendo a /login.");
@@ -100,7 +97,6 @@ export async function middleware(request: Request) {
     }
   }
 
-  // Si todo está bien, permitir la solicitud
   return NextResponse.next();
 }
 
