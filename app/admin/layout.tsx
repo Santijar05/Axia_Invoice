@@ -1,19 +1,7 @@
 // app/platform/dashboard/layout.tsx
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
 
-import HomeBoxAdmin from "@/modules/admin/HomeBoxAdmin";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import HomeBox from "@/components/organisms/HomeBox";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -22,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <HomeBoxAdmin>
+    <main className="justify-center items-center bg-black">
+      <HomeBox>
         {children}
-      </HomeBoxAdmin>
+      </HomeBox>
     </main>
   );
 }

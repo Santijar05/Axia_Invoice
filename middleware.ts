@@ -2,25 +2,31 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 
+import { useUserStore } from "./store/UserStore";
+
 export async function middleware(request: Request) {
   const cookieStore = await cookies();
   const authToken = cookieStore.get("authToken")?.value;
   const url = new URL(request.url);
   const pathname = url.pathname;
 
-  console.log("🔹 Middleware ejecutado en:", pathname);
-  console.log("🔹 Token presente:", authToken ? "Sí" : "No");
+  console.log("Middleware ejecutado en:", pathname);
+  console.log("Token presente:", authToken ? "Sí" : "No");
+
+  const { setRole } = useUserStore.getState();
 
   // Definición de rutas públicas
   const publicRoutes = ["/login", "/register"];
-  const isAdminRoute = pathname.startsWith("/admin");
-  const isEmployeeRoute = pathname.startsWith("/employee");
+  const routesClients = ["/", "/aboutus", "/contactus"];
 
-  let userRole = null;
+  // Permitir acceso a rutas públicas y rutas de clientes sin token
+  if ((publicRoutes.includes(pathname) || routesClients.includes(pathname)) && !authToken) {
+    return NextResponse.next();
+  }
 
-  // Si no hay token, redirigir a login salvo que sea una ruta pública
-  if (!authToken && !publicRoutes.includes(pathname)) {
-    console.log("❌ Sin token. Redirigiendo a /login.");
+  // Si no hay token y la ruta no es pública ni de clientes, redirigir a /login
+  if (!authToken) {
+    console.log("Sin token. Redirigiendo a /login.");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -28,15 +34,17 @@ export async function middleware(request: Request) {
   if (authToken) {
     try {
       const decoded: any = jwtDecode(authToken);
-      userRole = decoded.role;
+      const userRole = decoded.role;
 
-      console.log("🔹 Token decodificado:", decoded);
-      console.log("🔹 Rol del usuario:", userRole);
+      console.log("Token decodificado:", decoded);
+      console.log("Rol del usuario:", userRole);
+
+      setRole(userRole); // Guardar el rol en Zustand
 
       // Verificar si el token ha expirado (24 horas desde iat)
       const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000;
       if (decoded.iat && Date.now() > decoded.iat * 1000 + MILLISECONDS_IN_A_DAY) {
-        console.log("❌ Token expirado. Redirigiendo a /login.");
+        console.log("Token expirado. Redirigiendo a /login.");
         const response = NextResponse.redirect(new URL("/login", request.url));
         response.cookies.delete("authToken");
         return response;
@@ -44,7 +52,7 @@ export async function middleware(request: Request) {
 
       // Evitar que usuarios autenticados entren a rutas públicas
       if (publicRoutes.includes(pathname)) {
-        console.log("❌ Usuario autenticado intentó acceder a ruta pública:", pathname);
+        console.log("Usuario autenticado intentó acceder a ruta pública:", pathname);
         if (userRole === "ADMIN" || userRole === "SUPERADMIN") {
           return NextResponse.redirect(new URL("/admin", request.url));
         } else {
@@ -52,24 +60,40 @@ export async function middleware(request: Request) {
         }
       }
 
-      if (userRole === "EMPLOYEE") {
+      // Definir rutas permitidas según el rol
+      const allowedRoutes = {
+        EMPLOYEE: [
+          "/employee",
+          "/store/products",
+          "/sales/make-sales",
+          "/shopping/make-purchase",
+        ],
+        ADMIN: [
+          "/admin",
+          "/box/cash-history",
+          "/box/manage-cash",
+          "/store/products",
+          "/sales/make-sales",
+          "/shopping/suppliers",
+          "/users/customers",
+          "/users/employees",
+        ],
+      };
 
-        if (!isEmployeeRoute) {
-          console.log("❌ EMPLOYEE intentó acceder a una ruta no permitida:", pathname);
-          return NextResponse.redirect(new URL("/employee", request.url));
-        }
-      } else if (userRole === "ADMIN" || userRole === "SUPERADMIN") {
-        if (!isAdminRoute) {
-          console.log("❌ ADMIN/SUPERADMIN intentó acceder a una ruta no permitida:", pathname);
-          return NextResponse.redirect(new URL("/admin", request.url));
+      if (userRole in allowedRoutes) {
+        const userRoutes = allowedRoutes[userRole as keyof typeof allowedRoutes];
+      
+        if (!userRoutes.some(route => pathname.startsWith(route))) {
+          console.log(`${userRole} intentó acceder a una ruta no permitida:`, pathname);
+          return NextResponse.redirect(new URL(userRole === "ADMIN" || userRole === "SUPERADMIN" ? "/admin" : "/employee", request.url));
         }
       } else {
-        console.log("❌ Rol no reconocido:", userRole);
-        return NextResponse.redirect(new URL("/", request.url));
+        console.log("Rol desconocido. Redirigiendo a /login.");
+        return NextResponse.redirect(new URL("/login", request.url));
       }
 
     } catch (error) {
-      console.error("❌ Error al decodificar el token:", error);
+      console.error("Error al decodificar el token:", error);
       const response = NextResponse.redirect(new URL("/login", request.url));
       response.cookies.delete("authToken");
       return response;
@@ -80,7 +104,19 @@ export async function middleware(request: Request) {
   return NextResponse.next();
 }
 
-// Aplicar middleware solo a las ramas /admin/* y /employee/*, login, register
 export const config = {
-    matcher: ["/admin/:path*", "/employee/:path*", "/login", "/register"],
+  matcher: [
+    "/login", 
+    "/register", 
+    "/employee",
+    "/store/:path*",
+    "/sales/:path*",
+    "/admin",
+    "/box/:path*",
+    "/shopping/:path*",
+    "/users/:path*",
+    "/", 
+    "/aboutus", 
+    "/contactus"
+  ],
 };

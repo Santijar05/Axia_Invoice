@@ -4,8 +4,11 @@ import {
   User, Home, Truck, ShoppingCart, ChevronDown, ChevronUp, HandCoins, ArchiveRestore
 } from "lucide-react";
 
-export default function SidebarAdmin({ isOpen }: { isOpen: boolean }) {
+import { useUserStore } from "@/store/UserStore";
+
+export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const { role } = useUserStore();
 
   useEffect(() => {
     if (!isOpen) setOpenMenu(null);
@@ -17,46 +20,50 @@ export default function SidebarAdmin({ isOpen }: { isOpen: boolean }) {
     }
   };
 
+  const basePath = role === "EMPLOYEE" ? "/employee" : "/admin";
+
   const menuItems = [
-    { icon: Home, label: "Home", href: "/admin" },
-    { 
-      icon: HandCoins, 
-      label: "Box",
-      subOptions: [
-        { label: "History Cash", href: "/admin/box/cash-history" },
-        { label: "Manage Cash", href: "/admin/box/manage-cash" },
-      ],
-    },
+    { icon: Home, label: "Home", href: basePath },
+    ...(role === "ADMIN" || role === "SUPERADMIN" ? [
+      { 
+        icon: HandCoins, 
+        label: "Box",
+        subOptions: [
+          { label: "History Cash", href: `${basePath}/box/cash-history` },
+          { label: "Manage Cash", href: `${basePath}/box/manage-cash` },
+        ],
+      },
+    ] : []),
     { 
       icon: ArchiveRestore, 
       label: "Store",
       subOptions: [
-        { label: "Brands", href: "/admin/store/brands" },
-        { label: "Categories", href: "/admin/store/categories" },
-        { label: "Products", href: "/admin/store/products" },
+        { label: "Products", href: "/store/products" },
       ],
     },
     { 
       icon: Truck, 
       label: "Sales",
-      subOptions: [{ label: "Make Sales", href: "/admin/sales/make-sales" }],
+      subOptions: [{ label: "Make Sales", href: "/sales/make-sales" }],
     },
     { 
       icon: ShoppingCart, 
       label: "Shopping",
       subOptions: [
-        { label: "Make Purchase", href: "/admin/shopping/make-purchase" },
-        { label: "Supplier", href: "/admin/shopping/suppliers" },
+        ...(role === "EMPLOYEE" ? [{ label: "Make Purchase", href: "/shopping/make-purchase" }] : []),
+        ...(role === "ADMIN" || role === "SUPERADMIN" ? [{ label: "Supplier", href: "/shopping/suppliers" }] : []),
       ],
     },
-    { 
-      icon: User, 
-      label: "Users",
-      subOptions: [
-        { label: "Customers", href: "/admin/users/customers" },
-        { label: "Employees", href: "/admin/users/employees" },
-      ],
-    },
+    ...(role === "ADMIN" || role === "SUPERADMIN" ? [
+      { 
+        icon: User, 
+        label: "Users",
+        subOptions: [
+          { label: "Customers", href: "/users/customers" },
+          { label: "Employees", href: "/users/employees" },
+        ],
+      },
+    ] : []),
   ];
 
   return (
