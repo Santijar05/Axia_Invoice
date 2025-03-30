@@ -4,16 +4,17 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Search } from "lucide-react";
 
 import { getListproductsByName } from "@/lib/api-products";
-import { ProductDAO } from "@/types/Api";
+//import { getListEmployeesByName } from "@/lib/api-employees";
+import { ProductDAO, EmployeeDAO } from "@/types/Api";
 import Input from "@/components/atoms/Input";
 import CustomButton from "@/components/atoms/CustomButton";
 
 interface SearchBarUniversalProps {
-  onProductsFound?: (products: ProductDAO[]) => void;
+  onResultsFound?: (results: ProductDAO[] | EmployeeDAO[]) => void;
   onAddToCart?: (product: ProductDAO) => void;
   showResults?: boolean;
   placeholder?: string;
-  onSearchChange?: (query: string) => void;
+  searchType: "employees" | "products";
 }
 
 function debounce<U extends unknown[], R>(
@@ -28,13 +29,14 @@ function debounce<U extends unknown[], R>(
 }
 
 const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
-  onProductsFound,
+  onResultsFound,
   onAddToCart,
   showResults = false,
-  placeholder = "Buscar productos..."
+  placeholder = "Buscar...",
+  searchType
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [products, setProducts] = useState<ProductDAO[]>([]);
+  const [results, setResults] = useState<(ProductDAO | EmployeeDAO)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,26 +44,31 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
     () =>
       debounce(async (term: string) => {
         if (!term || term.length < 2) {
-          setProducts([]);
-          if (onProductsFound) onProductsFound([]);
+          setResults([]);
+          if (onResultsFound) onResultsFound([]);
           return;
         }
         setIsLoading(true);
         setError(null);
         try {
-          const fetchedProducts = await getListproductsByName(term);
-          setProducts(fetchedProducts || []);
-          if (onProductsFound) onProductsFound(fetchedProducts || []);
+          let fetchedResults: ProductDAO[] | EmployeeDAO[] = [];
+          if (searchType === "products") {
+            fetchedResults = await getListproductsByName(term) || [];
+          } else {
+            //fetchedResults = await getListEmployeesByName(term) || [];
+          }
+          setResults(fetchedResults);
+          if (onResultsFound) onResultsFound(fetchedResults);
         } catch (err) {
-          console.error("Error fetching products:", err);
-          setError("Error al buscar productos");
-          setProducts([]);
-          if (onProductsFound) onProductsFound([]);
+          console.error("Error fetching results:", err);
+          setError("Error al buscar");
+          setResults([]);
+          if (onResultsFound) onResultsFound([]);
         } finally {
           setIsLoading(false);
         }
       }, 500),
-    [onProductsFound]
+    [onResultsFound, searchType]
   );
 
   useEffect(() => {
@@ -87,32 +94,43 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
         <div className="mt-2">
           {isLoading && <p className="text-gray-500 text-sm">Buscando...</p>}
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          {searchTerm && products.length > 0 ? (
+          {searchTerm && results.length > 0 ? (
             <ul className="bg-white border border-gray-300 rounded-md shadow-sm max-h-60 overflow-auto">
-              {products.map((product) => (
+              {results.map((item) => (
                 <li
-                  key={product.id}
+                  key={(item as ProductDAO).id || (item as EmployeeDAO).id}
                   className="flex justify-between items-center p-2 border-b hover:bg-gray-100"
                 >
                   <div>
-                    <span className="font-medium text-black">{product.name}</span>
+                    <span className="font-medium text-black">
+                      {(item as ProductDAO).name || (item as EmployeeDAO).name}
+                    </span>
                     <div className="text-sm text-gray-500">
-                      <span>Precio: ${product.salePrice}</span>
-                      <span className="ml-2">Stock: {product.stock}</span>
+                      {searchType === "products" ? (
+                        <>
+                          <span>Precio: ${(item as ProductDAO).salePrice}</span>
+                          <span className="ml-2">Stock: {(item as ProductDAO).stock}</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Posición: {(item as EmployeeDAO).position}</span>
+                          <span className="ml-2">Email: {(item as EmployeeDAO).email}</span>
+                        </>
+                      )}
                     </div>
                   </div>
-                  {onAddToCart && (
+                  {onAddToCart && searchType === "products" && (
                     <CustomButton
                       text="Agregar"
                       style="bg-blue-500 text-white hover:bg-blue-600 text-sm px-3 py-1"
-                      onClickButton={() => onAddToCart(product)}
+                      onClickButton={() => onAddToCart(item as ProductDAO)}
                     />
                   )}
                 </li>
               ))}
             </ul>
           ) : (
-            searchTerm && !isLoading && <p className="text-gray-500 text-sm">No se encontraron productos.</p>
+            searchTerm && !isLoading && <p className="text-gray-500 text-sm">No se encontraron resultados.</p>
           )}
         </div>
       )}
@@ -121,4 +139,3 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
 };
 
 export default SearchBarUniversal;
-

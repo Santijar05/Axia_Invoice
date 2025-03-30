@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
 import { getListproducts } from "@/lib/api-products";
-import { ProductDAO } from "@/types/Api";
+import { EmployeeDAO, ProductDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import ProductForm from "./ProductForm";
 
@@ -53,9 +53,9 @@ export default function ScreenProducts() {
         setProducts(formattedProducts);
     };
 
-    const handleProductsFound = (foundProducts: ProductDAO[]) => {
-        if (foundProducts.length > 0) {
-            formatAndSetProducts(foundProducts);
+    const handleProductsFound = (results: EmployeeDAO[] | ProductDAO[]) => {
+        if (results.length > 0 && "stock" in results[0]) {
+            formatAndSetProducts(results as ProductDAO[]);
         } else if (searchQuery) {
             setProducts([]);
         } else {
@@ -64,7 +64,7 @@ export default function ScreenProducts() {
     };
 
     const handleRowClick = (productId: string) => {
-        router.push(`/admin/store/products/${productId}`);
+        router.push(`/store/products/${productId}`);
     }
 
     return (
@@ -77,11 +77,11 @@ export default function ScreenProducts() {
             
             <div className="mb-4 mt-4 w-72">
                 <SearchBarUniversal 
-                    onProductsFound={handleProductsFound} 
+                    onResultsFound={handleProductsFound} 
                     showResults={false}
-                    placeholder="Buscar por nombre..."
-                    onSearchChange={(query: string) => setSearchQuery(query)}
-                    />
+                    placeholder="Search by name..."
+                    searchType="products"
+                />
             </div>
             
             {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando productos...</p>}

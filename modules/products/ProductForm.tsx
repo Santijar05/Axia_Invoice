@@ -41,9 +41,10 @@ export default function ProductForm() {
                 <label className="text-sm font-semibold text-gray-500">Code</label>
                 <Input placeholder="AUTOGENERADO" type="text" disable={true} />
             </div>
+
             <div>
                 <label className="text-sm font-semibold text-gray-500">Outside</label>
-                <Input placeholder="ODA8580BDS08" type="text" />
+                <Input className="text-black" placeholder="ODA8580BDS08" type="text" />
             </div>
 
             <div className="col-span-2">
@@ -52,6 +53,7 @@ export default function ProductForm() {
                     <label className="text-lg text-red-600 font-semibold"> *</label>
                 </div>
                 <Input 
+                    className="text-black"
                     placeholder="EJ. MOUSE RAZER" 
                     type="text" 
                 />
@@ -63,6 +65,7 @@ export default function ProductForm() {
                     <label className="text-lg text-red-600 font-semibold"> *</label>
                 </div>
                 <Input 
+                    className="text-black"
                     placeholder="0.00" 
                     type="number" 
                 />
@@ -74,6 +77,7 @@ export default function ProductForm() {
                     <label className="text-lg text-red-600 font-semibold"> *</label>
                 </div>
                 <Input 
+                    className="text-black"
                     placeholder="EJ. 1.00" 
                     type="number" 
                 />
@@ -85,6 +89,7 @@ export default function ProductForm() {
                     <label className="text-lg text-red-600 font-semibold"> *</label>
                 </div>
                 <Input 
+                    className="text-black"
                     placeholder="0.00" 
                     type="number" 
                 />

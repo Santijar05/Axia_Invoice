@@ -3,6 +3,15 @@ export interface UserDataLogin {
     password: string;
 }
 
+export interface EmployeeDAO {
+    id: string;
+    name: string;
+    position: string;
+    email: string;
+    phone: string;
+    status: string;
+}
+
 export interface UserDataRegister {
     name: string;
     email: string;
