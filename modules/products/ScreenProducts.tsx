@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
 import { getListproducts } from "@/lib/api-products";
-import { EmployeeDAO, ProductDAO } from "@/types/Api";
+import { EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import ProductForm from "./ProductForm";
 
@@ -53,7 +53,7 @@ export default function ScreenProducts() {
         setProducts(formattedProducts);
     };
 
-    const handleProductsFound = (results: EmployeeDAO[] | ProductDAO[]) => {
+    const handleProductsFound = (results: EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
         if (results.length > 0 && "stock" in results[0]) {
             formatAndSetProducts(results as ProductDAO[]);
         } else if (searchQuery) {

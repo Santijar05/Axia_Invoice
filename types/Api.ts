@@ -12,6 +12,17 @@ export interface EmployeeDAO {
     status: string;
 }
 
+export interface SupplierDAO {
+    id: string;
+    tenantId: string;
+    nit: string;
+    name: string;
+    phone: string;
+    address: string;
+    createdAt: string; 
+    updatedAt: string; 
+}  
+
 export interface UserDataRegister {
     name: string;
     email: string;
