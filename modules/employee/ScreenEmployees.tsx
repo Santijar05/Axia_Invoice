@@ -45,10 +45,8 @@ export default function ScreenEmployees() {
         const formattedEmployees = employeeList.map((employee: EmployeeDAO) => ({
             id: employee.id,
             name: employee.name,
-            position: employee.position,
+            role: employee.role,
             email: employee.email,
-            phone: employee.phone,
-            status: employee.status,
         }));
         setInitialEmployees(formattedEmployees);
         setEmployees(formattedEmployees);
@@ -72,7 +70,7 @@ export default function ScreenEmployees() {
         <div className="container mx-auto">
             <Toolbar
                 title="Employees"
-                formComponent={<EmployeeForm />}
+                formComponent={<EmployeeForm/>}
                 formTitle="Enter Employee"
             />
             
@@ -89,7 +87,7 @@ export default function ScreenEmployees() {
             
             <CustomTable
                 title=""
-                headers={["ID", "Name", "Position", "Email", "Phone", "Status"]}
+                headers={["ID", "Name", "Email", "role"]}
                 options={true}
                 products={employees}
                 onRowClick={handleRowClick}

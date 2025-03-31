@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const customertSchema = z.object({
-    name: z.string()
+    firstName: z.string()
             .nonempty({ message: "Name is required" })
             .min(4, {message: "Name must be at least 4 characters long"})
             .max(40)
@@ -19,18 +19,17 @@ export const customertSchema = z.object({
                     { message: "Lastname cannot contain special characters or spaces or numbers" }
                 ),
 
-    phone: z.string().regex(/^\d{7,15}$/, "Número de teléfono inválido"),
+    identification: z.string()
+                .nonempty({ message: "Identification is required" })
+                .min(7, {message: "Identification must be at least 7 characters long"})
+                .max(15, {message: "Identification must be at most 15 characters long"})
+                .refine(
+                    (value) => /^[0-9]+$/.test(value ?? ""),
+                    { message: "La identificacion solo puede contener numeros" }
+                ),
 
     email: z.string()
 			.nonempty({ message: "Email is required" })
 			.email({message: "Please enter a valid email"})
 			.max(40),
-
-    address: z.string().min(1, "La dirección es obligatoria"),
-
-    birthDate: z.string().refine(date => {
-        return new Date(date) <= new Date();
-    }, {
-        message: "Date is required"
-    }),
 });

@@ -48,7 +48,6 @@ export default function ScreenCustomers() {
             firstName: client.firstName,
             lastName: client.lastName,
             email: client.email,
-            createdAt: new Date(client.createdAt).toLocaleDateString(),
         }));
         setInitialClients(formattedClients);
         setClients(formattedClients);
@@ -89,7 +88,7 @@ export default function ScreenCustomers() {
             
             <CustomTable
                 title=""
-                headers={["ID", "Identification", "First Name", "Last Name", "Email", "Created At"]}
+                headers={["ID", "Identification", "First Name", "Last Name", "Email"]}
                 options={true}
                 products={clients}
                 onRowClick={handleRowClick}

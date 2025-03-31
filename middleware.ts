@@ -59,13 +59,23 @@ export async function middleware(request: Request) {
 
       // Definir rutas permitidas según el rol
       const allowedRoutes = {
-        EMPLOYEE: [
+        USER: [
           "/employee",
           "/store/products",
           "/sales/make-sales",
           "/shopping/make-purchase",
         ],
         ADMIN: [
+          "/admin",
+          "/box/cash-history",
+          "/box/manage-cash",
+          "/store/products",
+          "/sales/make-sales",
+          "/shopping/suppliers",
+          "/users/customers",
+          "/users/employees",
+        ],
+        SUPERADMIN: [
           "/admin",
           "/box/cash-history",
           "/box/manage-cash",

@@ -2,37 +2,84 @@ import React, { forwardRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customertSchema } from "@/schemes/customerScheme";
-
 import Input from "@/components/atoms/Input";
+import { createCustomer } from "@/request/users";
+import Cookies from "js-cookie"; 
+import { jwtDecode } from "jwt-decode";
 
 type CustomerFormData = {
-    name: string;
+    tenantId: string;
+    identification: string; 
+    firstName: string;
     lastName: string;
-    phone: string; 
     email: string; 
-    address: string; 
-    birthDate: string;
 };
 
-const CustomerForm = forwardRef<HTMLFormElement>((_, ref) => {
+interface CustomerFormProps {
+    onSuccess?: () => void; 
+}
+
+const CustomerForm = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuccess }, ref) => {
         const {
             register,
             handleSubmit,
+            reset, 
             formState: { errors },
         } = useForm<CustomerFormData>({
             resolver: zodResolver(customertSchema),
         });
 
-        const onSubmit = (data: CustomerFormData) => {
-            console.log("Datos enviados:", data);
-            // fetch() a backend
+        const onSubmit = async (data: CustomerFormData) => {
+            const authToken = Cookies.get("authToken");
+            if (!authToken) {
+                throw new Error("Authentication token is missing");
+            }
+            
+            const decoded: any = jwtDecode(authToken);
+            const tenantId = decoded.tenantId;
+            
+            const formData = {
+                ...data,         
+                tenantId,
+                id: "", 
+            };
+            console.log("Datos enviados:", formData);
+
+            try {                
+            const response = await createCustomer(formData, authToken);
+
+            if (response.status === 201) {
+                const responseData = await response.json();
+                alert("Cliente creado exitosamente");
+                console.log("Usuario creado:", responseData);
+                reset(); 
+                if (onSuccess) onSuccess();
+            } else {
+                const errorData = await response.json();
+                console.log("Error al crear el cliente:", errorData);
+            }
+            } catch (error) {
+            console.error(error);
+                alert("Error de conexión. Inténtalo nuevamente.");
+            }     
         };
 
         return (
             <form ref={ref} onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4"> 
                 <div>
                     <label className="text-sm font-semibold text-gray-500">Código</label>
-                    <Input placeholder="AUTOGENERADO" type="text" disable={true} />
+                    <Input placeholder="AUTOGENERADO" type="text" disabled={true} />
+                </div>
+
+                <div>
+                    <label className="text-sm font-semibold text-gray-500">Identificacion</label>
+                    <Input 
+                        className="text-homePrimary-200 bg-transparent" 
+                        placeholder="Ej. 123456789" 
+                        type="text" 
+                        {...register("identification")} 
+                    />
+                    {errors.identification && <p className="text-red-500 text-xs">{errors.identification.message}</p>}
                 </div>
 
                 <div>
@@ -41,9 +88,9 @@ const CustomerForm = forwardRef<HTMLFormElement>((_, ref) => {
                         className="text-homePrimary-200 bg-transparent" 
                         placeholder="Ej. Juan" 
                         type="text" 
-                        {...register("name")} 
+                        {...register("firstName")} 
                     />
-                    {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
+                    {errors.firstName && <p className="text-red-500 text-xs">{errors.firstName.message}</p>}
                 </div>
 
                 <div>
@@ -54,18 +101,7 @@ const CustomerForm = forwardRef<HTMLFormElement>((_, ref) => {
                         type="text" 
                         {...register("lastName")} 
                     />
-                    {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
-                </div>
-
-                <div>
-                    <label className="text-sm font-semibold text-gray-500">Teléfono</label>
-                    <Input 
-                        className="text-homePrimary-200 bg-transparent" 
-                        placeholder="Ej. 123456789" 
-                        type="text" 
-                        {...register("phone")} 
-                    />
-                    {errors.phone && <p className="text-red-500 text-xs">{errors.phone.message}</p>}
+                    {errors.lastName && <p className="text-red-500 text-xs">{errors.lastName.message}</p>}
                 </div>
 
                 <div>
@@ -79,28 +115,6 @@ const CustomerForm = forwardRef<HTMLFormElement>((_, ref) => {
                     {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
                 </div>
                 
-                <div>
-                    <label className="text-sm font-semibold text-gray-500">Dirección</label>
-                    <Input 
-                        className="text-homePrimary-200 bg-transparent" 
-                        placeholder="Ej. Calle 123, Ciudad" 
-                        type="text" 
-                        {...register("address")} 
-                    />
-                    {errors.address && <p className="text-red-500 text-xs">{errors.address.message}</p>}
-                </div>
-                
-                <div>
-                    <label className="text-sm font-semibold text-gray-500">Fecha de Nacimiento</label>
-                    <Input 
-                        className="text-homePrimary-200 bg-transparent" 
-                        type="date" 
-                        placeholder="Seleccione una fecha" 
-                        {...register("birthDate")}
-                        max={new Date().toISOString().split("T")[0]} 
-                    />
-                    {errors.birthDate && <p className="text-red-500 text-xs">{errors.birthDate.message}</p>}
-                </div>
             </form>
         );
     }

@@ -1,50 +1,129 @@
-import React, { useState } from "react";
+import React, { forwardRef } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { employeeSchema } from "@/schemes/employeeScheme";
 import Input from "@/components/atoms/Input";
+import Cookies from "js-cookie"; 
+import { jwtDecode } from "jwt-decode";
+import { createEmployee } from "@/request/users";
 
-export default function EmployeeForm() {
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+type EmployeeFormData = {
+    tenantId: string;
+    name: string; 
+    email: string; 
+    password: string;
+    role: string;
+    avatar: string; 
+};
 
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setSelectedImage(URL.createObjectURL(file));
+interface EmployeeFormProps {
+    onSuccess?: () => void; 
+}
+
+const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess }, ref) => {
+    const {
+        register,
+        handleSubmit,
+        reset, 
+        formState: { errors },
+    } = useForm<EmployeeFormData>({
+        resolver: zodResolver(employeeSchema),
+    });
+
+    const onSubmit = async (data: EmployeeFormData) => {
+        console.log("onSubmit disparado con datos:", data); 
+        const authToken = Cookies.get("authToken");
+        if (!authToken) {
+            console.error("No hay authToken");
+            throw new Error("Authentication token is missing");
         }
+        
+        const decoded: any = jwtDecode(authToken);
+        const tenantId = decoded.tenantId;
+        
+        const formData = {
+            ...data,         
+            tenantId,
+            id: "", 
+        };
+        console.log("Datos enviados:", formData);
+        
+        try {                
+            const response = await createEmployee(formData, authToken);
+            console.log("Respuesta del servidor:", response);
+
+            if (response.status === 201) {
+                const responseData = await response.json();
+                alert("Cliente creado exitosamente");
+                console.log("Usuario creado:", responseData);
+                reset(); 
+                if (onSuccess) {
+                    onSuccess();
+                }
+
+            } else {
+                const errorData = await response.json();
+                console.log("Error al crear el cliente:", errorData);
+            }
+        } catch (error) {
+            console.error("Error en onSubmit:", error);
+            alert("Error de conexión. Inténtalo nuevamente.");
+        }   
     };
 
     return (
-        <div className="grid grid-cols-2 gap-4">
+        <form ref={ref} onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4"> 
             <div>
                 <label className="text-sm font-semibold text-gray-500">Código</label>
-                <Input placeholder="AUTOGENERADO" type="text" disable={true} />
+                <Input placeholder="AUTOGENERADO" type="text" disabled={true} />
             </div>
 
             <div>
                 <label className="text-sm font-semibold text-gray-500">Nombre</label>
-                <Input className="text-black" placeholder="Ej. Juan" type="text" disable={false}/>
+                <Input 
+                    className="text-homePrimary-200 bg-transparent" 
+                    placeholder="Ej. Juan" 
+                    type="text" 
+                    {...register("name")} 
+                />
+                {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Apellido</label>
-                <Input className="text-black" placeholder="Ej. Pérez" type="text" />
+                <label className="text-sm font-semibold text-gray-500">Correo electrónico</label>
+                <Input 
+                    className="text-homePrimary-200 bg-transparent" 
+                    placeholder="Ej. Juan@gmail.com" 
+                    type="email" 
+                    {...register("email")} 
+                />
+                {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Teléfono</label>
-                <Input className="text-black" placeholder="Ej. 123456789" type="text" />
+                <label className="text-sm font-semibold text-gray-500">Contraseña</label>
+                <Input 
+                    className="text-homePrimary-200 bg-transparent" 
+                    placeholder="Contraseña" 
+                    type="password" 
+                    {...register("password")} 
+                />
+                {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Email</label>
-                <Input className="text-black" placeholder="Ej. juan.perez@email.com" type="email" />
+                <label className="text-sm font-semibold text-gray-500">Rol</label>
+                <Input 
+                    className="text-homePrimary-200 bg-transparent" 
+                    placeholder="Ej. admin" 
+                    type="text" 
+                    {...register("role")} 
+                />
+                {errors.role && <p className="text-red-500 text-xs">{errors.role.message}</p>}
             </div>
-
-            <div className="col-span-2">
-                <div className="py-2">
-                    <label className="text-sm text-gray-500 font-semibold">Image</label>
-                    <label className="text-lg text-red-600 font-semibold"> *</label>
-                </div>
-                <input type="file" onChange={handleImageChange} className="input-file text-gray-400 border p-3 rounded-md border-gray-300" />
-            </div>
-        </div>
+        </form>
     );
-}
+});
+
+EmployeeForm.displayName = "EmployeeForm";
+export default EmployeeForm;
