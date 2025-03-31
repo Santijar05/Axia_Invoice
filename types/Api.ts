@@ -12,6 +12,17 @@ export interface EmployeeDAO {
     status: string;
 }
 
+export interface ClientDAO {
+    id: string;
+    tenantId: string;
+    identification: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    createdAt: string;  // Se puede usar Date si se manejará como objeto de fecha
+    updatedAt: string;
+}
+
 export interface SupplierDAO {
     id: string;
     tenantId: string;

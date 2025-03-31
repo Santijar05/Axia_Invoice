@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
 import { getListSuppliers } from "@/lib/api-suppliers";
-import { EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
+import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import SupplierForm from "./SupplierForm";
 
@@ -52,7 +52,7 @@ export default function ScreenSuppliers() {
         setSuppliers(formattedSuppliers);
     };
 
-    const handleSuppliersFound = (results: EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+    const handleSuppliersFound = (results: EmployeeDAO[] | ProductDAO[] | SupplierDAO[] | ClientDAO[]) => {
         if (results.length > 0 && "nit" in results[0]) {
             formatAndSetSuppliers(results as SupplierDAO[]);
         } else if (searchQuery) {

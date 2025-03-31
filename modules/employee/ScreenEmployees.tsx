@@ -1,10 +1,12 @@
 'use client'
+
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
 import { getListEmployees } from "@/lib/api-employees";
-import { EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
+import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import EmployeeForm from "./EmployeeForm";
 
@@ -52,7 +54,7 @@ export default function ScreenEmployees() {
         setEmployees(formattedEmployees);
     };
 
-    const handleEmployeesFound = (results: EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+    const handleEmployeesFound = (results: EmployeeDAO[] | ProductDAO[] | SupplierDAO[] | ClientDAO[]) => {
         if (results.length > 0 && "email" in results[0]) {
             formatAndSetEmployees(results as EmployeeDAO[]);
         } else if (searchQuery) {

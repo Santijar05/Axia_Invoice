@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef, cloneElement } from "react";
 import { CirclePlus, Printer} from "lucide-react";
 import CustomButton from "../atoms/CustomButton";
 import CustomModal from "@/components/organisms/CustomModal";
 
 interface ToolbarProps {
     title: string, 
-    formComponent: React.ReactNode,
+    formComponent: React.ReactElement; 
     formTitle: string,
 }
 
 export default function Toolbar({title, formComponent, formTitle}: ToolbarProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
 
     return (
         <div className="p-4 bg-black shadow">
@@ -34,8 +33,12 @@ export default function Toolbar({title, formComponent, formTitle}: ToolbarProps)
                 </div>
             </div>
 
-            <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={formTitle}>
-                {formComponent} 
+            <CustomModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                title={formTitle}
+            >
+                {formComponent}
             </CustomModal>
         </div>
     );

@@ -4,18 +4,19 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Search } from "lucide-react";
 
 import { getListproductsByName } from "@/lib/api-products";
+//import { getListClientsByName } from "@/lib/api-clients";
 //import { getListEmployeesByName } from "@/lib/api-employees";
 //import { getListSuppliersByName } from "@/lib/api-suppliers";
-import { ProductDAO, EmployeeDAO, SupplierDAO } from "@/types/Api";
+import { ProductDAO, EmployeeDAO, SupplierDAO, ClientDAO } from "@/types/Api";
 import Input from "@/components/atoms/Input";
 import CustomButton from "@/components/atoms/CustomButton";
 
 interface SearchBarUniversalProps {
-  onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[]) => void;
+  onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[]) => void;
   onAddToCart?: (product: ProductDAO) => void;
   showResults?: boolean;
   placeholder?: string;
-  searchType: "employees" | "products"  | "suppliers";
+  searchType: "employees" | "products"  | "suppliers" | "clients";
 }
 
 function debounce<U extends unknown[], R>(
@@ -37,7 +38,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   searchType
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState<(ProductDAO | EmployeeDAO | SupplierDAO)[]>([]);
+  const [results, setResults] = useState<(ProductDAO | EmployeeDAO | SupplierDAO | ClientDAO)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,14 +55,16 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
         setError(null);
 
         try {
-          let fetchedResults: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] = [];
+          let fetchedResults: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] = [];
           
           if (searchType === "products") {
             fetchedResults = await getListproductsByName(term) || [];
+          } else if (searchType === "clients") {
+            //fetchedResults = (await getListClientsByName(term)) || [];
           } else if (searchType === "suppliers") {
-            //fetchedResults = await getListSuppliersByName(term) || [];
+            // fetchedResults = await getListSuppliersByName(term) || [];
           } else {
-            //fetchedResults = await getListEmployeesByName(term) || [];
+            // fetchedResults = await getListEmployeesByName(term) || [];
           }
 
           setResults(fetchedResults);
@@ -117,7 +120,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                 >
                   <div>
                     <span className="font-medium text-black">
-                      {(item as ProductDAO).name || (item as EmployeeDAO).name || (item as SupplierDAO).name}
+                      {(item as ProductDAO).name || (item as EmployeeDAO).name || (item as SupplierDAO).name || `${(item as ClientDAO).firstName} ${(item as ClientDAO).lastName}`}
                     </span>
 
                     <div className="text-sm text-gray-500">
@@ -131,6 +134,11 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                         <>
                           <span>Posición: {(item as EmployeeDAO).position}</span>
                           <span className="ml-2">Email: {(item as EmployeeDAO).email}</span>
+                        </>
+                      ) : searchType === "clients" ? (
+                        <>
+                          <span>Email: {(item as ClientDAO).email}</span>
+                          <span className="ml-2">ID: {(item as ClientDAO).identification}</span>
                         </>
                       ) : (
                         <>
