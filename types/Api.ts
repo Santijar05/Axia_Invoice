@@ -6,10 +6,8 @@ export interface UserDataLogin {
 export interface EmployeeDAO {
     id: string;
     name: string;
-    position: string;
+    role: string;
     email: string;
-    phone: string;
-    status: string;
 }
 
 export interface ClientDAO {
@@ -19,8 +17,6 @@ export interface ClientDAO {
     firstName: string;
     lastName: string;
     email: string;
-    createdAt: string;  // Se puede usar Date si se manejará como objeto de fecha
-    updatedAt: string;
 }
 
 export interface SupplierDAO {
