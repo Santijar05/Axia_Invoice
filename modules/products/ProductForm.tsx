@@ -4,6 +4,7 @@ import Switch from "react-switch";
 import Input from "@/components/atoms/Input";
 import Dropdown from "@/components/molecules/Dropdown";
 
+
 export default function ProductForm() {
     const [selectedCategory, setSelectedCategory] = useState("Selecciona una categoría");
     const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);

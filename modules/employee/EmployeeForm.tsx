@@ -18,6 +18,7 @@ type EmployeeFormData = {
 
 interface EmployeeFormProps {
     onSuccess?: () => void; 
+    onClose?: () => void;  
 }
 
 const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess }, ref) => {
@@ -31,7 +32,6 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
     });
 
     const onSubmit = async (data: EmployeeFormData) => {
-        console.log("onSubmit disparado con datos:", data); 
         const authToken = Cookies.get("authToken");
         if (!authToken) {
             console.error("No hay authToken");

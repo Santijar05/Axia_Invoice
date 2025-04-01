@@ -25,7 +25,7 @@ export const customertSchema = z.object({
                 .max(15, {message: "Identification must be at most 15 characters long"})
                 .refine(
                     (value) => /^[0-9]+$/.test(value ?? ""),
-                    { message: "La identificacion solo puede contener numeros" }
+                     { message: "La identificacion solo puede contener numeros" }
                 ),
 
     email: z.string()

@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
-import { getListproducts } from "@/lib/api-products";
+import { getListproducts } from "@/lib/api-products"; // Añadida función deleteProduct
 import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import ProductForm from "./ProductForm";
@@ -11,8 +11,7 @@ import ProductForm from "./ProductForm";
 export default function ScreenProducts() {
     const router = useRouter();
     const [products, setProducts] = useState<{ [key: string]: string }[]>([]);
-    const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]); // Nuevo estado para productos iniciales
-    const [searchQuery, setSearchQuery] = useState('');
+    const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const initialFetchDone = useRef(false);
     
@@ -33,7 +32,7 @@ export default function ScreenProducts() {
                 formatAndSetProducts(res);
             }
         } catch (err) {
-            console.log('Error al obtener productos', err);
+            console.error('Error al obtener productos:', err);
         } finally {
             setIsLoading(false);
         }
@@ -43,21 +42,24 @@ export default function ScreenProducts() {
         const formattedProducts = productList.map((product: ProductDAO) => ({
             id: product.id,
             name: product.name,
-            supplier: product.supplier.name,
-            tax: product.tax.toString(),
-            stock: product.stock.toString(),
-            purchasePrice: product.purchasePrice.toString(),
-            salePrice: product.salePrice.toString(),
+            supplier: product.supplier?.name || 'N/A',
+            tax: product.tax?.toString() || '0',
+            stock: product.stock?.toString() || '0',
+            purchasePrice: product.purchasePrice?.toString() || '0',
+            salePrice: product.salePrice?.toString() || '0',
         }));
-        setInitialProducts(formattedProducts); // Guardar productos iniciales
+        setInitialProducts(formattedProducts);
         setProducts(formattedProducts);
     };
 
-    const handleProductsFound = (results: EmployeeDAO[] | ProductDAO[] | SupplierDAO[] | ClientDAO[]) => {
-        if (results.length > 0 && "stock" in results[0]) {
-            formatAndSetProducts(results as ProductDAO[]);
-        } else if (searchQuery) {
-            setProducts([]);
+    const handleProductsFound = (results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+        // Type guard para filtrar solo ProductDAO
+        const productResults = results.filter((result): result is ProductDAO => 
+            'name' in result && 'stock' in result
+        );
+        
+        if (productResults.length > 0) {
+            formatAndSetProducts(productResults);
         } else {
             setProducts(initialProducts);
         }
@@ -65,21 +67,26 @@ export default function ScreenProducts() {
 
     const handleRowClick = (productId: string) => {
         router.push(`/store/products/${productId}`);
-    }
+    };
+
+    // Función para manejar la eliminación de productos
+    const handleDeleteProduct = async (productId: string) => {
+
+    };
 
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Products"
+                title="Gestión de Productos"
                 formComponent={<ProductForm />}
-                formTitle="Ingrese producto"
+                formTitle="Nuevo Producto"
             />
             
             <div className="mb-4 mt-4 w-72">
                 <SearchBarUniversal 
                     onResultsFound={handleProductsFound} 
                     showResults={false}
-                    placeholder="Search by name..."
+                    placeholder="Buscar productos..."
                     searchType="products"
                 />
             </div>
@@ -87,11 +94,22 @@ export default function ScreenProducts() {
             {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando productos...</p>}
             
             <CustomTable
-                title=""
-                headers={["Bar/Internal", "Product", "Supplier", "Tax", "Stock", "P. Purchase", "Price"]}
+                title="Lista de Productos"
+                headers={["Código", "Producto", "Proveedor", "Impuesto", "Stock", "P. Compra", "P. Venta"]}
                 options={true}
-                products={products}
+                data={products}
+                contextType="products"
                 onRowClick={handleRowClick}
+                customActions={{
+                    delete: handleDeleteProduct,
+                    edit: (id) => router.push(`/store/products/edit/${id}`),
+                    view: handleRowClick
+                }}
+                actionLabels={{
+                    delete: "Eliminar",
+                    edit: "Editar",
+                    view: "Ver Detalles"
+                }}
             />
         </div>
     );
