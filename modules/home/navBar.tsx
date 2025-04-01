@@ -14,7 +14,7 @@ const Navbar = () => {
   return (
     <nav className="bg-black dark:bg-gray-900 fixed w-full z-20 top-0">
       <div className="max-w-screen-xl flex items-center justify-between p-4 mx-auto">
-        <Link href="/home" className="flex space-x-3">
+        <Link href="/" className="flex space-x-3">
           <Image 
             src="/Images/logo_blanco.png"  
             alt="Axia logo" 
@@ -33,7 +33,7 @@ const Navbar = () => {
 
         <div className="flex md:order-2">
           <CustomButton
-            text="Platform" 
+            text="Plataforma" 
             style="bg-homePrimary text-white font-semibold" 
             onClickButton={() => router.push('/login')}
           />

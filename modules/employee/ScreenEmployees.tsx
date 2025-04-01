@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
-import { getListEmployees } from "@/lib/api-employees";
+import { getListEmployees } from "@/request/users";
 import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import EmployeeForm from "./EmployeeForm";
@@ -31,6 +31,7 @@ export default function ScreenEmployees() {
         setIsLoading(true);
         try {
             const res = await getListEmployees();
+            console.log('Employees fetched:', res);
             if (res && Array.isArray(res)) {
                 formatAndSetEmployees(res);
             }
@@ -87,7 +88,7 @@ export default function ScreenEmployees() {
             
             <CustomTable
                 title=""
-                headers={["ID", "Name", "Email", "role"]}
+                headers={["ID", "Name", "Role", "Email"]}
                 options={true}
                 products={employees}
                 onRowClick={handleRowClick}

@@ -8,7 +8,7 @@ import Toolbar from "@/components/organisms/ToolBar";
 import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import CustomerForm from "./CustomerForm";
-import { getListClients } from "@/lib/api-clients";
+import { getListCustomers } from "@/request/users";
 
 export default function ScreenCustomers() {
     const router = useRouter();
@@ -30,7 +30,7 @@ export default function ScreenCustomers() {
         
         setIsLoading(true);
         try {
-            const res = await getListClients();
+            const res = await getListCustomers();
             if (res && Array.isArray(res)) {
                 formatAndSetClients(res);
             }

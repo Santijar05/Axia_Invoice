@@ -24,7 +24,6 @@ export const createCustomer = async (body: ClientDAO, authToken: string): Promis
     body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${authToken}`, 
     },
   };
 
@@ -39,10 +38,38 @@ export const createEmployee = async (body: EmployeeDAO, authToken: string): Prom
       body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`, 
       },
     };
   
     return fetchWithCredentials(url, headersOptions);
   };
   
+export const getListEmployees = async (): Promise<EmployeeDAO[]> => {
+  const url = `${API_BASE_URL}/users`;
+  console.log('Fetching products from:', url);
+
+  const response = await fetchWithCredentials(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data: EmployeeDAO[] = await response.json();
+  return data;
+};
+
+export const getListCustomers = async (): Promise<ClientDAO[]> => {
+  const url = `${API_BASE_URL}/clients`;
+  console.log('Fetching products from:', url);
+
+  const response = await fetchWithCredentials(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data: ClientDAO[] = await response.json();
+  return data;
+};
