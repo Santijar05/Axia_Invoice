@@ -18,6 +18,7 @@ type EmployeeFormData = {
 
 interface EmployeeFormProps {
     onSuccess?: () => void; 
+    onClose?: () => void;  
 }
 
 const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess }, ref) => {

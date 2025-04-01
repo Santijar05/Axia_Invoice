@@ -73,3 +73,61 @@ export const getListCustomers = async (): Promise<ClientDAO[]> => {
   const data: ClientDAO[] = await response.json();
   return data;
 };
+
+export const deleteCustomers = async (id: string): Promise<ClientDAO[]> => {
+  const url = `${API_BASE_URL}/clients/${id}`;
+  console.log('Fetching products from:', url);
+
+  const response = await fetchWithCredentials(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data: ClientDAO[] = await response.json();
+  return data;
+};
+
+export const deleteEmployees = async (id: string): Promise<EmployeeDAO[]> => {
+  const url = `${API_BASE_URL}/users/${id}`;
+  console.log('Fetching products from:', url);
+
+  const response = await fetchWithCredentials(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data: EmployeeDAO[] = await response.json();
+  return data;
+};
+
+export const updateCustomer = async (body: ClientDAO, id:string): Promise<Response> => {
+  const url = `${API_BASE_URL}/clients/${id}`;
+
+  const headersOptions: RequestInit = {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  return fetchWithCredentials(url, headersOptions);
+};
+
+export const updateEmployee = async (body: EmployeeDAO, id:string): Promise<Response> => {
+  const url = `${API_BASE_URL}/users/${id}`;
+
+  const headersOptions: RequestInit = {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  return fetchWithCredentials(url, headersOptions);
+};

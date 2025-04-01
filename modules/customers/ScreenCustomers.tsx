@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
@@ -8,14 +7,17 @@ import Toolbar from "@/components/organisms/ToolBar";
 import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import CustomerForm from "./CustomerForm";
-import { getListCustomers } from "@/request/users";
+import { getListCustomers, deleteCustomers } from "@/request/users";
+import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
+import CustomerFormEdit from "./CustomerFormEdit";
 
 export default function ScreenCustomers() {
     const router = useRouter();
     const [clients, setClients] = useState<{ [key: string]: string }[]>([]);
     const [initialClients, setInitialClients] = useState<{ [key: string]: string }[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentClient, setCurrentClient] = useState<ClientDAO | null>(null);
     const initialFetchDone = useRef(false);
     
     useEffect(() => {
@@ -35,51 +37,79 @@ export default function ScreenCustomers() {
                 formatAndSetClients(res);
             }
         } catch (err) {
-            console.log('Error al obtener clientes', err);
+            console.error('Error fetching clients:', err);
         } finally {
             setIsLoading(false);
         }
     };
 
     const formatAndSetClients = (clientList: ClientDAO[]) => {
-        const formattedClients = clientList.map((client: ClientDAO) => ({
+        const formattedClients = clientList.map((client) => ({
             id: client.id,
             identification: client.identification,
-            firstName: client.firstName,
-            lastName: client.lastName,
+            "first name": client.firstName,
+            "last name": client.lastName,
             email: client.email,
         }));
         setInitialClients(formattedClients);
         setClients(formattedClients);
     };
 
-    const handleClientsFound = (results: EmployeeDAO[] | ProductDAO[] | SupplierDAO[] | ClientDAO[]) => {
-        if (results.length > 0 && "identification" in results[0]) {
-            formatAndSetClients(results as ClientDAO[]);
-        } else if (searchQuery) {
-            setClients([]);
+    const handleClientsFound = (results: ClientDAO[] | ProductDAO[] | EmployeeDAO[] | SupplierDAO[]) => {
+        const clientResults = results.filter((result): result is ClientDAO => 
+            'identification' in result && 'firstName' in result
+        );
+        
+        if (clientResults.length > 0) {
+            formatAndSetClients(clientResults);
         } else {
             setClients(initialClients);
         }
-    };    
+    };
 
-    const handleRowClick = (clientId: string) => {
-        router.push(`/users/clients/${clientId}`);
+    const handleEditClient = (clientId: string) => {
+        const clientToEdit = initialClients.find(client => client.id === clientId);
+        if (clientToEdit) {
+            setCurrentClient({
+                id: clientToEdit.id,
+                tenantId: "", 
+                identification: clientToEdit.identification,
+                firstName: clientToEdit["first name"],
+                lastName: clientToEdit["last name"],
+                email: clientToEdit.email,
+            });
+            setIsModalOpen(true);
+        }
+    };
+
+    const handleViewClient = (clientId: string) => {
+        router.push(`/users/customers/${clientId}`);
+    };
+
+    const handleDeleteClient = (clientId: string) => {
+        deleteCustomers(clientId)
+            .then(() => {
+                fetchAllClients();
+            })
+            .catch((err) => {
+                console.error("Error deleting customer:", err);
+             });
+        
     };
 
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Customers"
-                formComponent={<CustomerForm/>}
-                formTitle="Enter Customer"
+                title="Customers Management"
+                formComponent={<CustomerForm onSuccess={fetchAllClients} />}
+                formTitle="Add New Customer"
             />
             
             <div className="mb-4 mt-4 w-72">
                 <SearchBarUniversal 
                     onResultsFound={handleClientsFound} 
                     showResults={false}
-                    placeholder="Search by name..."
+                    placeholder="Search customers..."
                     searchType="clients"
                 />
             </div>
@@ -87,12 +117,34 @@ export default function ScreenCustomers() {
             {isLoading && <p className="text-gray-500 text-sm mb-2">Loading customers...</p>}
             
             <CustomTable
-                title=""
+                title="Customers List"
                 headers={["ID", "Identification", "First Name", "Last Name", "Email"]}
                 options={true}
-                products={clients}
-                onRowClick={handleRowClick}
+                data={clients}
+                contextType="clients"
+                customActions={{
+                    edit: handleEditClient,
+                    view: handleViewClient,
+                    delete: handleDeleteClient,
+                }}
             />
+            
+            <CustomModalNoButton 
+                isOpen={isModalOpen} 
+                onClose={() => {
+                    fetchAllClients();
+                    setIsModalOpen(false);
+                }} 
+                title="Edit Customer"
+            >
+                <CustomerFormEdit 
+                    client={currentClient || undefined}
+                    onSuccess={() => {
+                        fetchAllClients();
+                        setIsModalOpen(false);
+                    }} 
+                />
+            </CustomModalNoButton>
         </div>
     );
 }
