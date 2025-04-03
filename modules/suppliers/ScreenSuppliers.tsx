@@ -8,12 +8,14 @@ import { getListSuppliers } from "@/lib/api-suppliers";
 import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import SupplierForm from "./SupplierForm";
+import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 
 export default function ScreenSuppliers() {
     const router = useRouter();
     const [suppliers, setSuppliers] = useState<{ [key: string]: string }[]>([]);
     const [initialSuppliers, setInitialSuppliers] = useState<{ [key: string]: string }[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [isSupplierModalOpen, setIsSupplierModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const initialFetchDone = useRef(false);
     
@@ -70,9 +72,25 @@ export default function ScreenSuppliers() {
         <div className="container mx-auto">
             <Toolbar
                 title="Suppliers"
-                formComponent={<SupplierForm />}
-                formTitle="Enter Supplier"
+                onAddNew={() => setIsSupplierModalOpen(true)}
             />
+            
+            {/* Resto de tu componente... */}
+
+            <CustomModalNoButton 
+                isOpen={isSupplierModalOpen}
+                onClose={() => {
+                setIsSupplierModalOpen(false);
+                // Aquí puedes agregar cualquier lógica de refresco si es necesario
+                }}
+                title="Enter Supplier"
+            >
+                <SupplierForm 
+                onSuccess={() => {
+                    setIsSupplierModalOpen(false);
+                }}
+                />
+            </CustomModalNoButton>
             
             <div className="mb-4 mt-4 w-72">
                 <SearchBarUniversal 

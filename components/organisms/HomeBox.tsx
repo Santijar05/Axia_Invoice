@@ -16,7 +16,6 @@ export default function HomeBox({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const role = Cookies.get("userRole");
 
-    // Validar que el rol sea uno de los valores esperados
     if (role === "USER" || role === "ADMIN" || role === "SUPERADMIN") {
       setUserRole(role);
     } else {
@@ -39,12 +38,10 @@ export default function HomeBox({ children }: { children: React.ReactNode }) {
           <span className="font-bold text-lg">AXIA</span>
         </div>
 
-        {/* Muestra el rol del usuario si está disponible 
-        {userRole && <span className="text-sm text-gray-400">Rol: {userRole}</span>}*/}""
       </header>
 
       <div className="flex">
-        <Sidebar isOpen={isSidebarOpen} role={userRole} />
+        <Sidebar isOpen={isSidebarOpen}/>
         <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
     </div>

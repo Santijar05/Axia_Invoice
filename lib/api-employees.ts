@@ -42,7 +42,6 @@ export const getListEmployeesByName = async (name: string, role?: string): Promi
   });
 };
 
-// Función para obtener emppleados sin autenticación (para SSG)
 export const getPublicEmployees = async () => {
   const url = `${envVariables.API_URL}/users/public/list`;
   console.log('Fetching public employees from:', url);
@@ -52,7 +51,6 @@ export const getPublicEmployees = async () => {
     headers: {
       'Content-Type': 'application/json',
     },
-    // Sin credentials: 'include'
   });
 
   if (!response.ok) {

@@ -1,7 +1,11 @@
 import React from "react";
 import Input from "@/components/atoms/Input";
 
-export default function SupplierForm() {
+interface SupplierFormProps {
+    onSuccess?: () => void;
+}  
+
+export default function SupplierForm({onSuccess} : SupplierFormProps) {
     return (
         <div className="grid grid-cols-2 gap-4">
             <div>
