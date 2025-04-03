@@ -9,11 +9,13 @@ import SearchBarUniversal from "@/components/molecules/SearchBar";
 import ProductForm from "./ProductForm";
 import TableFilter from "@/components/molecules/TableFilter";
 import EmptyState from '@/components/molecules/EmptyState';
+import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 
 export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     const router = useRouter();
     const [products, setProducts] = useState<{ [key: string]: string }[]>([]);
     const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]);
+    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -151,10 +153,25 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Gestión de Productos"
-                formComponent={<ProductForm onSuccess={() => currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts()} />}
-                formTitle="Nuevo Producto"
+            title="Gestión de Productos"
+            onAddNew={() => setIsProductModalOpen(true)}
             />
+
+            <CustomModalNoButton 
+            isOpen={isProductModalOpen}
+            onClose={() => {
+                setIsProductModalOpen(false);
+                currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts();
+            }}
+            title="Nuevo Producto"
+            >
+            <ProductForm 
+                onSuccess={() => {
+                setIsProductModalOpen(false);
+                currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts();
+                }}
+            />
+            </CustomModalNoButton>
             
             <div className="flex justify-between items-center mb-4 mt-4">
                 <div className="w-72">
