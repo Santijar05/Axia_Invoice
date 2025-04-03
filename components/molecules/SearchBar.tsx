@@ -4,8 +4,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Search } from "lucide-react";
 
 import { getListproductsByName } from "@/lib/api-products";
-//import { getListClientsByName } from "@/lib/api-clients";
-//import { getListEmployeesByName } from "@/lib/api-employees";
+import { getListClientsByName } from "@/lib/api-clients";
+import { getListEmployeesByName } from "@/lib/api-employees";
 //import { getListSuppliersByName } from "@/lib/api-suppliers";
 import { ProductDAO, EmployeeDAO, SupplierDAO, ClientDAO } from "@/types/Api";
 import Input from "@/components/atoms/Input";
@@ -16,7 +16,7 @@ interface SearchBarUniversalProps {
   onAddToCart?: (product: ProductDAO) => void;
   showResults?: boolean;
   placeholder?: string;
-  searchType: "employees" | "products"  | "suppliers" | "clients";
+  searchType: "employees" | "products" | "suppliers" | "clients";
 }
 
 function debounce<U extends unknown[], R>(
@@ -42,6 +42,14 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Agregamos un efecto específico para manejar cuando searchTerm está vacío
+  useEffect(() => {
+    if (searchTerm === "") {
+      setResults([]);
+      if (onResultsFound) onResultsFound([]);
+    }
+  }, [searchTerm, onResultsFound]);
+
   const debounceSearch = useMemo(
     () =>
       debounce(async (term: string) => {
@@ -60,11 +68,11 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
           if (searchType === "products") {
             fetchedResults = await getListproductsByName(term) || [];
           } else if (searchType === "clients") {
-            //fetchedResults = (await getListClientsByName(term)) || [];
+            fetchedResults = (await getListClientsByName(term)) || [];
           } else if (searchType === "suppliers") {
             // fetchedResults = await getListSuppliersByName(term) || [];
           } else {
-            // fetchedResults = await getListEmployeesByName(term) || [];
+            fetchedResults = await getListEmployeesByName(term) || [];
           }
 
           setResults(fetchedResults);
@@ -105,26 +113,25 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
 
       {showResults && (
         <div className="mt-2">
-
           {isLoading && <p className="text-gray-500 text-sm">Buscando...</p>}
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
           {searchTerm && results.length > 0 ? (
             <ul className="bg-white border border-gray-300 rounded-md shadow-sm max-h-60 overflow-auto">
-              
               {results.map((item) => (
-                
                 <li
-                 key={(item as ProductDAO).id || (item as EmployeeDAO).id || (item as SupplierDAO).id}
-                 className="flex justify-between items-center p-2 border-b hover:bg-gray-100"
+                  key={(item as any).id}
+                  className="flex justify-between items-center p-2 border-b hover:bg-gray-100"
                 >
                   <div>
                     <span className="font-medium text-black">
-                      {(item as ProductDAO).name || (item as EmployeeDAO).name || (item as SupplierDAO).name || `${(item as ClientDAO).firstName} ${(item as ClientDAO).lastName}`}
+                      {(item as ProductDAO).name || 
+                       (item as EmployeeDAO).name || 
+                       (item as SupplierDAO).name || 
+                       `${(item as ClientDAO).firstName} ${(item as ClientDAO).lastName}`}
                     </span>
 
                     <div className="text-sm text-gray-500">
-
                       {searchType === "products" ? (
                         <>
                           <span>Precio: ${(item as ProductDAO).salePrice}</span>
@@ -132,7 +139,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                         </>
                       ) : searchType === "employees" ? (
                         <>
-                          <span>Posición: {(item as EmployeeDAO).position}</span>
+                          <span>Posición: {(item as EmployeeDAO).id}</span>
                           <span className="ml-2">Email: {(item as EmployeeDAO).email}</span>
                         </>
                       ) : searchType === "clients" ? (
@@ -146,7 +153,6 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                           <span className="ml-2">Teléfono: {(item as SupplierDAO).phone}</span>
                         </>
                       )}
-
                     </div>
                   </div>
 
@@ -157,15 +163,12 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                       onClickButton={() => onAddToCart(item as ProductDAO)}
                     />
                   )}
-
                 </li>
               ))}
             </ul>
-
           ) : (
             searchTerm && !isLoading && <p className="text-gray-500 text-sm">No se encontraron resultados.</p>
           )}
-
         </div>
       )}
       

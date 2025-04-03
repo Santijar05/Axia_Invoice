@@ -28,7 +28,7 @@ export default function DashboardPage() {
           title= "Lastest products" 
           headers= {["Bar/Internal", "Product", "Brand", "Stock", "Price"]}
           options={false} 
-          products={products} 
+          data={products} 
         />
       </div>
       {/*<SalesCharts />*/}

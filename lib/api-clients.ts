@@ -16,8 +16,20 @@ const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promi
 };
 
 export const getListClients = async (): Promise<ClientDAO[]> => {
-  const url = `${envVariables.API_URL}`;
-  console.log('Fetching products from:', url);
+  const url = `${envVariables.API_URL}/clients`;
+  console.log('Obteniendo clientes desde:', url);
+
+  return fetchWithCredentials<ClientDAO[]>(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const getListClientsByName = async (name: string): Promise<ClientDAO[]> => {
+  const url = `${envVariables.API_URL}/clients/search?name=${encodeURIComponent(name)}`;
+  console.log('Buscando clientes por nombre:', name);
 
   return fetchWithCredentials<ClientDAO[]>(url, {
     method: 'GET',
