@@ -14,6 +14,7 @@ import CustomButton from "@/components/atoms/CustomButton";
 interface SearchBarUniversalProps {
   onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[]) => void;
   onAddToCart?: (product: ProductDAO) => void;
+  onSearchTermChange?: (term: string) => void;
   showResults?: boolean;
   placeholder?: string;
   searchType: "employees" | "products" | "suppliers" | "clients";
@@ -33,6 +34,7 @@ function debounce<U extends unknown[], R>(
 const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   onResultsFound,
   onAddToCart,
+  onSearchTermChange,
   showResults = false,
   placeholder = "Buscar...",
   searchType
@@ -42,7 +44,6 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Agregamos un efecto específico para manejar cuando searchTerm está vacío
   useEffect(() => {
     if (searchTerm === "") {
       setResults([]);
@@ -76,6 +77,13 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
           }
 
           setResults(fetchedResults);
+
+          if (fetchedResults.length === 0) {
+            setError("No se encontraron resultados para la búsqueda.");
+          } else {
+            setError(null);
+          }
+
           if (onResultsFound) onResultsFound(fetchedResults);
         
         } catch (err) {
@@ -96,7 +104,9 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   }, [searchTerm, debounceSearch]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+    const term = e.target.value;
+    setSearchTerm(term);
+    if (onSearchTermChange) onSearchTermChange(term);
   };
 
   return (
@@ -114,7 +124,8 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
       {showResults && (
         <div className="mt-2">
           {isLoading && <p className="text-gray-500 text-sm">Buscando...</p>}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          
+          {error && <p className="text-yellow-600 text-sm">{error}</p>}
 
           {searchTerm && results.length > 0 ? (
             <ul className="bg-white border border-gray-300 rounded-md shadow-sm max-h-60 overflow-auto">
@@ -167,7 +178,8 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
               ))}
             </ul>
           ) : (
-            searchTerm && !isLoading && <p className="text-gray-500 text-sm">No se encontraron resultados.</p>
+            searchTerm && !isLoading && !error && 
+            <p className="text-gray-500 text-sm">No se encontraron resultados.</p>
           )}
         </div>
       )}

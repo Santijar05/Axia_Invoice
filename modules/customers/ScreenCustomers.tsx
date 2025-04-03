@@ -12,6 +12,7 @@ import { getListClientsByName } from "@/lib/api-clients";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import CustomerFormEdit from "./CustomerFormEdit";
 import TableFilter from "@/components/molecules/TableFilter";
+import EmptyState from '@/components/molecules/EmptyState'; // Import EmptyState component
 
 export default function ScreenCustomers() {
     const router = useRouter();
@@ -23,6 +24,7 @@ export default function ScreenCustomers() {
     const [currentClient, setCurrentClient] = useState<ClientDAO | null>(null);
     const [initialClients, setInitialClients] = useState<{ [key: string]: string }[]>([]);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
     
     useEffect(() => {
         if (!initialFetchDone.current) {
@@ -88,7 +90,17 @@ export default function ScreenCustomers() {
             } else {
                 setClients(formattedData);
             }
+        } else if (searchTerm && searchTerm.length >= 2) {
+            // Create a "no results" row when actively searching
+            setClients([{
+                id: "no-results",
+                identification: "",
+                "first name": "",
+                "last name": `No se encontraron clientes para: "${searchTerm}"`,
+                email: "",
+            }]);
         } else {
+            // Show original data when not searching
             if (currentSort) {
                 const sortedData = sortCustomers([...initialClients], currentSort.field, currentSort.direction);
                 setClients(sortedData);
@@ -96,7 +108,7 @@ export default function ScreenCustomers() {
                 setClients([...initialClients]);
             }
         }
-    }, [currentSort, initialClients]);
+    }, [currentSort, initialClients, searchTerm]);
 
     const handleSort = useCallback((field: string, direction: 'asc' | 'desc') => {
         setCurrentSort({ field, direction });
@@ -176,6 +188,7 @@ export default function ScreenCustomers() {
                         showResults={false}
                         placeholder="Buscar clientes..."
                         searchType="clients"
+                        onSearchTermChange={setSearchTerm}
                     />
                 </div>
                 <TableFilter 
@@ -186,18 +199,26 @@ export default function ScreenCustomers() {
             
             {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando clientes...</p>}
             
-            <CustomTable
-                title="Lista de Clientes"
-                headers={tableHeaders}
-                options={true}
-                data={clients}
-                contextType="clients"
-                customActions={{
-                    edit: handleEditClient,
-                    view: handleViewClient,
-                    delete: handleDeleteClient,
-                }}
-            />
+            {/* Show empty state when search has no results */}
+            {searchTerm && searchTerm.length >= 2 && clients.length === 1 && clients[0].id === "no-results" ? (
+                <EmptyState 
+                    message="No se encontraron clientes" 
+                    searchTerm={searchTerm} 
+                />
+            ) : (
+                <CustomTable
+                    title="Lista de Clientes"
+                    headers={tableHeaders}
+                    options={true}
+                    data={clients.filter(c => c.id !== "no-results")}
+                    contextType="clients"
+                    customActions={{
+                        edit: handleEditClient,
+                        view: handleViewClient,
+                        delete: handleDeleteClient,
+                    }}
+                />
+            )}
             
             <CustomModalNoButton 
                 isOpen={isModalOpen} 
