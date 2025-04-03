@@ -12,6 +12,7 @@ import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import EmployeeFormEdit from "./EmployeeFormEdit";
 import EmployeeFormView from "./EmployeeFormView";
 import TableFilter from "@/components/molecules/TableFilter";
+import EmptyState from '@/components/molecules/EmptyState'; // Import EmptyState component
 
 export default function ScreenEmployees() {
     const router = useRouter();
@@ -22,6 +23,7 @@ export default function ScreenEmployees() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentEmployee, setCurrentEmployee] = useState<EmployeeDAO | null>(null);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
     const initialFetchDone = useRef(false);
     
     useEffect(() => {
@@ -86,6 +88,14 @@ export default function ScreenEmployees() {
             } else {
                 setEmployees(formattedData);
             }
+        } else if (searchTerm && searchTerm.length >= 2) {
+            // Create a "no results" row
+            setEmployees([{
+                id: "no-results",
+                name: `No se encontraron empleados para: "${searchTerm}"`,
+                role: "",
+                email: "",
+            }]);
         } else {
             if (currentSort) {
                 const sortedData = sortEmployees([...initialEmployees], currentSort.field, currentSort.direction);
@@ -94,7 +104,7 @@ export default function ScreenEmployees() {
                 setEmployees([...initialEmployees]);
             }
         }
-    }, [currentSort, initialEmployees]);
+    }, [currentSort, initialEmployees, searchTerm]);
 
     const handleSort = useCallback((field: string, direction: 'asc' | 'desc') => {
         setCurrentSort({ field, direction });
@@ -155,6 +165,7 @@ export default function ScreenEmployees() {
                         showResults={false}
                         placeholder="Buscar empleados..."
                         searchType="employees"
+                        onSearchTermChange={setSearchTerm}
                     />
                 </div>
                 <TableFilter 
@@ -165,18 +176,26 @@ export default function ScreenEmployees() {
             
             {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando empleados...</p>}
             
-            <CustomTable
-                title="Lista de Empleados"
-                headers={tableHeaders}
-                options={true}
-                data={employees}
-                contextType="employees"
-                customActions={{
-                    edit: handleEditEmployee,
-                    view: handleViewEmployee,
-                    delete: handleDeleteEmployee,
-                }}
-            />
+            {/* Show empty state when search has no results */}
+            {searchTerm && searchTerm.length >= 2 && employees.length === 1 && employees[0].id === "no-results" ? (
+                <EmptyState
+                    message="No se encontraron empleados" 
+                    searchTerm={searchTerm} 
+                />
+            ) : (
+                <CustomTable
+                    title="Lista de Empleados"
+                    headers={tableHeaders}
+                    options={true}
+                    data={employees.filter(e => e.id !== "no-results")}
+                    contextType="employees"
+                    customActions={{
+                        edit: handleEditEmployee,
+                        view: handleViewEmployee,
+                        delete: handleDeleteEmployee,
+                    }}
+                />
+            )}
 
             <CustomModalNoButton 
                 isOpen={isModalOpen} 

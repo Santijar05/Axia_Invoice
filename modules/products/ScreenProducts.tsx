@@ -8,7 +8,7 @@ import { ClientDAO, EmployeeDAO, ProductDAO, ProductFormProps, SupplierDAO } fro
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import ProductForm from "./ProductForm";
 import TableFilter from "@/components/molecules/TableFilter";
-import { on } from "events";
+import EmptyState from '@/components/molecules/EmptyState';
 
 export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     const router = useRouter();
@@ -16,6 +16,7 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
     const initialFetchDone = useRef(false);
     
     const fieldMapping: { [key: string]: string } = {
@@ -30,20 +31,6 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     
     useEffect(() => {
         if (!initialFetchDone.current) {
-            const fetchAllProducts = async () => {
-                setIsLoading(true);
-                try {
-                    const res = await getListproducts();
-                    if (res && Array.isArray(res)) {
-                        formatAndSetProducts(res);
-                    }
-                } catch (err) {
-                    console.error('Error al obtener productos:', err);
-                } finally {
-                    setIsLoading(false);
-                }
-            };
-    
             fetchAllProducts();
             initialFetchDone.current = true;
         }
@@ -104,9 +91,20 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
         );
         
         if (productResults.length > 0) {
-            formatAndSetProducts(productResults); // Solo actualiza products, no initialProducts
+            formatAndSetProducts(productResults);
+        } else if (searchTerm && searchTerm.length >= 2) {
+            // Create a "no results" row for products
+            setProducts([{
+                id: "no-results",
+                código: "",
+                producto: `No se encontraron productos para: "${searchTerm}"`,
+                proveedor: "",
+                impuesto: "",
+                stock: "",
+                'p. compra': "",
+                'p. venta': "",
+            }]);
         } else {
-            // Si no hay resultados o el array está vacío, volvemos a los productos iniciales
             setProducts(initialProducts);
         }
     };
@@ -165,6 +163,7 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                         showResults={false}
                         placeholder="Buscar productos..."
                         searchType="products"
+                        onSearchTermChange={setSearchTerm}
                     />
                 </div>
                 <TableFilter 
@@ -175,24 +174,32 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
             
             {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando productos...</p>}
             
-            <CustomTable
-                title="Lista de Productos"
-                headers={tableHeaders}
-                options={true}
-                data={products}
-                contextType="products"
-                onRowClick={handleRowClick}
-                customActions={{
-                    delete: handleDeleteProduct,
-                    edit: (id) => router.push(`/store/products/edit/${id}`),
-                    view: handleRowClick
-                }}
-                actionLabels={{
-                    delete: "Eliminar",
-                    edit: "Editar",
-                    view: "Ver Detalles"
-                }}
-            />
+            {/* Show empty state when search has no results */}
+            {searchTerm && searchTerm.length >= 2 && products.length === 1 && products[0].id === "no-results" ? (
+                <EmptyState 
+                    message="No se encontraron productos" 
+                    searchTerm={searchTerm} 
+                />
+            ) : (
+                <CustomTable
+                    title="Lista de Productos"
+                    headers={tableHeaders}
+                    options={true}
+                    data={products.filter(p => p.id !== "no-results")}
+                    contextType="products"
+                    onRowClick={handleRowClick}
+                    customActions={{
+                        delete: handleDeleteProduct,
+                        edit: (id) => router.push(`/store/products/edit/${id}`),
+                        view: handleRowClick
+                    }}
+                    actionLabels={{
+                        delete: "Eliminar",
+                        edit: "Editar",
+                        view: "Ver Detalles"
+                    }}
+                />
+            )}
         </div>
     );
 }
