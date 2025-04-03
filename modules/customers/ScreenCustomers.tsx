@@ -8,8 +8,10 @@ import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import CustomerForm from "./CustomerForm";
 import { getListCustomers, deleteCustomers } from "@/request/users";
+import { getListClientsByName } from "@/lib/api-clients";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import CustomerFormEdit from "./CustomerFormEdit";
+import TableFilter from "@/components/molecules/TableFilter";
 
 export default function ScreenCustomers() {
     const router = useRouter();
@@ -18,6 +20,7 @@ export default function ScreenCustomers() {
     const [isLoading, setIsLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentClient, setCurrentClient] = useState<ClientDAO | null>(null);
+    const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
     const initialFetchDone = useRef(false);
     
     useEffect(() => {
@@ -34,16 +37,24 @@ export default function ScreenCustomers() {
         try {
             const res = await getListCustomers();
             if (res && Array.isArray(res)) {
-                formatAndSetClients(res);
+                const formattedData = formatClients(res);
+                if( currentSort) {
+                    const sortedData = sortCustomers(formattedData, currentSort?.field, currentSort?.direction);
+                    setInitialClients(formattedData);
+                    setClients(sortedData);
+                } else {
+                    setInitialClients(formattedData);
+                    setClients(formattedData);
+                }
             }
         } catch (err) {
-            console.error('Error fetching clients:', err);
+            console.error('Error al obtener clientes:', err);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const formatAndSetClients = (clientList: ClientDAO[]) => {
+    const formatClients = (clientList: ClientDAO[]) => {
         const formattedClients = clientList.map((client) => ({
             id: client.id,
             identification: client.identification,
@@ -51,20 +62,45 @@ export default function ScreenCustomers() {
             "last name": client.lastName,
             email: client.email,
         }));
-        setInitialClients(formattedClients);
-        setClients(formattedClients);
+        return formattedClients;
     };
 
-    const handleClientsFound = (results: ClientDAO[] | ProductDAO[] | EmployeeDAO[] | SupplierDAO[]) => {
-        const clientResults = results.filter((result): result is ClientDAO => 
-            'identification' in result && 'firstName' in result
+    const sortCustomers = (data: { [key: string]: string }[], field: string, direction: 'asc' | 'desc') => {
+        return [...data].sort((a, b) => {
+            if (a[field] < b[field]) return direction === 'asc' ? -1 : 1;
+            if (a[field] > b[field]) return direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+    };
+
+    const handleClientsFound = (results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+        const clientsResults = results.filter((result): result is ClientDAO => 
+            'firstName' in result && 'lastName' in result && 'identification' in result
         );
         
-        if (clientResults.length > 0) {
-            formatAndSetClients(clientResults);
+        if (clientsResults.length > 0) {
+            const formattedData = formatClients(clientsResults);
+            if (currentSort) {
+                const sortedData = sortCustomers(formattedData, currentSort.field, currentSort.direction);
+                setClients(sortedData);
+            } else {
+                setClients(formattedData);
+            }
         } else {
-            setClients(initialClients);
+            // Si no hay resultados, mantener el ordenamiento de initialClients
+            if (currentSort) {
+                const sortedData = sortCustomers(initialClients, currentSort.field, currentSort.direction);
+                setClients(sortedData);
+            } else {
+                setClients(initialClients);
+            }
         }
+    };
+
+    const handleSort = (field: string, direction: 'asc' | 'desc') => {
+        setCurrentSort({ field, direction });
+        const sortedClients = sortCustomers(clients, field, direction);
+        setClients(sortedClients);
     };
 
     const handleEditClient = (clientId: string) => {
@@ -92,33 +128,40 @@ export default function ScreenCustomers() {
                 fetchAllClients();
             })
             .catch((err) => {
-                console.error("Error deleting customer:", err);
+                console.error("Error al eliminar cliente:", err);
              });
-        
     };
+
+    const tableHeaders = ["ID", "Identification", "First Name", "Last Name", "Email"];
 
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Customers Management"
+                title="Gestión de Clientes"
                 formComponent={<CustomerForm onSuccess={fetchAllClients} />}
-                formTitle="Add New Customer"
+                formTitle="Agregar Nuevo Cliente"
             />
             
-            <div className="mb-4 mt-4 w-72">
-                <SearchBarUniversal 
-                    onResultsFound={handleClientsFound} 
-                    showResults={false}
-                    placeholder="Search customers..."
-                    searchType="clients"
+            <div className="flex justify-between items-center mb-4 mt-4">
+                <div className="w-72">
+                    <SearchBarUniversal 
+                        onResultsFound={handleClientsFound} 
+                        showResults={false}
+                        placeholder="Buscar clientes..."
+                        searchType="clients"
+                    />
+                </div>
+                <TableFilter 
+                    headers={tableHeaders} 
+                    onSort={handleSort} 
                 />
             </div>
             
-            {isLoading && <p className="text-gray-500 text-sm mb-2">Loading customers...</p>}
+            {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando clientes...</p>}
             
             <CustomTable
-                title="Customers List"
-                headers={["ID", "Identification", "First Name", "Last Name", "Email"]}
+                title="Lista de Clientes"
+                headers={tableHeaders}
                 options={true}
                 data={clients}
                 contextType="clients"
@@ -135,7 +178,7 @@ export default function ScreenCustomers() {
                     fetchAllClients();
                     setIsModalOpen(false);
                 }} 
-                title="Edit Customer"
+                title="Editar Cliente"
             >
                 <CustomerFormEdit 
                     client={currentClient || undefined}

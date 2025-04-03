@@ -75,3 +75,7 @@ export interface ErrorInterface {
 export interface ApiError {
     msg: string;
 }
+
+export interface ProductFormProps {
+    onSuccess?: () => Promise<void> | void;
+}

@@ -15,8 +15,33 @@ const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promi
   return response.json() as Promise<T>;
 };
 
-export const getListproducts = async (): Promise<ProductDAO[]> => {
-  const url = `${envVariables.API_URL}/products`;
+export const getListproducts = async (params?: {
+  sortBy?: string;
+  order?: 'asc' | 'desc';
+  id?: string;
+  supplier?: string;
+  stock?: number;
+  salePrice?: number;
+  purchasePrice?: number;
+  tax?: number;
+}): Promise<ProductDAO[]> => {
+  let url = `${envVariables.API_URL}/products`;
+  
+  if (params) {
+    const queryParams = new URLSearchParams();
+    
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        queryParams.append(key, value.toString());
+      }
+    });
+    
+    const queryString = queryParams.toString();
+    if (queryString) {
+      url += `?${queryString}`;
+    }
+  }
+  
   console.log('Fetching products from:', url);
 
   return fetchWithCredentials<ProductDAO[]>(url, {

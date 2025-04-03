@@ -16,8 +16,23 @@ const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promi
 };
 
 export const getListEmployees = async (): Promise<EmployeeDAO[]> => {
-  const url = `${envVariables.API_URL}`;
-  console.log('Fetching products from:', url);
+  const url = `${envVariables.API_URL}/users`;
+  console.log('Obteniendo empleados desde:', url);
+
+  return fetchWithCredentials<EmployeeDAO[]>(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const getListEmployeesByName = async (name: string, role?: string): Promise<EmployeeDAO[]> => {
+  let url = `${envVariables.API_URL}/users/search?name=${encodeURIComponent(name)}`;
+  if (role) {
+    url += `&role=${encodeURIComponent(role)}`;
+  }
+  console.log('Buscando empleados:', url);
 
   return fetchWithCredentials<EmployeeDAO[]>(url, {
     method: 'GET',
