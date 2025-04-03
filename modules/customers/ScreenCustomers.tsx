@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 import CustomTable from "@/components/organisms/CustomTable";
@@ -31,19 +31,21 @@ export default function ScreenCustomers() {
     }, []);
 
     const fetchAllClients = async () => {
-        if (isLoading) return;
+        if (isLoading) return; // Prevenir múltiples llamadas
         
         setIsLoading(true);
         try {
             const res = await getListCustomers();
             if (res && Array.isArray(res)) {
                 const formattedData = formatClients(res);
-                if( currentSort) {
-                    const sortedData = sortCustomers(formattedData, currentSort?.field, currentSort?.direction);
-                    setInitialClients(formattedData);
+                // Guardar los datos sin ordenar primero
+                setInitialClients(formattedData);
+                
+                // Aplicar ordenamiento si existe
+                if(currentSort) {
+                    const sortedData = sortCustomers(formattedData, currentSort.field, currentSort.direction);
                     setClients(sortedData);
                 } else {
-                    setInitialClients(formattedData);
                     setClients(formattedData);
                 }
             }
@@ -73,13 +75,14 @@ export default function ScreenCustomers() {
         });
     };
 
-    const handleClientsFound = (results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+    const handleClientsFound = useCallback((results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
         const clientsResults = results.filter((result): result is ClientDAO => 
             'firstName' in result && 'lastName' in result && 'identification' in result
         );
         
         if (clientsResults.length > 0) {
             const formattedData = formatClients(clientsResults);
+            
             if (currentSort) {
                 const sortedData = sortCustomers(formattedData, currentSort.field, currentSort.direction);
                 setClients(sortedData);
@@ -87,21 +90,20 @@ export default function ScreenCustomers() {
                 setClients(formattedData);
             }
         } else {
-            // Si no hay resultados, mantener el ordenamiento de initialClients
             if (currentSort) {
-                const sortedData = sortCustomers(initialClients, currentSort.field, currentSort.direction);
+                const sortedData = sortCustomers([...initialClients], currentSort.field, currentSort.direction);
                 setClients(sortedData);
             } else {
-                setClients(initialClients);
+                setClients([...initialClients]);
             }
         }
-    };
+    }, [currentSort, initialClients]);
 
-    const handleSort = (field: string, direction: 'asc' | 'desc') => {
+    const handleSort = useCallback((field: string, direction: 'asc' | 'desc') => {
         setCurrentSort({ field, direction });
-        const sortedClients = sortCustomers(clients, field, direction);
+        const sortedClients = sortCustomers([...clients], field, direction);
         setClients(sortedClients);
-    };
+    }, [clients]);
 
     const handleEditClient = (clientId: string) => {
         const clientToEdit = initialClients.find(client => client.id === clientId);
@@ -175,9 +177,10 @@ export default function ScreenCustomers() {
             <CustomModalNoButton 
                 isOpen={isModalOpen} 
                 onClose={() => {
-                    fetchAllClients();
-                    setIsModalOpen(false);
-                }} 
+                    setIsModalOpen(false); // Primero cerrar el modal
+                    // Luego actualizar datos
+                    setTimeout(() => fetchAllClients(), 0);
+                }}
                 title="Editar Cliente"
             >
                 <CustomerFormEdit 
