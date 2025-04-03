@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { EmployeeDAO } from "@/types/Api";
 import { updateEmployee } from "@/request/users";
+import CustomButton from "@/components/atoms/CustomButton";
 
 type EmployeeFormData = {
     id?: string;
@@ -52,10 +53,6 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
 
     const onSubmit = async (data: EmployeeFormData) => {
         const authToken = Cookies.get("authToken");
-        if (!authToken) {
-            alert("Token de autenticación no encontrado");
-            return;
-        }
     
         if (!employee?.id) {
             alert("ID de cliente no disponible");
@@ -142,20 +139,9 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
                 {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
             </div>
 
-            <div className="col-span-2 flex justify-between mt-4">
-                <button
-                    type="button"
-                    onClick={onSuccess} 
-                    className="border px-4 rounded-md ext-white bg-homePrimary border text-white bg-homePrimary hover:bg-blue-500"
-                >
-                    Cerrar
-                </button>
-                <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md border text-white bg-homePrimary hover:bg-blue-500"
-                >
-                    {employee?.id ? 'Actualizar Empleado' : 'Crear Empleado'}
-                </button>
+            <div className="col-span-2 flex justify-end gap-2 mt-4">
+                <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
+                <CustomButton text={employee?.id ? 'Actualizar Empleado' : 'Crear Empleado'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
             </div>
         </form>
     );

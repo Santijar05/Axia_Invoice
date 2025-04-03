@@ -21,7 +21,7 @@ export const customertSchema = z.object({
 
     identification: z.string()
                 .nonempty({ message: "Identification is required" })
-                .min(7, {message: "Identification must be at least 7 characters long"})
+                .min(6, {message: "Identification must be at least 6 characters long"})
                 .max(15, {message: "Identification must be at most 15 characters long"})
                 .refine(
                     (value) => /^[0-9]+$/.test(value ?? ""),

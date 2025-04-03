@@ -30,6 +30,20 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     
     useEffect(() => {
         if (!initialFetchDone.current) {
+            const fetchAllProducts = async () => {
+                setIsLoading(true);
+                try {
+                    const res = await getListproducts();
+                    if (res && Array.isArray(res)) {
+                        formatAndSetProducts(res);
+                    }
+                } catch (err) {
+                    console.error('Error al obtener productos:', err);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+    
             fetchAllProducts();
             initialFetchDone.current = true;
         }

@@ -11,17 +11,18 @@ import { getListCustomers, deleteCustomers } from "@/request/users";
 import { getListClientsByName } from "@/lib/api-clients";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import CustomerFormEdit from "./CustomerFormEdit";
+import CustomerFormView from "./CustomerFormView";
 import TableFilter from "@/components/molecules/TableFilter";
 
 export default function ScreenCustomers() {
-    const router = useRouter();
-    const [clients, setClients] = useState<{ [key: string]: string }[]>([]);
-    const [initialClients, setInitialClients] = useState<{ [key: string]: string }[]>([]);
+    const initialFetchDone = useRef(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalViewOpen, setIsModalViewOpen] = useState(false);
+    const [clients, setClients] = useState<{ [key: string]: string }[]>([]);
     const [currentClient, setCurrentClient] = useState<ClientDAO | null>(null);
+    const [initialClients, setInitialClients] = useState<{ [key: string]: string }[]>([]);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
-    const initialFetchDone = useRef(false);
     
     useEffect(() => {
         if (!initialFetchDone.current) {
@@ -121,7 +122,18 @@ export default function ScreenCustomers() {
     };
 
     const handleViewClient = (clientId: string) => {
-        router.push(`/users/customers/${clientId}`);
+        const clientToView = initialClients.find(client => client.id === clientId);
+        if (clientToView) {
+            setCurrentClient({
+                id: clientToView.id,
+                tenantId: "", 
+                identification: clientToView.identification,
+                firstName: clientToView["first name"],
+                lastName: clientToView["last name"],
+                email: clientToView.email,
+            });
+            setIsModalViewOpen(true);
+        }
     };
 
     const handleDeleteClient = (clientId: string) => {
@@ -188,6 +200,21 @@ export default function ScreenCustomers() {
                     onSuccess={() => {
                         fetchAllClients();
                         setIsModalOpen(false);
+                    }} 
+                />
+            </CustomModalNoButton>
+            <CustomModalNoButton 
+                isOpen={isModalViewOpen} 
+                onClose={() => {
+                    fetchAllClients();
+                    setIsModalViewOpen(false);
+                }} 
+                title="Detalle del Cliente"
+            >
+                <CustomerFormView
+                    client={currentClient || undefined}
+                    onClose={() => {
+                        setIsModalViewOpen(false);
                     }} 
                 />
             </CustomModalNoButton>

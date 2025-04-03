@@ -4,7 +4,7 @@ import React, { forwardRef, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 type InputProps = {
-  placeholder: string;
+  placeholder?: string;
   type?: string;
   icon?: React.ElementType;
   disable?: boolean;
