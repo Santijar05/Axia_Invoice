@@ -15,6 +15,46 @@ const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promi
   return response.json() as Promise<T>;
 };
 
+// Función para obtener clientes sin autenticación (para SSG)
+export const getPublicClients = async () => {
+  const url = `${envVariables.API_URL}/clients/public/list`;
+  console.log('Fetching public clients from:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // Sin credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener clientes públicos');
+  }
+
+  return response.json();
+};
+
+// Función para obtener un cliente por ID sin autenticación (para SSG)
+export const getPublicClientById = async (clientId: string) => {
+  const url = `${envVariables.API_URL}/clients/public/${clientId}`;
+  console.log('Fetching public client by ID:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // Sin credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener cliente público');
+  }
+
+  return response.json();
+};
+
 export const getListClients = async (): Promise<ClientDAO[]> => {
   const url = `${envVariables.API_URL}`;
   console.log('Fetching products from:', url);

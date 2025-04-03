@@ -26,3 +26,23 @@ export const getListEmployees = async (): Promise<EmployeeDAO[]> => {
     },
   });
 };
+
+// Función para obtener emppleados sin autenticación (para SSG)
+export const getPublicEmployees = async () => {
+  const url = `${envVariables.API_URL}/users/public/list`;
+  console.log('Fetching public employees from:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // Sin credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener empleados públicos');
+  }
+
+  return response.json();
+};

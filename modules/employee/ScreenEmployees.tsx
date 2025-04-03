@@ -10,12 +10,13 @@ import SearchBarUniversal from "@/components/molecules/SearchBar";
 import EmployeeForm from "./EmployeeForm";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import EmployeeFormEdit from "./EmployeeFormEdit";
+import EmployeeFormView from "./EmployeeFormView";
 
 export default function ScreenEmployees() {
-    const router = useRouter();
     const [employees, setEmployees] = useState<{ [key: string]: string }[]>([]);
     const [initialEmployees, setInitialEmployees] = useState<{ [key: string]: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isModalViewOpen, setIsModalViewOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentEmployee, setCurrentEmployee] = useState<EmployeeDAO | null>(null);
     const initialFetchDone = useRef(false);
@@ -80,7 +81,16 @@ export default function ScreenEmployees() {
     };
 
     const handleViewEmployee = (employeeId: string) => {
-        router.push(`/users/employees/${employeeId}`);
+        const employeeToView = initialEmployees.find(emp => emp.id === employeeId);
+        if (employeeToView) {
+            setCurrentEmployee({
+                id: employeeToView.id,
+                name: employeeToView.name,
+                role: employeeToView.role,
+                email: employeeToView.email,
+            });
+            setIsModalViewOpen(true);
+        }
     };
 
     const handleDeleteEmployee = (employeeId: string) => {
@@ -124,6 +134,7 @@ export default function ScreenEmployees() {
                     delete: handleDeleteEmployee,
                 }}
             />
+
             <CustomModalNoButton 
                 isOpen={isModalOpen} 
                 onClose={() => {setIsModalOpen(false); fetchAllEmployees();}} 
@@ -134,6 +145,19 @@ export default function ScreenEmployees() {
                     onSuccess={() => {
                         fetchAllEmployees();
                         setIsModalOpen(false);
+                    }} 
+                />
+            </CustomModalNoButton>
+
+            <CustomModalNoButton 
+                isOpen={isModalViewOpen} 
+                onClose={() => {setIsModalOpen(false); fetchAllEmployees();}} 
+                title="Detalle del Empleado"
+            >
+                <EmployeeFormView
+                    employee={currentEmployee || undefined}
+                    onClose={() => {
+                        setIsModalViewOpen(false);
                     }} 
                 />
             </CustomModalNoButton>

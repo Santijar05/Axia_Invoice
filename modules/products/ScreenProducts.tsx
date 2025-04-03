@@ -17,36 +17,34 @@ export default function ScreenProducts() {
     
     useEffect(() => {
         if (!initialFetchDone.current) {
+            const fetchAllProducts = async () => {
+                setIsLoading(true);
+                try {
+                    const res = await getListproducts();
+                    if (res && Array.isArray(res)) {
+                        formatAndSetProducts(res);
+                    }
+                } catch (err) {
+                    console.error('Error al obtener productos:', err);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+    
             fetchAllProducts();
             initialFetchDone.current = true;
         }
-    }, []);
-
-    const fetchAllProducts = async () => {
-        if (isLoading) return;
-        
-        setIsLoading(true);
-        try {
-            const res = await getListproducts();
-            if (res && Array.isArray(res)) {
-                formatAndSetProducts(res);
-            }
-        } catch (err) {
-            console.error('Error al obtener productos:', err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    }, []);        
 
     const formatAndSetProducts = (productList: ProductDAO[]) => {
         const formattedProducts = productList.map((product: ProductDAO) => ({
-            id: product.id,
-            name: product.name,
-            supplier: product.supplier?.name || 'N/A',
-            tax: product.tax?.toString() || '0',
+            código: product.id,
+            producto: product.name,
+            proveedor: product.supplier?.name || 'N/A',
+            impuesto: product.tax?.toString() || '0',
             stock: product.stock?.toString() || '0',
-            purchasePrice: product.purchasePrice?.toString() || '0',
-            salePrice: product.salePrice?.toString() || '0',
+            "p. compra": product.purchasePrice?.toString() || '0',
+            "p. venta": product.salePrice?.toString() || '0',
         }));
         setInitialProducts(formattedProducts);
         setProducts(formattedProducts);

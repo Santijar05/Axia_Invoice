@@ -30,7 +30,7 @@ export default function ScreenBrands() {
                 title= "" 
                 headers= {["No", "Brand", "State"]}
                 options={true} 
-                products={products}
+                data={products}
             />
         </>
     )
