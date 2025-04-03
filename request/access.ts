@@ -1,6 +1,6 @@
 import { UserDataLogin, UserDataRegister } from "@/types/Api";
 
-const API_BASE_URL = 'http://localhost:3001/api/v1/users';
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/users`;
 
 const fetchWithCredentials = async (url: string, options: RequestInit): Promise<Response> => {
   const response = await fetch(url, {

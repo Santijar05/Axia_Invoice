@@ -18,7 +18,7 @@ export default function Hero() {
                 alt="Background Image" 
                 fill 
                 priority 
-                style={{ objectFit: "cover" }} 
+                className="object-cover"
             />
         
             <div className="text-center z-10">

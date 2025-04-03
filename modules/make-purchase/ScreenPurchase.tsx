@@ -32,7 +32,7 @@ export default function ScreenPurchase() {
             onAddToCart={handleAddToCart} 
             showResults={true}
             placeholder="Buscar productos para comprar..."
-            onSearchChange={(query) => setSearchQuery(query)}
+            searchType="products"
           />
         </div>
         

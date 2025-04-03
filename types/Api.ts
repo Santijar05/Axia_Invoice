@@ -3,6 +3,33 @@ export interface UserDataLogin {
     password: string;
 }
 
+export interface EmployeeDAO {
+    id: string;
+    name: string;
+    role: string;
+    email: string;
+}
+
+export interface ClientDAO {
+    id: string;
+    tenantId: string;
+    identification: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+}
+
+export interface SupplierDAO {
+    id: string;
+    tenantId: string;
+    nit: string;
+    name: string;
+    phone: string;
+    address: string;
+    createdAt: string; 
+    updatedAt: string; 
+}  
+
 export interface UserDataRegister {
     name: string;
     email: string;
@@ -47,4 +74,8 @@ export interface ErrorInterface {
 
 export interface ApiError {
     msg: string;
+}
+
+export interface ProductFormProps {
+    onSuccess?: () => Promise<void> | void;
 }

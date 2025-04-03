@@ -21,10 +21,10 @@ export default function NotFoundPage() {
 
         <div className="text-center space-y-6 relative z-10 max-w-6xl mx-auto px-4">
           <h1 className="text-9xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-white to-homePrimary mb-4 animate-pulse">404</h1>
-          <p className="text-2xl md:text-3xl"> Sorry we couldnt find this page</p>
-          <Link href="/" passHref>
+          <p className="text-2xl md:text-3xl"> Sorry we couldnt find this product</p>
+          <Link href="/store/products" passHref>
             <button className="mt-6 inline-block bg-homePrimary hover:bg-primary text-white font-bold py-3 px-6 rounded-full shadow-lg transform hover:scale-110 transition duration-300">
-              Return to Home
+              Return to Products
             </button>
           </Link>
         </div>

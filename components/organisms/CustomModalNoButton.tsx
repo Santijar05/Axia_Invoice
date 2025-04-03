@@ -10,7 +10,7 @@ interface CustomModalProps {
     children: ReactElement;
 }
 
-export default function CustomModal({ isOpen, onClose, title, children }: CustomModalProps) {
+export default function CustomModalNoButton({ isOpen, onClose, title, children }: CustomModalProps) {
     const formRef = useRef<HTMLFormElement>(null); 
 
     const handleSubmit = () => {
@@ -35,11 +35,6 @@ export default function CustomModal({ isOpen, onClose, title, children }: Custom
                                 onSuccess: onClose
                             } as any)
                         }
-                
-                        <div className="col-span-2 flex justify-end gap-2 mt-4">
-                            <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onClose} />
-                            <CustomButton text="Crear" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" onClickButton={() => formRef.current?.requestSubmit()}  />
-                        </div>
                     </div>
                 </Dialog.Content>
             </Dialog.Portal>
