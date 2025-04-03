@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 
 import CustomerDetailServer from "@/modules/customers/CustomerDetail/CustomerDetailServer";
@@ -91,5 +91,5 @@ export default async function CustomerDetail({ params }: CustomerPageProps) {
         notFound();
     }
     
-    redirect(`/users/customers`);
+    return <CustomerDetailServer customerId={customerId} />; 
 }

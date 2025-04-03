@@ -28,7 +28,7 @@ interface CustomerFormProps {
     onClose?: () => void;
 }
 
-const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuccess, onClose, client }, ref) => {
+const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuccess, client }, ref) => {
     const {
         register,
         handleSubmit,

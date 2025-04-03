@@ -11,14 +11,14 @@ import { getListCustomers, deleteCustomers } from "@/request/users";
 import { getListClientsByName } from "@/lib/api-clients";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import CustomerFormEdit from "./CustomerFormEdit";
-import CustomerFormView from "./CustomerFormView";
 import TableFilter from "@/components/molecules/TableFilter";
 
 export default function ScreenCustomers() {
+    const router = useRouter();
     const initialFetchDone = useRef(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalViewOpen, setIsModalViewOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [clients, setClients] = useState<{ [key: string]: string }[]>([]);
     const [currentClient, setCurrentClient] = useState<ClientDAO | null>(null);
     const [initialClients, setInitialClients] = useState<{ [key: string]: string }[]>([]);
@@ -32,17 +32,15 @@ export default function ScreenCustomers() {
     }, []);
 
     const fetchAllClients = async () => {
-        if (isLoading) return; // Prevenir múltiples llamadas
+        if (isLoading) return; 
         
         setIsLoading(true);
         try {
             const res = await getListCustomers();
             if (res && Array.isArray(res)) {
                 const formattedData = formatClients(res);
-                // Guardar los datos sin ordenar primero
                 setInitialClients(formattedData);
                 
-                // Aplicar ordenamiento si existe
                 if(currentSort) {
                     const sortedData = sortCustomers(formattedData, currentSort.field, currentSort.direction);
                     setClients(sortedData);
@@ -132,7 +130,7 @@ export default function ScreenCustomers() {
                 lastName: clientToView["last name"],
                 email: clientToView.email,
             });
-            setIsModalViewOpen(true);
+            router.push(`/users/customers/${clientId}`);
         }
     };
 
@@ -151,10 +149,25 @@ export default function ScreenCustomers() {
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Gestión de Clientes"
-                formComponent={<CustomerForm onSuccess={fetchAllClients} />}
-                formTitle="Agregar Nuevo Cliente"
+                title="Gestión de Empleados"
+                onAddNew={() => setIsAddModalOpen(true)} 
             />
+            
+            <CustomModalNoButton 
+                isOpen={isAddModalOpen} 
+                onClose={() => {
+                    setIsAddModalOpen(false);
+                    fetchAllClients();
+                }} 
+                title="Agregar Nuevo Empleado"
+            >
+                <CustomerForm 
+                    onSuccess={() => {
+                        setIsAddModalOpen(false);
+                        fetchAllClients();
+                    }} 
+                />
+            </CustomModalNoButton>
             
             <div className="flex justify-between items-center mb-4 mt-4">
                 <div className="w-72">
@@ -189,8 +202,7 @@ export default function ScreenCustomers() {
             <CustomModalNoButton 
                 isOpen={isModalOpen} 
                 onClose={() => {
-                    setIsModalOpen(false); // Primero cerrar el modal
-                    // Luego actualizar datos
+                    setIsModalOpen(false); 
                     setTimeout(() => fetchAllClients(), 0);
                 }}
                 title="Editar Cliente"
@@ -200,21 +212,6 @@ export default function ScreenCustomers() {
                     onSuccess={() => {
                         fetchAllClients();
                         setIsModalOpen(false);
-                    }} 
-                />
-            </CustomModalNoButton>
-            <CustomModalNoButton 
-                isOpen={isModalViewOpen} 
-                onClose={() => {
-                    fetchAllClients();
-                    setIsModalViewOpen(false);
-                }} 
-                title="Detalle del Cliente"
-            >
-                <CustomerFormView
-                    client={currentClient || undefined}
-                    onClose={() => {
-                        setIsModalViewOpen(false);
                     }} 
                 />
             </CustomModalNoButton>

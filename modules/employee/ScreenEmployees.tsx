@@ -10,7 +10,6 @@ import SearchBarUniversal from "@/components/molecules/SearchBar";
 import EmployeeForm from "./EmployeeForm";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import EmployeeFormEdit from "./EmployeeFormEdit";
-import EmployeeFormView from "./EmployeeFormView";
 import TableFilter from "@/components/molecules/TableFilter";
 
 export default function ScreenEmployees() {
@@ -18,7 +17,7 @@ export default function ScreenEmployees() {
     const [employees, setEmployees] = useState<{ [key: string]: string }[]>([]);
     const [initialEmployees, setInitialEmployees] = useState<{ [key: string]: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [isModalViewOpen, setIsModalViewOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentEmployee, setCurrentEmployee] = useState<EmployeeDAO | null>(null);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
@@ -144,9 +143,24 @@ export default function ScreenEmployees() {
         <div className="container mx-auto">
             <Toolbar
                 title="Gestión de Empleados"
-                formComponent={<EmployeeForm onSuccess={fetchAllEmployees} onClose={fetchAllEmployees} />}
-                formTitle="Agregar Nuevo Empleado"
+                onAddNew={() => setIsAddModalOpen(true)} 
             />
+            
+            <CustomModalNoButton 
+                isOpen={isAddModalOpen} 
+                onClose={() => {
+                    setIsAddModalOpen(false);
+                    fetchAllEmployees();
+                }} 
+                title="Agregar Nuevo Empleado"
+            >
+                <EmployeeForm 
+                    onSuccess={() => {
+                        setIsAddModalOpen(false);
+                        fetchAllEmployees();
+                    }} 
+                />
+            </CustomModalNoButton>
             
             <div className="flex justify-between items-center mb-4 mt-4">
                 <div className="w-72">
@@ -186,21 +200,8 @@ export default function ScreenEmployees() {
                 <EmployeeFormEdit 
                     employee={currentEmployee || undefined}
                     onSuccess={() => {
-                        fetchAllEmployees();
                         setIsModalOpen(false);
-                    }} 
-                />
-            </CustomModalNoButton>
-
-            <CustomModalNoButton 
-                isOpen={isModalViewOpen} 
-                onClose={() => {setIsModalViewOpen(false); fetchAllEmployees();}} 
-                title="Detalle del Empleado"
-            >
-                <EmployeeFormView
-                    employee={currentEmployee || undefined}
-                    onClose={() => {
-                        setIsModalViewOpen(false);
+                        fetchAllEmployees();
                     }} 
                 />
             </CustomModalNoButton>

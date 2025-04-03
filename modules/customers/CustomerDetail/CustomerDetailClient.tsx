@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { ClientDAO } from "@/types/Api";
 import CustomButton from "@/components/atoms/CustomButton";
@@ -14,10 +15,17 @@ export default function CustomerDetailClient({ customer }: CustomerDetailClientP
     const router = useRouter();
 
     return (
-        <div className="container mx-auto p-6">
-            <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="relative w-full min-h-screen text-white flex justify-center">
+            <Image 
+                src="/Images/fondoHerooo.png" 
+                alt="Background Image" 
+                fill 
+                className="absolute top-0 left-0 w-full h-full object-cover"
+                priority
+            />
+            <div className="relative w-full max-w-4xl bg-blac bg-opacity-50 rounded-lg shadow-lg mt-20">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold text-tertiary">Detalle del cliente</h1>
+                    <h2 className="text-2xl font-semibold text-white">Detalle del cliente</h2>
                     <CustomButton 
                         text="Volver" 
                         style="bg-tertiary text-white hover:bg-blue-800"
@@ -25,26 +33,21 @@ export default function CustomerDetailClient({ customer }: CustomerDetailClientP
                     />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="col-span-2 p-4 bg-gray-50 rounded-lg">
-                            <h3 className="font-bold text-xl mb-2 text-tertiary">{customer.firstName}</h3>
-                            <p className="text-sm text-gray-500">ID: {customer.id}</p>
-                        </div>
+                <div className="grid grid-cols-1 gap-8">
+                    <div className="bg-black bg-opacity-30 p-6 rounded-lg">
+                        <h3 className="font-bold text-2xl mb-3 text-tertiary text-center">{`${customer.firstName} ${customer.lastName}`}</h3>
+                        <p className="text-sm text-gray-300 text-center mb-16">ID: {customer.id}</p>
                         
-                        <div className="p-3 border rounded-lg">
-                            <p className="text-sm font-semibold text-gray-500">Email</p>
-                            <p className="text-black">{customer.email}</p>
-                        </div>
-                        
-                        <div className="p-3 border rounded-lg">
-                            <p className="text-sm font-semibold text-gray-500">Teléfono</p>
-                            <p className="text-black">{customer.identification}</p>
-                        </div>
-                        
-                        <div className="p-3 border rounded-lg">
-                            <p className="text-sm font-semibold text-gray-500">Dirección</p>
-                            <p className="text-black">{customer.lastName}</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div className="p-4 border border-gray-600 rounded-lg">
+                                <p className="text-sm font-semibold text-gray-400 mb-2">Email</p>
+                                <p className="text-white">{customer.email}</p>
+                            </div>
+
+                            <div className="p-4 border border-gray-600 rounded-lg">
+                                <p className="text-sm font-semibold text-gray-400 mb-2">Identificacion</p>
+                                <p className="text-white">{customer.identification}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

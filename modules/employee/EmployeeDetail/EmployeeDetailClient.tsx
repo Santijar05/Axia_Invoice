@@ -24,7 +24,7 @@ export default function EmployeeDetailClient({ employee }: EmployeeDetailClientP
                 priority
             />
             
-            <div className="relative w-full max-w-3xl bg-blac bg-opacity-50 rounded-lg shadow-lg p-8 mx-4 my-8">
+            <div className="relative w-full max-w-4xl bg-blac bg-opacity-50 rounded-lg shadow-lg mt-20">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-white">Detalle del empleado</h2>
                     <CustomButton 
@@ -37,7 +37,7 @@ export default function EmployeeDetailClient({ employee }: EmployeeDetailClientP
                 <div className="grid grid-cols-1 gap-8">
                     <div className="bg-black bg-opacity-30 p-6 rounded-lg">
                         <h3 className="font-bold text-2xl mb-3 text-tertiary text-center">{employee.name}</h3>
-                        <p className="text-sm text-gray-300 text-center mb-4">ID: {employee.id}</p>
+                        <p className="text-sm text-gray-300 text-center mb-16">ID: {employee.id}</p>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                             <div className="p-4 border border-gray-600 rounded-lg">

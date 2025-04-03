@@ -6,6 +6,7 @@ import Input from "@/components/atoms/Input";
 import { createCustomer } from "@/request/users";
 import Cookies from "js-cookie"; 
 import { jwtDecode } from "jwt-decode";
+import CustomButton from "@/components/atoms/CustomButton";
 
 type CustomerFormData = {
     tenantId: string;
@@ -114,6 +115,11 @@ const CustomerForm = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuccess
                     />
                     {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
                 </div>
+
+            <div className="col-span-2 flex justify-end gap-2 mt-4">
+                <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
+                <CustomButton text={ 'Crear Cliente'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
+            </div>               
                 
             </form>
         );

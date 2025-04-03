@@ -6,6 +6,7 @@ import Input from "@/components/atoms/Input";
 import Cookies from "js-cookie"; 
 import { jwtDecode } from "jwt-decode";
 import { createEmployee } from "@/request/users";
+import CustomButton from "@/components/atoms/CustomButton";
 
 type EmployeeFormData = {
     tenantId: string;
@@ -21,7 +22,7 @@ interface EmployeeFormProps {
     onClose?: () => void;  
 }
 
-const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess }, ref) => {
+const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess, onClose }, ref) => {
     const {
         register,
         handleSubmit,
@@ -54,16 +55,15 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
 
             if (response.status === 201) {
                 const responseData = await response.json();
-                alert("Cliente creado exitosamente");
-                console.log("Usuario creado:", responseData);
+                alert("Empleado creado exitosamente");
+                console.log("Empleado creado:", responseData);
                 reset(); 
-                if (onSuccess) {
-                    onSuccess();
-                }
+                onSuccess?.();
+                onClose?.();
 
             } else {
                 const errorData = await response.json();
-                console.log("Error al crear el cliente:", errorData);
+                console.log("Error al crear el empleado:", errorData);
             }
         } catch (error) {
             console.error("Error en onSubmit:", error);
@@ -121,6 +121,11 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
                 />
                 {errors.role && <p className="text-red-500 text-xs">{errors.role.message}</p>}
             </div>
+
+            <div className="col-span-2 flex justify-end gap-2 mt-4">
+                <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
+                <CustomButton text={ 'Crear Cliente'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
+            </div>    
         </form>
     );
 });

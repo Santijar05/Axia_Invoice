@@ -34,12 +34,12 @@ export default function CustomTable({
   contextType = 'products',
   customActions,
   actionLabels = {
-    edit: contextType === 'clients' ? 'Edit Client' : 
-          contextType === 'employees' ? 'Edit Employee' : 'Edit',
-    view: contextType === 'clients' ? 'View Client' : 
-          contextType === 'employees' ? 'View Employee' : 'View',
-    delete: contextType === 'clients' ? 'Delete Client' : 
-            contextType === 'employees' ? 'Delete Employee' : 'Delete' 
+    edit: contextType === 'clients' ? 'Editar cliente' : 
+          contextType === 'employees' ? 'Editar empleado' : 'Editar',
+    view: contextType === 'clients' ? 'Ver cliente' : 
+          contextType === 'employees' ? 'Ver empleado' : 'Ver',
+    delete: contextType === 'clients' ? 'Eliminar Cliente' : 
+            contextType === 'employees' ? 'Eliminar empleado' : 'Eliminar' 
   }
 }: CustomTableProps) {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -68,7 +68,7 @@ export default function CustomTable({
 
   const handleDelete = (id: string) => {
     if (customActions?.delete) {
-      if (confirm(`Are you sure you want to delete this ${contextType}?`)) {
+      if (confirm(`Estas seguro que quieres eliminar el ${contextType}?`)) {
         customActions.delete(id);
       }
     } else {
