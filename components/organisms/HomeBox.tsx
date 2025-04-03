@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
+import Cookies from "js-cookie";
 
 import CustomButton from "../atoms/CustomButton";
 import Sidebar from "@/components/molecules/Sidebar";
@@ -12,15 +13,8 @@ export default function HomeBox({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [userRole, setUserRole] = useState<UserRole>(null);
 
-  // Función para obtener una cookie por nombre
-  const getCookie = (name: string) => {
-    const cookies = document.cookie.split("; ");
-    const cookie = cookies.find(row => row.startsWith(`${name}=`));
-    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
-  };
-
   useEffect(() => {
-    const role = getCookie("userRole");
+    const role = Cookies.get("userRole");
 
     // Validar que el rol sea uno de los valores esperados
     if (role === "USER" || role === "ADMIN" || role === "SUPERADMIN") {

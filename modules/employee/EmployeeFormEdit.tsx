@@ -53,10 +53,6 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
 
     const onSubmit = async (data: EmployeeFormData) => {
         const authToken = Cookies.get("authToken");
-        if (!authToken) {
-            alert("Token de autenticación no encontrado");
-            return;
-        }
     
         if (!employee?.id) {
             alert("ID de cliente no disponible");

@@ -6,6 +6,7 @@ import Input from "@/components/atoms/Input";
 import Cookies from "js-cookie"; 
 import { updateCustomer } from "@/request/users";
 import { ClientDAO } from "@/types/Api";
+import CustomButton from "@/components/atoms/CustomButton";
 
 type CustomerFormData = {
     id?: string;
@@ -40,7 +41,8 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
 
     useEffect(() => {
         if (client) {
-            setValue('identification', client.identification);
+            const formattedIdentification = client.identification.slice(2); 
+            setValue('identification', formattedIdentification);
             setValue('firstName', client.firstName);
             setValue('lastName', client.lastName);
             setValue('email', client.email);
@@ -51,14 +53,10 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
         } else {
             reset();
         }
-    }, [client, reset, setValue]);        
+    }, [client, reset, setValue]);      
 
     const onSubmit = async (data: CustomerFormData) => {
         const authToken = Cookies.get("authToken");
-        if (!authToken) {
-            alert("Token de autenticación no encontrado");
-            return;
-        }
     
         if (!client?.id) {
             alert("ID de cliente no disponible");
@@ -66,11 +64,9 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
         }
     
         try {
-            const tenantId = ''
-    
             const requestBody: ClientDAO = {
-                id: client.id, 
-                tenantId,     
+                id: client.id,
+                tenantId: "",
                 identification: data.identification,
                 firstName: data.firstName,
                 lastName: data.lastName,
@@ -91,6 +87,7 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
             console.error("Error en onSubmit:", error);
         }
     };
+    
 
     return (
         <form ref={ref} onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4"> 
@@ -147,25 +144,9 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
                 {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
             </div>
             
-            <div className="col-span-2 flex justify-between mt-4">
-                <button
-                    type="button"
-                    onClick={() => {
-                        if (onClose) onClose();
-                        if (onSuccess) onSuccess();
-                    }}
-                    className="border px-4 rounded-md ext-white bg-homePrimary border text-white bg-homePrimary hover:bg-blue-500"
-                    disabled={isSubmitting}
-                >
-                    Cancelar
-                </button>
-                <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md border text-white bg-homePrimary hover:bg-blue-500"
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? 'Procesando...' : client?.id ? 'Actualizar Cliente' : 'Crear Cliente'}
-                </button>
+            <div className="col-span-2 flex justify-end gap-2 mt-4">
+                <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
+                <CustomButton text={isSubmitting ? 'Procesando...' : client?.id ? 'Actualizar Cliente' : 'Crear Cliente'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
             </div>
         </form>
     );

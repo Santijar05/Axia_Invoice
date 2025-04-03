@@ -11,6 +11,7 @@ import EmployeeForm from "./EmployeeForm";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import EmployeeFormEdit from "./EmployeeFormEdit";
 import EmployeeFormView from "./EmployeeFormView";
+import TableFilter from "@/components/molecules/TableFilter";
 
 export default function ScreenEmployees() {
     const [employees, setEmployees] = useState<{ [key: string]: string }[]>([]);
@@ -19,6 +20,7 @@ export default function ScreenEmployees() {
     const [isModalViewOpen, setIsModalViewOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentEmployee, setCurrentEmployee] = useState<EmployeeDAO | null>(null);
+    const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
     const initialFetchDone = useRef(false);
     
     useEffect(() => {
@@ -35,24 +37,40 @@ export default function ScreenEmployees() {
         try {
             const res = await getListEmployees();
             if (res && Array.isArray(res)) {
-                formatAndSetEmployees(res);
+                const formattedData = formatEmployees(res);
+                if (currentSort) {
+                    const sortedData = sortEmployees(formattedData, currentSort.field, currentSort.direction);
+                    setInitialEmployees(formattedData);
+                    setEmployees(sortedData);
+                } else {
+                    setInitialEmployees(formattedData);
+                    setEmployees(formattedData);
+                }
             }
         } catch (err) {
-            console.error('Error fetching employees:', err);
+            console.error('Error al obtener empleados:', err);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const formatAndSetEmployees = (employeeList: EmployeeDAO[]) => {
-        const formattedEmployees = employeeList.map((employee) => ({
+    // Función auxiliar para formatear los empleados
+    const formatEmployees = (employeeList: EmployeeDAO[]) => {
+        return employeeList.map((employee) => ({
             id: employee.id,
             name: employee.name,
             role: employee.role,
             email: employee.email,
         }));
-        setInitialEmployees(formattedEmployees);
-        setEmployees(formattedEmployees);
+    };
+
+    // Función auxiliar para ordenar los empleados
+    const sortEmployees = (data: { [key: string]: string }[], field: string, direction: 'asc' | 'desc') => {
+        return [...data].sort((a, b) => {
+            if (a[field] < b[field]) return direction === 'asc' ? -1 : 1;
+            if (a[field] > b[field]) return direction === 'asc' ? 1 : -1;
+            return 0;
+        });
     };
 
     const handleEmployeesFound = (results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
@@ -61,10 +79,28 @@ export default function ScreenEmployees() {
         );
         
         if (employeeResults.length > 0) {
-            formatAndSetEmployees(employeeResults);
+            const formattedData = formatEmployees(employeeResults);
+            if (currentSort) {
+                const sortedData = sortEmployees(formattedData, currentSort.field, currentSort.direction);
+                setEmployees(sortedData);
+            } else {
+                setEmployees(formattedData);
+            }
         } else {
-            setEmployees(initialEmployees);
+            // Si no hay resultados, mantener el ordenamiento de initialEmployees 
+            if (currentSort) {
+                const sortedData = sortEmployees(initialEmployees, currentSort.field, currentSort.direction);
+                setEmployees(sortedData);
+            } else {
+                setEmployees(initialEmployees);
+            }
         }
+    };
+
+    const handleSort = (field: string, direction: 'asc' | 'desc') => {
+        setCurrentSort({ field, direction });
+        const sortedEmployees = sortEmployees(employees, field, direction);
+        setEmployees(sortedEmployees);
     };
 
     const handleEditEmployee = (employeeId: string) => {
@@ -99,32 +135,40 @@ export default function ScreenEmployees() {
             fetchAllEmployees();
         })
         .catch((err) => {
-            console.error("Error deleting employee:", err);
+            console.error("Error al eliminar empleado:", err);
         });
     };
+
+    const tableHeaders = ["ID", "Name", "Role", "Email"];
 
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Employees Management"
+                title="Gestión de Empleados"
                 formComponent={<EmployeeForm onSuccess={fetchAllEmployees} onClose={fetchAllEmployees} />}
-                formTitle="Add New Employee"
+                formTitle="Agregar Nuevo Empleado"
             />
             
-            <div className="mb-4 mt-4 w-72">
-                <SearchBarUniversal 
-                    onResultsFound={handleEmployeesFound} 
-                    showResults={false}
-                    placeholder="Search employees..."
-                    searchType="employees"
+            <div className="flex justify-between items-center mb-4 mt-4">
+                <div className="w-72">
+                    <SearchBarUniversal 
+                        onResultsFound={handleEmployeesFound} 
+                        showResults={false}
+                        placeholder="Buscar empleados..."
+                        searchType="employees"
+                    />
+                </div>
+                <TableFilter 
+                    headers={tableHeaders} 
+                    onSort={handleSort} 
                 />
             </div>
             
-            {isLoading && <p className="text-gray-500 text-sm mb-2">Loading employees...</p>}
+            {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando empleados...</p>}
             
             <CustomTable
-                title="Employees List"
-                headers={["ID", "Name", "Role", "Email"]}
+                title="Lista de Empleados"
+                headers={tableHeaders}
                 options={true}
                 data={employees}
                 contextType="employees"
@@ -138,7 +182,7 @@ export default function ScreenEmployees() {
             <CustomModalNoButton 
                 isOpen={isModalOpen} 
                 onClose={() => {setIsModalOpen(false); fetchAllEmployees();}} 
-                title="Edit Employee"
+                title="Editar Empleado"
             >
                 <EmployeeFormEdit 
                     employee={currentEmployee || undefined}
@@ -151,7 +195,7 @@ export default function ScreenEmployees() {
 
             <CustomModalNoButton 
                 isOpen={isModalViewOpen} 
-                onClose={() => {setIsModalOpen(false); fetchAllEmployees();}} 
+                onClose={() => {setIsModalViewOpen(false); fetchAllEmployees();}} 
                 title="Detalle del Empleado"
             >
                 <EmployeeFormView
