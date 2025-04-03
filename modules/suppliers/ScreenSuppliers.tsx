@@ -89,7 +89,7 @@ export default function ScreenSuppliers() {
                 title=""
                 headers={["ID", "NIT", "Name", "Phone", "Address"]}
                 options={true}
-                products={suppliers}
+                data={suppliers}
                 onRowClick={handleRowClick}
             />
         </div>
