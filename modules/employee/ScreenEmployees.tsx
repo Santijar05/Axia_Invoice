@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 import CustomTable from "@/components/organisms/CustomTable";
@@ -37,12 +37,12 @@ export default function ScreenEmployees() {
             const res = await getListEmployees();
             if (res && Array.isArray(res)) {
                 const formattedData = formatEmployees(res);
-                if (currentSort) {
+                setInitialEmployees(formattedData);
+                
+                if(currentSort) {
                     const sortedData = sortEmployees(formattedData, currentSort.field, currentSort.direction);
-                    setInitialEmployees(formattedData);
                     setEmployees(sortedData);
                 } else {
-                    setInitialEmployees(formattedData);
                     setEmployees(formattedData);
                 }
             }
@@ -53,7 +53,6 @@ export default function ScreenEmployees() {
         }
     };
 
-    // Función auxiliar para formatear los empleados
     const formatEmployees = (employeeList: EmployeeDAO[]) => {
         return employeeList.map((employee) => ({
             id: employee.id,
@@ -63,7 +62,6 @@ export default function ScreenEmployees() {
         }));
     };
 
-    // Función auxiliar para ordenar los empleados
     const sortEmployees = (data: { [key: string]: string }[], field: string, direction: 'asc' | 'desc') => {
         return [...data].sort((a, b) => {
             if (a[field] < b[field]) return direction === 'asc' ? -1 : 1;
@@ -72,13 +70,14 @@ export default function ScreenEmployees() {
         });
     };
 
-    const handleEmployeesFound = (results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+    const handleEmployeesFound = useCallback((results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
         const employeeResults = results.filter((result): result is EmployeeDAO => 
             'name' in result && 'role' in result
         );
         
         if (employeeResults.length > 0) {
             const formattedData = formatEmployees(employeeResults);
+            
             if (currentSort) {
                 const sortedData = sortEmployees(formattedData, currentSort.field, currentSort.direction);
                 setEmployees(sortedData);
@@ -86,21 +85,20 @@ export default function ScreenEmployees() {
                 setEmployees(formattedData);
             }
         } else {
-            // Si no hay resultados, mantener el ordenamiento de initialEmployees 
             if (currentSort) {
-                const sortedData = sortEmployees(initialEmployees, currentSort.field, currentSort.direction);
+                const sortedData = sortEmployees([...initialEmployees], currentSort.field, currentSort.direction);
                 setEmployees(sortedData);
             } else {
-                setEmployees(initialEmployees);
+                setEmployees([...initialEmployees]);
             }
         }
-    };
+    }, [currentSort, initialEmployees]);
 
-    const handleSort = (field: string, direction: 'asc' | 'desc') => {
+    const handleSort = useCallback((field: string, direction: 'asc' | 'desc') => {
         setCurrentSort({ field, direction });
-        const sortedEmployees = sortEmployees(employees, field, direction);
+        const sortedEmployees = sortEmployees([...employees], field, direction);
         setEmployees(sortedEmployees);
-    };
+    }, [employees]);
 
     const handleEditEmployee = (employeeId: string) => {
         const employeeToEdit = initialEmployees.find(emp => emp.id === employeeId);
