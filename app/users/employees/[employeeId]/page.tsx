@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 
 import { getPublicEmployees } from "@/lib/api-employees";
@@ -91,5 +91,6 @@ export default async function EmployeeDetailAdmin({ params }: EmployeePageProps)
         notFound();
     }
         
-    redirect(`/users/employees`);
+    // Return the EmployeeDetailServer component instead of redirectingerver component instead of redirectingerver component instead of redirecting
+    return <EmployeeDetailServer employeeId={employeeId} />; 
 }

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
-  User, Home, Truck, ShoppingCart, ChevronDown, ChevronUp, HandCoins, ArchiveRestore, LogOut 
-} from "lucide-react";
+  User, Home, Truck, ShoppingCart, ChevronDown, ChevronUp, HandCoins, ArchiveRestore, LogOut} from "lucide-react";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+
 import { useUserStore } from "@/store/UserStore";
 
 type MenuItem = {
@@ -17,11 +19,31 @@ type MenuItem = {
   allowedRoles?: string[];
 };
 
-type UserRole = "USER" | "ADMIN" | "SUPERADMIN" | null;
+type UserRole = "EMPLOYEE" | "ADMIN" | "SUPERADMIN" | null;
 
-export default function Sidebar({ isOpen, role }: { isOpen: boolean; role: UserRole }) {
+export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { role, setRole } = useUserStore();
 
+  // Verificar el token al montar el componente
+  useEffect(() => {
+    const authToken = Cookies.get("authToken");
+    if (authToken) {
+      try {
+        const decoded: { role?: UserRole } = jwtDecode(authToken);
+        if (decoded.role) {
+          setRole(decoded.role);
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        Cookies.remove("authToken");
+      }
+    }
+    setLoading(false);
+  }, [setRole]);
+
+  // Cerrar menús cuando el sidebar se colapsa
   useEffect(() => {
     if (!isOpen) setOpenMenu(null);
   }, [isOpen]);
@@ -32,7 +54,7 @@ export default function Sidebar({ isOpen, role }: { isOpen: boolean; role: UserR
     }
   };
 
-  if (!role) {
+  if (loading || !role) {
     return (
       <aside className={`bg-black min-h-[calc(100vh-64px)] flex flex-col items-center justify-center ${
         isOpen ? "w-56" : "w-14"
@@ -42,14 +64,14 @@ export default function Sidebar({ isOpen, role }: { isOpen: boolean; role: UserR
     );
   }
 
-  const basePath = role === "USER" ? "/employee" : "/admin";
+  const basePath = role === "EMPLOYEE" ? "/employee" : "/admin";
 
   const menuItems: MenuItem[] = [
     { 
       icon: Home, 
       label: "Home", 
       href: basePath,
-      allowedRoles: ["USER", "ADMIN", "SUPERADMIN"]
+      allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
     },
     ...(role === "ADMIN" || role === "SUPERADMIN" ? [
       { 
@@ -73,37 +95,37 @@ export default function Sidebar({ isOpen, role }: { isOpen: boolean; role: UserR
     { 
       icon: ArchiveRestore, 
       label: "Store",
-      allowedRoles: ["USER", "ADMIN", "SUPERADMIN"],
+      allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
           label: "Products", 
           href: "/store/products",
-          allowedRoles: ["USER", "ADMIN", "SUPERADMIN"]
+          allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
       ],
     },
     { 
       icon: Truck, 
       label: "Sales",
-      allowedRoles: ["USER", "ADMIN", "SUPERADMIN"],
+      allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
           label: "Make Sales", 
           href: "/sales/make-sales",
-          allowedRoles: ["USER", "ADMIN", "SUPERADMIN"]
+          allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
       ],
     },
     { 
       icon: ShoppingCart, 
       label: "Shopping",
-      allowedRoles: ["USER", "ADMIN", "SUPERADMIN"],
+      allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
-        ...(role === "USER" ? [
+        ...(role === "EMPLOYEE" ? [
           { 
             label: "Make Purchase", 
             href: "/shopping/make-purchase",
-            allowedRoles: ["USER"]
+            allowedRoles: ["EMPLOYEE"]
           }
         ] : []),
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [
@@ -136,18 +158,23 @@ export default function Sidebar({ isOpen, role }: { isOpen: boolean; role: UserR
     ] : []),
   ];
 
+  // Filtrar items y subopciones basado en el rol
   const filteredItems = menuItems
     .filter(item => !item.allowedRoles || item.allowedRoles.includes(role))
     .map(item => ({
       ...item,
-      subOptions: item.subOptions?.filter(sub => !sub.allowedRoles || sub.allowedRoles.includes(role))
+      subOptions: item.subOptions?.filter(
+        sub => !sub.allowedRoles || sub.allowedRoles.includes(role)
+      )
     }))
     .filter(item => !item.subOptions || item.subOptions.length > 0);
 
   return (
-    <aside className={`bg-black min-h-[calc(100vh-64px)] flex flex-col py-4 gap-2 transition-all duration-300 ${
-      isOpen ? "w-56 px-4" : "w-20 items-center pl-2"
-    }`}>
+    <aside
+      className={`bg-black min-h-[calc(100vh-64px)] flex flex-col py-4 gap-2 transition-all duration-300 ${
+        isOpen ? "w-56 px-4" : "w-14 items-center pl-2"
+      }`}
+    >
       {filteredItems.map(({ icon: Icon, label, href, subOptions }, index) => (
         <div key={`${label}-${index}`} className="w-full">
           <div 
@@ -169,24 +196,50 @@ export default function Sidebar({ isOpen, role }: { isOpen: boolean; role: UserR
               <Icon className="h-5 w-5 text-gray-500" />
               {isOpen && <span className="text-gray-500">{label}</span>}
             </Link>
+
             {subOptions && isOpen && (
               <div className="ml-auto">
-                {openMenu === label ? <ChevronUp className="h-4 w-4 text-gray-500" /> : <ChevronDown className="h-4 w-4 text-gray-500" />}
+                {openMenu === label ? (
+                  <ChevronUp className="h-4 w-4 text-gray-500" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 text-gray-500" />
+                )}
               </div>
             )}
           </div>
+          
           {subOptions && isOpen && openMenu === label && (
             <div className="pl-8">
               {subOptions.map((sub, i) => (
-                <Link key={`${sub.label}-${i}`} href={sub.href} className="block py-2 text-gray-400 hover:text-gray-200 transition-colors">{sub.label}</Link>
+                <Link 
+                  key={`${sub.label}-${i}`} 
+                  href={sub.href} 
+                  className="block py-2 text-gray-400 hover:text-gray-200 transition-colors"
+                >
+                  {sub.label}
+                </Link>
               ))}
             </div>
           )}
         </div>
       ))}
       <div className="mt-auto p-2">
-        <Link href="/login" onClick={() => useUserStore.getState().setRole(null)} className="flex items-center gap-3 p-2 rounded-lg text-white transition-colors">
-          <LogOut className="h-5 w-5" />
+        <Link 
+          href="/login"
+          onClick={(e) => {
+            e.preventDefault(); 
+
+            Cookies.remove("authToken");
+
+            useUserStore.getState().setRole(null);
+
+            window.location.href = "/login";
+          }}
+          className={`flex items-center gap-3 p-2 rounded-lg text-white transition-colors ${
+            !isOpen ? "justify-center" : ""
+          }`}
+        >
+          <LogOut className="h-5 w-5 text-" />
           {isOpen && <span className="text-gray-500">Cerrar sesión</span>}
         </Link>
       </div>

@@ -14,6 +14,7 @@ import EmployeeFormView from "./EmployeeFormView";
 import TableFilter from "@/components/molecules/TableFilter";
 
 export default function ScreenEmployees() {
+    const router = useRouter();
     const [employees, setEmployees] = useState<{ [key: string]: string }[]>([]);
     const [initialEmployees, setInitialEmployees] = useState<{ [key: string]: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -123,7 +124,7 @@ export default function ScreenEmployees() {
                 role: employeeToView.role,
                 email: employeeToView.email,
             });
-            setIsModalViewOpen(true);
+            router.push(`/users/employees/${employeeId}`);
         }
     };
 
