@@ -60,7 +60,6 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
                 reset(); 
                 onSuccess?.();
                 onClose?.();
-
             } else {
                 const errorData = await response.json();
                 console.log("Error al crear el empleado:", errorData);

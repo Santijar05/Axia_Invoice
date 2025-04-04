@@ -4,6 +4,7 @@ import { ProductFormProps } from "@/types/Api";
 
 import Input from "@/components/atoms/Input";
 import Dropdown from "@/components/molecules/Dropdown";
+import Select from "@/components/atoms/select";
 
 export default function ProductForm({ onSuccess }: ProductFormProps) {
     const [selectedCategory, setSelectedCategory] = useState("Selecciona una categoría");
@@ -21,20 +22,16 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
         }
     };
 
-    // Función temporal para simular la creación de producto
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
         
-        // Simulando una llamada API con un retraso
         setTimeout(() => {
-            // Si hay un callback onSuccess, lo llamamos
             if (onSuccess) {
                 onSuccess();
             }
             
             setIsSubmitting(false);
-            // Opcional: mostrar mensaje de éxito
             alert("Producto guardado (simulación)");
         }, 1000);
     };
@@ -55,6 +52,13 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
         { text: "FUENTE DE PODER" }
     ];
 
+    const proveedores = [
+        { value: "ODA8580BDS08", label: "ODA8580BDS08" },
+        { value: "ABC1234XYZ56", label: "ABC1234XYZ56" },
+        { value: "XYZ9876ABC12", label: "XYZ9876ABC12" },
+        { value: "123PQRS456TU", label: "123PQRS456TU" }
+      ];
+
     return (
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
             <div>
@@ -63,8 +67,12 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Outside</label>
-                <Input className="text-black" placeholder="ODA8580BDS08" type="text" />
+                <label className="text-sm font-semibold text-gray-500">Proveedor</label>
+                <Select 
+                    className="text-black" 
+                    placeholder="Seleccionar proveedor" 
+                    options={proveedores} 
+                />
             </div>
 
             <div className="col-span-2">
@@ -157,7 +165,6 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
                 <input type="file" onChange={handleImageChange} className="input-file text-gray-400 border p-3 rounded-md border-gray-300" />
             </div>
 
-            {/* Botón para enviar el formulario */}
             <div className="col-span-2 flex justify-end mt-4">
                 <button 
                     type="submit" 
