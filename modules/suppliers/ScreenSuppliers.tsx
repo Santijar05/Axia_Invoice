@@ -1,22 +1,30 @@
 'use client';
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
-import { getListSuppliers } from "@/lib/api-suppliers";
-import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
+import { getListSuppliers, deleteSupplier } from "@/lib/api-suppliers";
+import { SupplierDAO } from "@/types/Api";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import SupplierForm from "./SupplierForm";
+import SupplierFormEdit from "./SupplierFormEdit";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
+import TableFilter from "@/components/molecules/TableFilter";
+import EmptyState from '@/components/molecules/EmptyState';
+import SupplierDetail from "./SupplierDetail/SupplierDetail";
 
 export default function ScreenSuppliers() {
     const router = useRouter();
     const [suppliers, setSuppliers] = useState<{ [key: string]: string }[]>([]);
     const [initialSuppliers, setInitialSuppliers] = useState<{ [key: string]: string }[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isSupplierModalOpen, setIsSupplierModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [currentSupplier, setCurrentSupplier] = useState<SupplierDAO | null>(null);
+    const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
     const initialFetchDone = useRef(false);
     
     useEffect(() => {
@@ -33,7 +41,15 @@ export default function ScreenSuppliers() {
         try {
             const res = await getListSuppliers();
             if (res && Array.isArray(res)) {
-                formatAndSetSuppliers(res);
+                const formattedData = formatSuppliers(res);
+                setInitialSuppliers(formattedData);
+                
+                if(currentSort) {
+                    const sortedData = sortSuppliers(formattedData, currentSort.field, currentSort.direction);
+                    setSuppliers(sortedData);
+                } else {
+                    setSuppliers(formattedData);
+                }
             }
         } catch (err) {
             console.log('Error al obtener proveedores', err);
@@ -42,73 +58,189 @@ export default function ScreenSuppliers() {
         }
     };
 
-    const formatAndSetSuppliers = (supplierList: SupplierDAO[]) => {
-        const formattedSuppliers = supplierList.map((supplier: SupplierDAO) => ({
+    const formatSuppliers = (supplierList: SupplierDAO[]) => {
+        return supplierList.map((supplier) => ({
             id: supplier.id,
             nit: supplier.nit,
             name: supplier.name,
             phone: supplier.phone,
             address: supplier.address,
         }));
-        setInitialSuppliers(formattedSuppliers);
-        setSuppliers(formattedSuppliers);
     };
 
-    const handleSuppliersFound = (results: EmployeeDAO[] | ProductDAO[] | SupplierDAO[] | ClientDAO[]) => {
-        if (results.length > 0 && "nit" in results[0]) {
-            formatAndSetSuppliers(results as SupplierDAO[]);
-        } else if (searchQuery) {
-            setSuppliers([]);
+    const sortSuppliers = (data: { [key: string]: string }[], field: string, direction: 'asc' | 'desc') => {
+        return [...data].sort((a, b) => {
+            if (a[field] < b[field]) return direction === 'asc' ? -1 : 1;
+            if (a[field] > b[field]) return direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+    };
+
+    const handleSuppliersFound = useCallback((results: any[]) => {
+        const suppliersResults = results.filter((result): result is SupplierDAO => 
+            'nit' in result && 'name' in result
+        );
+        
+        if (suppliersResults.length > 0) {
+            const formattedData = formatSuppliers(suppliersResults);
+            
+            if (currentSort) {
+                const sortedData = sortSuppliers(formattedData, currentSort.field, currentSort.direction);
+                setSuppliers(sortedData);
+            } else {
+                setSuppliers(formattedData);
+            }
+        } else if (searchTerm && searchTerm.length >= 2) {
+            setSuppliers([{
+                id: "no-results",
+                nit: "",
+                name: `No se encontraron proveedores para: "${searchTerm}"`,
+                phone: "",
+                address: "",
+            }]);
         } else {
-            setSuppliers(initialSuppliers);
+            if (currentSort) {
+                const sortedData = sortSuppliers([...initialSuppliers], currentSort.field, currentSort.direction);
+                setSuppliers(sortedData);
+            } else {
+                setSuppliers([...initialSuppliers]);
+            }
         }
-    };    
+    }, [currentSort, initialSuppliers, searchTerm]);
 
-    const handleRowClick = (supplierId: string) => {
-        router.push(`/suppliers/${supplierId}`);
+    const handleSort = useCallback((field: string, direction: 'asc' | 'desc') => {
+        setCurrentSort({ field, direction });
+        const sortedSuppliers = sortSuppliers([...suppliers], field, direction);
+        setSuppliers(sortedSuppliers);
+    }, [suppliers]);
+
+    const handleEditSupplier = (supplierId: string) => {
+        const supplierToEdit = initialSuppliers.find(supplier => supplier.id === supplierId);
+        if (supplierToEdit) {
+            setCurrentSupplier({
+                id: supplierToEdit.id,
+                tenantId: "", 
+                nit: supplierToEdit.nit,
+                name: supplierToEdit.name,
+                phone: supplierToEdit.phone,
+                address: supplierToEdit.address,
+            });
+            setIsEditModalOpen(true);
+        }
     };
+
+    const handleViewSupplier = (supplierId: string) => {
+        const supplierToView = suppliers.find(emp => emp.id === supplierId);
+        if (supplierToView) {
+            setCurrentSupplier({
+                id: supplierToView.id,
+                name: supplierToView.name,
+                phone: supplierToView.phone,
+                address: supplierToView.address,
+                nit: supplierToView.nit,
+                tenantId: "", 
+            });
+            //router.push(`/users/employees/${employeeId}`);
+            setIsViewModalOpen(true);
+        }
+    };
+
+    const handleDeleteSupplier = async (supplierId: string) => {
+        if (confirm("¿Estás seguro de que deseas eliminar este proveedor?")) {
+            try {
+                await deleteSupplier(supplierId);
+                fetchAllSuppliers();
+            } catch (err) {
+                console.error("Error al eliminar proveedor:", err);
+                alert("No se pudo eliminar el proveedor");
+            }
+        }
+    };
+
+    const tableHeaders = ["ID", "NIT", "Name", "Phone", "Address"];
 
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Suppliers"
-                onAddNew={() => setIsSupplierModalOpen(true)}
+                title="Proveedores"
+                onAddNew={() => setIsAddModalOpen(true)}
             />
             
-            {/* Resto de tu componente... */}
-
             <CustomModalNoButton 
-                isOpen={isSupplierModalOpen}
+                isOpen={isAddModalOpen}
                 onClose={() => {
-                setIsSupplierModalOpen(false);
-                // Aquí puedes agregar cualquier lógica de refresco si es necesario
+                    setIsAddModalOpen(false);
+                    fetchAllSuppliers();
                 }}
-                title="Enter Supplier"
+                title="Nuevo Proveedor"
             >
                 <SupplierForm 
-                onSuccess={() => {
-                    setIsSupplierModalOpen(false);
-                }}
+                    onSuccess={() => {
+                        setIsAddModalOpen(false);
+                        fetchAllSuppliers();
+                    }} 
                 />
             </CustomModalNoButton>
             
-            <div className="mb-4 mt-4 w-72">
-                <SearchBarUniversal 
-                    onResultsFound={handleSuppliersFound} 
-                    showResults={false}
-                    placeholder="Search by name or NIT..."
-                    searchType="suppliers"
+            <div className="flex justify-between items-center mb-4 mt-4">
+                <div className="w-72">
+                    <SearchBarUniversal 
+                        onResultsFound={handleSuppliersFound} 
+                        showResults={false}
+                        placeholder="Buscar proveedores..."
+                        searchType="suppliers"
+                        onSearchTermChange={setSearchTerm}
+                    />
+                </div>
+                <TableFilter 
+                    headers={tableHeaders} 
+                    onSort={handleSort} 
                 />
             </div>
             
-            {isLoading && <p className="text-gray-500 text-sm mb-2">Loading suppliers...</p>}
+            {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando proveedores...</p>}
             
-            <CustomTable
-                title=""
-                headers={["ID", "NIT", "Name", "Phone", "Address"]}
-                options={true}
-                data={suppliers}
-                onRowClick={handleRowClick}
+            {searchTerm && searchTerm.length >= 2 && suppliers.length === 1 && suppliers[0].id === "no-results" ? (
+                <EmptyState 
+                    message="No se encontraron proveedores" 
+                    searchTerm={searchTerm} 
+                />
+            ) : (
+                <CustomTable
+                    title="Lista de Proveedores"
+                    headers={tableHeaders}
+                    options={true}
+                    data={suppliers.filter(s => s.id !== "no-results")}
+                    contextType="suppliers"
+                    customActions={{
+                        edit: handleEditSupplier,
+                        view: handleViewSupplier,
+                        delete: handleDeleteSupplier,
+                    }}
+                />
+            )}
+            
+            <CustomModalNoButton 
+                isOpen={isEditModalOpen} 
+                onClose={() => {
+                    setIsEditModalOpen(false); 
+                    setTimeout(() => fetchAllSuppliers(), 0);
+                }}
+                title="Editar Proveedor"
+            >
+                <SupplierFormEdit 
+                    supplier={currentSupplier || undefined}
+                    onSuccess={() => {
+                        fetchAllSuppliers();
+                        setIsEditModalOpen(false);
+                    }} 
+                />
+            </CustomModalNoButton>
+
+            <SupplierDetail
+                supplier={currentSupplier}
+                isOpen={isViewModalOpen}
+                onClose={() => setIsViewModalOpen(false)}
             />
         </div>
     );

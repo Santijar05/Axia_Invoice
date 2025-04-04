@@ -30,16 +30,18 @@ export default function CustomTable({
   headers, 
   options, 
   data = [], 
-  onRowClick,
   contextType = 'products',
   customActions,
   actionLabels = {
     edit: contextType === 'clients' ? 'Editar cliente' : 
-          contextType === 'employees' ? 'Editar empleado' : 'Editar',
+          contextType === 'employees' ? 'Editar empleado' : 
+          contextType === 'suppliers' ? 'Editar proveedor' : 'Editar',
     view: contextType === 'clients' ? 'Ver cliente' : 
-          contextType === 'employees' ? 'Ver empleado' : 'Ver',
-    delete: contextType === 'clients' ? 'Eliminar Cliente' : 
-            contextType === 'employees' ? 'Eliminar empleado' : 'Eliminar' 
+          contextType === 'employees' ? 'Ver empleado' :
+          contextType === 'suppliers' ? 'Ver proveedor' : 'Ver',
+    delete: contextType === 'clients' ? 'Eliminar cliente' : 
+            contextType === 'employees' ? 'Eliminar empleado' :
+            contextType === 'suppliers' ? 'Eliminar proveedor' : 'Eliminar' 
   }
 }: CustomTableProps) {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -85,13 +87,13 @@ export default function CustomTable({
 
   return (
     <div className="relative w-full h-screen text-white flex justify-center items-center">
-      <Image 
+      {/*Image 
         src="/Images/fondoHerooo.png" 
         alt="Background Image" 
         fill 
         className="absolute top-0 left-0 w-full h-full object-cover"
         priority
-      />
+      />*/}
 
       <div className="relative w-full h-full bg-transparent rounded-lg shadow-lg p-4">
         <h2 className="text-2xl font-semibold p-4 border-b text-white">{title}</h2>

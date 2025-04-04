@@ -26,8 +26,6 @@ export interface SupplierDAO {
     name: string;
     phone: string;
     address: string;
-    createdAt: string; 
-    updatedAt: string; 
 }  
 
 export interface UserDataRegister {
@@ -41,6 +39,7 @@ export interface Supplier {
     name:string
 }
 export interface ProductDAO {
+    tenantId: string;
     supplier: Supplier;
     name: string;
     id: string;

@@ -1,16 +1,14 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supplierSchema } from "@/schemes/supplierSchema";
 import Input from "@/components/atoms/Input";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
-import { createSupplier } from "@/lib/api-suppliers";
 import CustomButton from "@/components/atoms/CustomButton";
+import { SupplierDAO } from "@/types/Api";
+import { updateSupplier } from "@/lib/api-suppliers";
 
 type SupplierFormData = {
     id: string;
-    tenantId: string;
     nit: string;
     name: string;
     phone: string;
@@ -18,11 +16,18 @@ type SupplierFormData = {
 };
 
 interface SupplierFormProps {
+    supplier?: {
+        id: string;
+        nit: string;
+        name: string;
+        phone: string;
+        address: string;
+    };
     onSuccess?: () => void;
     onClose?: () => void;
 }
 
-const SupplierForm = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuccess, onClose }, ref) => {
+const SupplierFormEdit = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuccess, onClose, supplier }, ref) => {
     const {
         register,
         handleSubmit,
@@ -32,56 +37,57 @@ const SupplierForm = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuccess
         resolver: zodResolver(supplierSchema),
     });
 
-    const onSubmit = async (data: SupplierFormData) => {
-        const authToken = Cookies.get("authToken");
-        if (!authToken) {
-            console.error("No hay authToken");
-            throw new Error("Authentication token is missing");
+    useEffect(() => {
+        if (supplier) {
+            reset({
+                ...supplier,
+            });
         }
-        
-        const decoded: any = jwtDecode(authToken);
-        const tenantId = decoded.tenantId;
-        
-        const formData = {
-            ...data,
-            tenantId,
-            id: "", 
-        };
-        console.log("Datos enviados:", formData);
-        
-        try {                
-            const response = await createSupplier(formData);
-            console.log("Respuesta del servidor:", response);
+    }, [supplier, reset]);
 
-            if (response.status === 201) {
-                const responseData = await response.json();
-                alert("Proveedor creado exitosamente");
-                console.log("Proveedor creado:", responseData);
-                reset();
-                onSuccess?.();
-                onClose?.();
-            } else {
+    const onSubmit = async (data: SupplierFormData) => {
+    
+        if (!supplier?.id) {
+            alert("ID de cliente no disponible");
+            return;
+        }
+    
+        try {
+    
+            const requestBody: SupplierDAO = {
+                id: supplier.id, 
+                nit: data.nit,
+                name: data.name,
+                phone: data.phone,
+                address: data.address,
+                tenantId: "",
+            };
+    
+            const response = await updateSupplier(requestBody, supplier.id);
+    
+            if (!response.ok) {
                 const errorData = await response.json();
-                console.log("Error al crear el proveedor:", errorData);
-                alert(errorData.message || "Error al crear el proveedor");
+                throw new Error(errorData.message || "Error al actualizar el empleado");
             }
+    
+            alert("Proveedor actualizado correctamente");
+            if (onSuccess) onSuccess();
+            
         } catch (error) {
             console.error("Error en onSubmit:", error);
-            alert("Error de conexión. Inténtalo nuevamente.");
-        }   
+        }
     };
 
     return (
         <form ref={ref} onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
             <div>
                 <label className="text-sm font-semibold text-gray-500">Código</label>
-                <Input placeholder="AUTOGENERADO" type="text" disabled={true} />
+                <Input placeholder="AUTOGENERADO" type="text" disabled={true} {...register("id")}/>
             </div>
 
             <div>
                 <label className="text-sm font-semibold text-gray-500">Nombre del Proveedor</label>
                 <Input 
-                    className="text-homePrimary-200 bg-transparent" 
                     placeholder="Ej. Proveedora S.A." 
                     type="text" 
                     {...register("name")}
@@ -91,8 +97,7 @@ const SupplierForm = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuccess
 
             <div>
                 <label className="text-sm font-semibold text-gray-500">NIT</label>
-                <Input 
-                    className="text-homePrimary-200 bg-transparent" 
+                <Input  
                     placeholder="Ej. 123456789-0" 
                     type="text" 
                     {...register("nit")}
@@ -103,7 +108,6 @@ const SupplierForm = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuccess
             <div>
                 <label className="text-sm font-semibold text-gray-500">Teléfono</label>
                 <Input 
-                    className="text-homePrimary-200 bg-transparent" 
                     placeholder="Ej. 987654321" 
                     type="text" 
                     {...register("phone")}
@@ -115,7 +119,6 @@ const SupplierForm = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuccess
             <div>
                 <label className="text-sm font-semibold text-gray-500">Dirección</label>
                 <Input 
-                    className="text-homePrimary-200 bg-transparent" 
                     placeholder="Ej. Calle 123 #45-67" 
                     type="text" 
                     {...register("address")}
@@ -126,12 +129,12 @@ const SupplierForm = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuccess
             <div className="col-span-2 flex justify-end gap-2 mt-4">
             <div className="col-span-2 flex justify-end gap-2 mt-4">
                 <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
-                <CustomButton text={ 'Crear Proveedor'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
+                <CustomButton text={ 'Actualizar Proveedor'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
             </div>   
             </div>
         </form>
     );
 });
 
-SupplierForm.displayName = "SupplierForm";
-export default SupplierForm;
+SupplierFormEdit.displayName = "SupplierForm";
+export default SupplierFormEdit;
