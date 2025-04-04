@@ -9,11 +9,12 @@ interface SelectProps {
 
 const Select: React.FC<SelectProps> = ({ className, options, placeholder, ...props }) => (
   <select
-    className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-black ${className}`}
+    defaultValue=""
+    className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 appearance-none bg-black text-black ${className}`}
     {...props}
   >
     {placeholder && (
-      <option value="" disabled selected>
+      <option value="" disabled>
         {placeholder}
       </option>
     )}
