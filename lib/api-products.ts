@@ -17,20 +17,6 @@ const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promi
   return response.json() as Promise<T>;
 };
 
-export const createProduct = async (body: ProductDAO): Promise<Response> => {
-  const url = `${API_BASE_URL}`;
-
-  const headersOptions: RequestInit = {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  return fetchWithCredentials(url, headersOptions);
-};
-
 export const getListproducts = async (params?: {
   sortBy?: string;
   order?: 'asc' | 'desc';

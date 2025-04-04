@@ -146,7 +146,6 @@ export default function ScreenSuppliers() {
     };
 
     const handleDeleteSupplier = async (supplierId: string) => {
-        if (confirm("¿Estás seguro de que deseas eliminar este proveedor?")) {
             try {
                 await deleteSupplier(supplierId);
                 fetchAllSuppliers();
@@ -154,7 +153,6 @@ export default function ScreenSuppliers() {
                 console.error("Error al eliminar proveedor:", err);
                 alert("No se pudo eliminar el proveedor");
             }
-        }
     };
 
     const tableHeaders = ["ID", "NIT", "Name", "Phone", "Address"];
