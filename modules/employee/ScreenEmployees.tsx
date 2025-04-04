@@ -11,7 +11,8 @@ import EmployeeForm from "./EmployeeForm";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import EmployeeFormEdit from "./EmployeeFormEdit";
 import TableFilter from "@/components/molecules/TableFilter";
-import EmptyState from '@/components/molecules/EmptyState'; // Import EmptyState component
+import EmptyState from '@/components/molecules/EmptyState'; 
+import EmployeeDetailModal from "./EmployeeDetail/EmployeeDetailModal";
 
 export default function ScreenEmployees() {
     const router = useRouter();
@@ -19,6 +20,7 @@ export default function ScreenEmployees() {
     const [initialEmployees, setInitialEmployees] = useState<{ [key: string]: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentEmployee, setCurrentEmployee] = useState<EmployeeDAO | null>(null);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
@@ -88,7 +90,6 @@ export default function ScreenEmployees() {
                 setEmployees(formattedData);
             }
         } else if (searchTerm && searchTerm.length >= 2) {
-            // Create a "no results" row
             setEmployees([{
                 id: "no-results",
                 name: `No se encontraron empleados para: "${searchTerm}"`,
@@ -133,7 +134,8 @@ export default function ScreenEmployees() {
                 role: employeeToView.role,
                 email: employeeToView.email,
             });
-            router.push(`/users/employees/${employeeId}`);
+            //router.push(`/users/employees/${employeeId}`);
+            setIsViewModalOpen(true);
         }
     };
 
@@ -224,6 +226,12 @@ export default function ScreenEmployees() {
                     }} 
                 />
             </CustomModalNoButton>
+
+            <EmployeeDetailModal
+                employee={currentEmployee}
+                isOpen={isViewModalOpen}
+                onClose={() => setIsViewModalOpen(false)}
+            />
         </div>
     );
 }

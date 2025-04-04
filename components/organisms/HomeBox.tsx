@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 
 import CustomButton from "../atoms/CustomButton";
 import Sidebar from "@/components/molecules/Sidebar";
-
 type UserRole = "USER" | "ADMIN" | "SUPERADMIN" | null;
 
 export default function HomeBox({ children }: { children: React.ReactNode }) {
@@ -41,7 +40,7 @@ export default function HomeBox({ children }: { children: React.ReactNode }) {
       </header>
 
       <div className="flex">
-        <Sidebar isOpen={isSidebarOpen}/>
+        <Sidebar isOpen={isSidebarOpen} />
         <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
     </div>

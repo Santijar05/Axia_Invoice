@@ -98,7 +98,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
-          label: "Products", 
+          label: "Productos", 
           href: "/store/products",
           allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
