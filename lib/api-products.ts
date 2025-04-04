@@ -1,8 +1,6 @@
 import { envVariables } from "@/utils/config";
 import { ProductDAO } from "@/types/Api";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/products`;
-
 const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promise<T> => {
   const response = await fetch(url, {
     ...options,
