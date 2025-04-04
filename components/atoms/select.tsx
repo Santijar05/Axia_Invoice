@@ -1,36 +1,29 @@
-import React, { forwardRef } from "react";
+import React from 'react';
 
-type SelectProps = {
+interface SelectProps {
+  className?: string;
   options: { value: string; label: string }[];
-} & React.SelectHTMLAttributes<HTMLSelectElement>;
+  placeholder?: string;
+  [key: string]: any;
+}
 
-const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ options, disabled = false, ...rest }, ref) => {
-    return (
-      <div className="w-full flex items-center border border-gray-300 rounded px-4 py-2 mb-2 bg-white">
-        <select
-          ref={ref}
-          className={`flex-1 outline-none bg-transparent text-black ${
-            disabled ? "text-gray-500 cursor-not-allowed" : "cursor-pointer"
-          }`}
-          defaultValue="" 
-          {...rest}
-        >
-          <option value="" disabled>
-            Selecciona una opción
-          </option>
-
-          {options.map((option) => (
-            <option key={option.value} value={option.value} className="text-black">
-              {option.label}
-            </option>
-          ))}
-          
-        </select>
-      </div>
-    );
-  }
+const Select: React.FC<SelectProps> = ({ className, options, placeholder, ...props }) => (
+  <select
+    defaultValue=""
+    className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 appearance-none bg-black text-black ${className}`}
+    {...props}
+  >
+    {placeholder && (
+      <option value="" disabled>
+        {placeholder}
+      </option>
+    )}
+    {options.map((option) => (
+      <option key={option.value} value={option.value}>
+        {option.label}
+      </option>
+    ))}
+  </select>
 );
 
-Select.displayName = "Select";
 export default Select;

@@ -38,7 +38,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     
                     <div className="p-3 border rounded-lg">
                         <p className="text-sm font-semibold text-gray-500">Impuesto</p>
-                        <p className="text-black">{product.tax * 100}%</p>
+                        <p className="text-black">{product.tax}%</p>
                     </div>
                     
                     <div className="p-3 border rounded-lg">

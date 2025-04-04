@@ -52,7 +52,6 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
     }, [employee, reset]);
 
     const onSubmit = async (data: EmployeeFormData) => {
-        const authToken = Cookies.get("authToken");
     
         if (!employee?.id) {
             alert("ID de cliente no disponible");

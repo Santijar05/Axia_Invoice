@@ -1,6 +1,6 @@
-import { SupplierDAO } from "@/types/Api";
+import { ProductDAO } from "@/types/Api";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/suppliers`;
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/products`;
 
 const fetchWithCredentials = async (url: string, options: RequestInit): Promise<Response> => {
   const response = await fetch(url, {
@@ -16,22 +16,7 @@ const fetchWithCredentials = async (url: string, options: RequestInit): Promise<
   return response;
 };
 
-export const getListSuppliers = async (): Promise<SupplierDAO[]> => {
-  const url = `${API_BASE_URL}`;
-  console.log('Fetching products from:', url);
-
-  const response = await fetchWithCredentials(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  const data: SupplierDAO[] = await response.json();
-
-  return data;
-};
-
-export const createSupplier = async (body: SupplierDAO): Promise<Response> => {
+export const createProduct = async (body: ProductDAO): Promise<Response> => {
   const url = `${API_BASE_URL}`;
 
   const headersOptions: RequestInit = {
@@ -45,7 +30,7 @@ export const createSupplier = async (body: SupplierDAO): Promise<Response> => {
   return fetchWithCredentials(url, headersOptions);
 };
 
-export const deleteSupplier= async (id: string): Promise<SupplierDAO[]> => {
+export const deleteProduct= async (id: string): Promise<ProductDAO[]> => {
   const url = `${API_BASE_URL}/${id}`;
   console.log('Fetching products from:', url);
 
@@ -56,11 +41,11 @@ export const deleteSupplier= async (id: string): Promise<SupplierDAO[]> => {
     },
   });
 
-  const data: SupplierDAO[] = await response.json();
+  const data: ProductDAO[] = await response.json();
   return data;
 };
 
-export const updateSupplier = async (body: SupplierDAO, id:string): Promise<Response> => {
+export const updateProduct = async (body: ProductDAO, id:string): Promise<Response> => {
   const url = `${API_BASE_URL}/${id}`;
 
   const headersOptions: RequestInit = {

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { forwardRef, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
@@ -15,33 +15,35 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-      <div className="w-full flex items-center border border-gray-300 rounded px-4 py-2 mb-2">
-        {IconComponent && <IconComponent className="text-gray-500 mr-2" />}
+      <div className="w-full relative">
+        <div className="w-full flex items-center border border-gray-300 rounded-md p-2 focus-within:ring-2 bg-black">
+          {IconComponent && <IconComponent className="text-gray-500 mr-2" />}
 
-        <input
-          ref={ref}
-          type={type === "password" ? (showPassword ? "text" : "password") : type}
-          placeholder={placeholder}
-          className={`flex-1 outline-none bg-transparent text-white w-full ${
-            disable ? "input-disable text-gray-500" : ""
-          }`}
-          disabled={disable}
-          {...rest}
-        />
+          <input
+            ref={ref}
+            type={type === "password" ? (showPassword ? "text" : "password") : type}
+            placeholder={placeholder}
+            className={`flex-1 outline-none bg-transparent text-white w-full ${
+              disable ? "text-gray-500" : ""
+            }`}
+            disabled={disable}
+            {...rest}
+          />
 
-        {type === "password" && (
-          <button
-            type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
-            className="text-gray-500 ml-2"
-          >
-            {showPassword ? (
-              <Eye color="white" size={25} />
-            ) : (
-              <EyeOff color="white" size={25} />
-            )}
-          </button>
-        )}
+          {type === "password" && (
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="text-gray-500 ml-2"
+            >
+              {showPassword ? (
+                <Eye color="white" size={20} />
+              ) : (
+                <EyeOff color="white" size={20} />
+              )}
+            </button>
+          )}
+        </div>
       </div>
     );
   }
