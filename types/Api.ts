@@ -3,6 +3,47 @@ export interface UserDataLogin {
     password: string;
 }
 
+export interface SaleProduct {
+    productId: string;
+    quantity: number;
+}
+
+export interface CreatedInvoice {
+    id: string;
+    date: string;
+    totalPrice: number;
+    electronicBill: boolean;
+    clientId: string;
+    tenantId: string;
+    invoiceProducts: SaleProduct[];
+}
+
+export interface SaleItem {
+    id: number;
+    name: string;
+    productId: string;
+    quantity: number;
+    stock: number;
+    tax: number;
+    price: number;
+    basePrice: number;
+    tenantId: string; // ← agregar esto
+}  
+  
+export interface Venta {
+    clientId: string;
+    electronicBill?: boolean;
+    products: {
+        tenantId: string; 
+        productId: string;
+        quantity: number;
+    }[];
+        payment?: {
+        amount: number;
+        method: string;
+    };
+}
+
 export interface EmployeeDAO {
     id: string;
     name: string;

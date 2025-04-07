@@ -47,7 +47,7 @@ export async function middleware(request: Request) {
         "/employee",
         "/store/products",
         "/sales/make-sales",
-        "/shopping/make-purchase",
+        "/sales/make-sales",
       ],
       ADMIN: [
         "/admin",
@@ -55,6 +55,7 @@ export async function middleware(request: Request) {
         "/box/manage-cash",
         "/store/products",
         "/sales/make-sales",
+        "/shopping/make-purchase",
         "/shopping/suppliers",
         "/users/customers",
         "/users/employees",

@@ -39,6 +39,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   placeholder = "Buscar...",
   searchType
 }) => {
+  const [showResultsInternal, setShowResultsInternal] = useState(showResults);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<(ProductDAO | EmployeeDAO | SupplierDAO | ClientDAO)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,6 +107,11 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
     setSearchTerm(term);
+
+    if (showResults) {
+      setShowResultsInternal(true);
+    }
+
     if (onSearchTermChange) onSearchTermChange(term);
   };
 
@@ -121,7 +127,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
         />
       </div>
 
-      {showResults && (
+      {showResultsInternal && (
         <div className="mt-2">
           {isLoading && <p className="text-gray-500 text-sm">Buscando...</p>}
           
@@ -167,11 +173,25 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                     </div>
                   </div>
 
-                  {onAddToCart && searchType === "products" && (
+                  {(onAddToCart && (searchType === "products" || searchType === "clients")) && (
                     <CustomButton
                       text="Agregar"
                       style="bg-blue-500 text-white hover:bg-blue-600 text-sm px-3 py-1"
-                      onClickButton={() => onAddToCart(item as ProductDAO)}
+                      onClickButton={() => {
+                        onAddToCart?.(item as any);
+
+                        const name =
+                          (item as ProductDAO).name ||
+                          (item as EmployeeDAO).name ||
+                          (item as SupplierDAO).name ||
+                          `${(item as ClientDAO).firstName} ${(item as ClientDAO).lastName}`;
+
+                        setSearchTerm(name);
+
+                        if (showResults) {
+                          setShowResultsInternal(false);
+                        }
+                      }}
                     />
                   )}
                 </li>

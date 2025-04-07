@@ -1,26 +1,41 @@
 'use client';
 
-import { useState } from 'react';
-import ProductSearch from './ProductSearch';
+import { useEffect, useState } from 'react';
 
-interface SaleItem {
-  id: number;
-  name: string;
-  quantity: number;
-  stock: number;
-  tax: number;
-  price: number;
-  basePrice: number;
-}
+import Input from '@/components/atoms/Input';
+import Select from '@/components/atoms/select';
+import { getListClients } from '@/lib/api-clients';
+import { ClientDAO, SaleItem, Venta } from '@/types/Api';
+import { crearFacturaVenta } from '@/lib/api-saleInvoce';
+import SearchBarUniversal from '@/components/molecules/SearchBar';
 
 export default function ScreenMakeSale() {
+  const [selectedProductId, setSelectedProductId] = useState('');
+  const [tenantIdProduct, settenantIdProduct] = useState('');
+  const [clientes, setClientes] = useState<ClientDAO[]>([]);
   const [items, setItems] = useState<SaleItem[]>([]);
-  const [name, setName] = useState('');
+  const [clientId, setClientId] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [nextId, setNextId] = useState(1);
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState(0);
+  const [name, setName] = useState('');
   const [tax, setTax] = useState(0);
-  const [nextId, setNextId] = useState(1);
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const res = await getListClients();
+        if (res && Array.isArray(res)) {
+          setClientes(res);
+        }
+      } catch (err) {
+        console.error('Error al obtener clientes:', err);
+      }
+    };
+
+    fetchClients();
+  }, []);
 
   const handleAddItem = () => {
     const priceValue = parseFloat(price);
@@ -48,6 +63,8 @@ export default function ScreenMakeSale() {
 
       const newItem: SaleItem = {
         id: nextId,
+        tenantId: tenantIdProduct,
+        productId: selectedProductId,
         name,
         quantity,
         stock,
@@ -89,12 +106,28 @@ export default function ScreenMakeSale() {
     return value.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
   };
 
-  const handleCompleteSale = () => {
-    if (items.length > 0) {
-      alert(`Venta completada. Total: ${formatCurrency(calculateTotal())}`);
-      setItems([]);
-    } else {
+  const handleCompleteSale = async () => {
+    if (items.length === 0) {
       alert('Agrega productos antes de completar la venta.');
+      return;
+    }
+
+    const venta: Venta = {
+      clientId,
+      electronicBill: false,
+      products: items.map(item => ({
+        tenantId: item.tenantId,
+        productId: item.productId,
+        quantity: item.quantity,
+      })),
+    };
+
+    try {
+      const factura = await crearFacturaVenta(venta);
+      alert(`Venta completada. ID factura: ${factura.id}`);
+      setItems([]);
+    } catch (error) {
+      alert('Error al procesar la venta.');
     }
   };
 
@@ -103,53 +136,77 @@ export default function ScreenMakeSale() {
       <h1 className="text-2xl font-bold text-white mb-4">Nueva venta</h1>
 
       <div className="w-full space-y-6">
-        <div className="shadow-md rounded-lg mt-12 w-full">
-          <h2 className="text-xl font-semibold mb-4 text-white">Añadir Items</h2>
 
-          <div className="flex flex-wrap gap-4 items-end">
-            <div className="flex flex-col flex-1 min-w-[200px]">
-              <label className="mb-1 text-sm font-medium text-white">Producto</label>
-              <ProductSearch
-                onSelect={(product) => {
-                  setName(product.name);
-                  setPrice(product.price.toString());
-                  setStock(product.stock);
-                  setTax(product.tax);
+        <div className="flex flex-row gap-6 flex-wrap mt-12">
+        
+          <div className="flex-1 min-w-[300px] bg-gray-900 p-4 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4 text-white">Añadir Items</h2>
+
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col">
+                <label className="mb-1 text-sm font-medium text-white">Producto</label>
+                <SearchBarUniversal
+                  onAddToCart={(product) => {
+                    setName(product.name);
+                    setPrice(product.salePrice.toString());
+                    setStock(product.stock);
+                    setTax(product.tax);
+                    setSelectedProductId(product.id); 
+                    settenantIdProduct(product.tenantId);
+                  }}
+                  showResults={true}
+                  placeholder="Buscar productos para comprar..."
+                  searchType="products"
+                />
+              </div>
+
+              <div className="flex flex-row space-x-7">
+                <div className="flex flex-col w-full">
+                  <label className="mb-1 text-sm font-medium text-white">Cantidad</label>
+                  <Input
+                    type="number"
+                    value={quantity}
+                    onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
+                    placeholder="Ingrese la cantidad"
+                  />
+                </div>
+
+                <div className="flex flex-col w-full">
+                  <label className="mb-1 text-sm font-medium text-white">Precio sin impuesto</label>
+                  <Input
+                    type="number"
+                    value={price}
+                    disabled={true}
+                    placeholder="Ingrese el precio"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={handleAddItem}
+                disabled={!name}
+                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-500 transition-colors w-full"
+              >
+                Añadir producto
+              </button>
+            </div>
+          </div>
+  
+          <div className="flex-1 min-w-[300px] bg-gray-900 p-4 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4 text-white">Cliente</h2>
+
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-white">Selecciona un cliente</label>
+              <SearchBarUniversal
+                searchType="clients"
+                showResults={true}
+                onAddToCart={(cliente) => {
+                  setClientId(cliente.id);
                 }}
-                value={name}
-                onChange={setName}
+                placeholder="Selecciona un cliente"
               />
-            </div>
 
-            <div className="flex flex-col min-w-[100px]">
-              <label className="mb-1 text-sm font-medium text-white">Cantidad</label>
-              <input
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
-                min="1"
-                className="px-3 py-2 border border-gray-600 rounded-md w-full bg-gray-900 text-white"
-              />
             </div>
-
-            <div className="flex flex-col min-w-[150px]">
-              <label className="mb-1 text-sm font-medium text-white">Precio sin impuesto</label>
-              <input
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="px-3 py-2 border border-gray-600 rounded-md w-full bg-gray-900 text-white"
-                placeholder="Precio base"
-              />
-            </div>
-
-            <button
-              onClick={handleAddItem}
-              disabled={!name}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-500 transition-colors min-w-[180px]"
-            >
-              Añadir producto
-            </button>
           </div>
         </div>
 

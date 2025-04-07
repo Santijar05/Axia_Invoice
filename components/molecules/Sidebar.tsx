@@ -121,11 +121,11 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
       label: "Shopping",
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
-        ...(role === "EMPLOYEE" ? [
+        ...(role === "ADMIN" || role === "SUPERADMIN" ? [
           { 
             label: "Make Purchase", 
             href: "/shopping/make-purchase",
-            allowedRoles: ["EMPLOYEE"]
+            allowedRoles: ["ADMIN", "SUPERADMIN"]
           }
         ] : []),
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [

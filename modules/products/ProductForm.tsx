@@ -1,17 +1,23 @@
 "use client";
 
 import React, { forwardRef, useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie"; 
+
+import CustomButton from "@/components/atoms/CustomButton";
+import { createProduct } from "@/lib/api-products-status";
+import { getListSuppliers } from "@/lib/api-suppliers";
 import { productSchema } from "@/schemes/productSheme";
 import Input from "@/components/atoms/Input";
 import Select from "@/components/atoms/select";
-import CustomButton from "@/components/atoms/CustomButton";
-import { getListSuppliers } from "@/lib/api-suppliers";
-import { createProduct } from "@/lib/api-products-status";
-import { ProductDAO, ProductFormProps, Supplier, SupplierDAO } from "@/types/Api";
-import Cookies from "js-cookie"; 
-import { jwtDecode } from "jwt-decode";
+import { 
+  ProductDAO, 
+  ProductFormProps, 
+  Supplier, 
+  SupplierDAO 
+} from "@/types/Api";
 
 type ProductFormData = {
   id: string;
@@ -68,6 +74,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
     const onSubmit = async (data: ProductFormData) => {
       console.log("onSubmit", data);
       const authToken = Cookies.get("authToken");
+      
       if (!authToken) {
           console.error("No hay authToken");
           throw new Error("Authentication token is missing");
@@ -83,7 +90,9 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
           supplier: selectedSupplier ?? ({} as Supplier),
           id: "", 
         };
+
         const response = await createProduct(productData);
+
         if (response.status === 201) {
           alert("Producto creado exitosamente");
           reset();
@@ -93,6 +102,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
           console.error("Error al crear el producto:", errorData);
           alert("Error al crear el producto");
         }
+        
       } catch (error) {
         console.error("Error en onSubmit:", error);
         alert("Error de conexión. Inténtalo nuevamente.");
