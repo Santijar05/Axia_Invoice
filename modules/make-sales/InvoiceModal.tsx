@@ -4,6 +4,8 @@ import { createSaleInvoice, createPayment } from '@/lib/api-sales';
 import { SaleItem, SaleItemForAPI } from '@/types/Api';
 import { ClientDAO } from '@/types/Api';
 import ClientSelector from './ClientSelector';
+import { Switch } from '@headlessui/react';
+import Select from '@/components/atoms/select';
 
 interface InvoiceModalProps {
   subtotal: number;
@@ -49,7 +51,7 @@ export default function InvoiceModal({
     
     try {
       const productsForAPI: SaleItemForAPI[] = items.map(item => ({
-        productId: item.productId || '', // Make sure productId is available
+        productId: item.productId || '', 
         quantity: item.quantity
       }));
       
@@ -69,17 +71,16 @@ export default function InvoiceModal({
         invoiceId: invoiceResponse.invoice.id
       });
       
-      // Esperar un poco más de tiempo para asegurar que todo se ha completado
       setTimeout(() => {
-        console.log("⭐ Llamando a onSuccess desde setTimeout");
+        console.log(" Llamando a onSuccess desde setTimeout");
         onSuccess();
         
         // Añadir un segundo temporizador como refuerzo (por si el primero falla)
         setTimeout(() => {
-          console.log("🔄 Segundo intento de limpieza");
+          console.log(" Segundo intento de limpieza");
           onSuccess();
         }, 200);
-      }, 500); // Aumentar a 500ms para dar más tiempo
+      }, 500); 
     } catch (error) {
       console.error('Error processing sale:', error);
       setError(error instanceof Error ? error.message : 'Error procesando la venta');
@@ -111,15 +112,22 @@ export default function InvoiceModal({
       </div>
       
       <div className="mb-4">
-        <label className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            checked={isElectronicBill}
-            onChange={(e) => setIsElectronicBill(e.target.checked)}
-            className="form-checkbox"
-          />
+        <div className="flex items-center justify-between">
           <span>Generar Factura Electrónica</span>
-        </label>
+          <Switch
+            checked={isElectronicBill}
+            onChange={setIsElectronicBill}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              isElectronicBill ? 'bg-blue-600' : 'bg-gray-300'
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+                isElectronicBill ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </Switch>
+        </div>
       </div>
       
       <div className="space-y-2 my-4">
