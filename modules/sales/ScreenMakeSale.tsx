@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from "next/image";
 
 import Input from '@/components/atoms/Input';
 import { getListClients } from '@/lib/api-clients';
@@ -131,14 +132,24 @@ export default function ScreenMakeSale() {
   };
 
   return (
-    <div className="w-full mt-[-12] px-4">
-      <h1 className="text-2xl font-bold text-white mb-4">Nueva venta</h1>
+    <div className="relative w-full min-h-screen text-white flex justify-center">
+      <Image 
+          src="/Images/fondoHerooo.png" 
+          alt="Background Image" 
+          fill 
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          priority
+      />
 
-      <div className="w-full space-y-6">
+      <div className="relative w-full my-6 bg-blac bg-opacity-50 rounded-lg shadow-lg mt-5">
+
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-white">Nueva venta</h2>  
+        </div>
 
         <div className="flex flex-row gap-6 flex-wrap mt-12">
         
-          <div className="flex-1 min-w-[300px] bg-gray-900 p-4 rounded-lg shadow-md">
+          <div className="flex-1 min-w-[300px] border border-gray-600 bg-transparent p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4 text-white">Añadir Items</h2>
 
             <div className="flex flex-col gap-4">
@@ -184,14 +195,14 @@ export default function ScreenMakeSale() {
               <button
                 onClick={handleAddItem}
                 disabled={!name}
-                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-500 transition-colors w-full"
+                className="px-6 py-2 bg-homePrimary text-white rounded-md hover:bg-homePrimary-400 disabled:bg-gray-500 transition-colors w-full"
               >
                 Añadir producto
               </button>
             </div>
           </div>
   
-          <div className="flex-1 min-w-[300px] bg-gray-900 p-4 rounded-lg shadow-md">
+          <div className="flex-1 min-w-[300px] border border-gray-600 bg-transparent p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4 text-white">Cliente</h2>
 
             <div className="flex flex-col">
@@ -209,7 +220,7 @@ export default function ScreenMakeSale() {
           </div>
         </div>
 
-        <div className="bg-gray-800 shadow-md rounded-lg p-6 w-full text-white min-h-[600px] max-h-[600px] flex flex-col">
+        <div className="mt-6 border border-gray-600 bg-transparent shadow-md rounded-lg p-6 w-full text-white min-h-[600px] max-h-[600px] flex flex-col">
           <div className="overflow-x-auto border-b border-gray-700 flex-grow">
             {items.length > 0 ? (
               <table className="min-w-full divide-y divide-gray-700">

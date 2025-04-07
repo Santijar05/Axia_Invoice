@@ -3,14 +3,18 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Search } from "lucide-react";
 
-import { getListproductsByName } from "@/lib/api-products";
-import { getListClientsByName } from "@/lib/api-clients";
-import { getListEmployeesByName } from "@/lib/api-employees";
-//import { getListSuppliersByName } from "@/lib/api-suppliers";
-import { ProductDAO, EmployeeDAO, SupplierDAO, ClientDAO } from "@/types/Api";
 import Input from "@/components/atoms/Input";
+import { getListClientsByName } from "@/lib/api-clients";
 import CustomButton from "@/components/atoms/CustomButton";
+import { getListproductsByName } from "@/lib/api-products";
+import { getListEmployeesByName } from "@/lib/api-employees";
 import { getListSuppliersByName } from "@/lib/api-suppliers";
+import { 
+  ProductDAO, 
+  EmployeeDAO, 
+  SupplierDAO, 
+  ClientDAO 
+} from "@/types/Api";
 
 interface SearchBarUniversalProps {
   onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[]) => void;
@@ -135,14 +139,14 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
           {error && <p className="text-yellow-600 text-sm">{error}</p>}
 
           {searchTerm && results.length > 0 ? (
-            <ul className="bg-white border border-gray-300 rounded-md shadow-sm max-h-60 overflow-auto">
+            <ul className="bg-black border border-gray-300 rounded-md shadow-sm max-h-60 overflow-auto">
               {results.map((item) => (
                 <li
                   key={(item as any).id}
-                  className="flex justify-between items-center p-2 border-b hover:bg-gray-100"
+                  className="flex justify-between items-center p-2 border-b hover:bg-gray-700"
                 >
                   <div>
-                    <span className="font-medium text-black">
+                    <span className="font-medium text-white">
                       {(item as ProductDAO).name || 
                        (item as EmployeeDAO).name || 
                        (item as SupplierDAO).name || 
@@ -177,7 +181,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                   {(onAddToCart && (searchType === "products" || searchType === "clients")) && (
                     <CustomButton
                       text="Agregar"
-                      style="bg-blue-500 text-white hover:bg-blue-600 text-sm px-3 py-1"
+                      style="c text-white hover:bg-homePrimary-400 text-sm px-3 py-1"
                       onClickButton={() => {
                         onAddToCart?.(item as any);
 

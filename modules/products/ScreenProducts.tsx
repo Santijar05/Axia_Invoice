@@ -12,17 +12,20 @@ import EmptyState from '@/components/molecules/EmptyState';
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import { deleteProduct } from "@/lib/api-products-status";
 import ProductFormEdit from "./productFormEdit";
+import ProductDetailModal from "./ProductDetail/ProductDetailModal";
 
 export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     const router = useRouter();
-    const [products, setProducts] = useState<{ [key: string]: string }[]>([]);
-    const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]);
     const [currentProduct, setCurrentProduct] = useState<ProductDAO | null>(null);
+    const [products, setProducts] = useState<{ [key: string]: string }[]>([]);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const initialFetchDone = useRef(false);
     
@@ -145,7 +148,22 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     };
 
     const handleRowClick = (productId: string) => {
-        router.push(`/store/products/${productId}`);
+        const productToView = initialProducts.find(product => product.id === productId);
+        if (productToView) {
+            setCurrentProduct({
+                id: productToView.id,
+                name: productToView["producto"],
+                salePrice: parseFloat(productToView["p. venta"] || "0"),
+                purchasePrice: parseFloat(productToView["p. compra"] || "0"),
+                tax: parseFloat(productToView["impuesto"] || "0"),
+                stock: parseFloat(productToView["stock"] || "0"),
+                tenantId: "", 
+                supplier: {
+                    name: productToView.proveedor,
+                } as SupplierDAO,
+            });
+            setIsViewModalOpen(true);
+        }
     };
 
     const handleDeleteProduct = async (productId: string) => {
@@ -261,7 +279,12 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                     }} 
                 />
             </CustomModalNoButton>
-
+                
+            <ProductDetailModal
+                product={currentProduct}
+                isOpen={isViewModalOpen}
+                onClose={() => setIsViewModalOpen(false)}
+            />
         </div>
     );
 }
