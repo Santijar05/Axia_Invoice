@@ -44,6 +44,40 @@ export interface Venta {
     };
 }
 
+export interface Invoice {
+    id: string;
+    tenantId: string;
+    clientId: string;
+    paymentId: string | null;
+    date: string; 
+    totalPrice: number;
+    electronicBill: boolean;
+    createdAt: string;
+    updatedAt: string;
+    tenant: Tenant;
+    client: ClientDAO;
+    invoiceProducts: InvoiceProduct[];
+    payment: null;
+}
+
+export interface Tenant {
+    id: string;
+    nit: string;
+    name: string;
+    address: string;
+    phone: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface InvoiceProduct {
+    id: string;
+    tenantId: string;
+    productId: string;
+    invoiceId: string;
+    quantity: number;
+}
+
 export interface EmployeeDAO {
     id: string;
     name: string;

@@ -15,6 +15,48 @@ const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promi
   return response.json() as Promise<T>;
 };
 
+export const getListSaleInvoices = async (): Promise<CreatedInvoice[]> => {
+  let url = `${envVariables.API_URL}/sale-invoices`;
+
+  return fetchWithCredentials<CreatedInvoice[]>(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export const deleteSaleInvoice = async (id: string): Promise<void> => {
+  const url = `${envVariables.API_URL}/sale-invoices/${id}`;
+
+  await fetchWithCredentials<void>(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+// Función para obtener facturas sin autenticación (para SSG)
+export const getPublicSaleInvoices = async () => {
+  const url = `${envVariables.API_URL}/sale-invoices/public/list`;
+  console.log('Fetching public sale invoices from:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // Sin credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener productos públicos');
+  }
+
+  return response.json();
+};
+
 export const crearFacturaVenta = async (venta: Venta): Promise<CreatedInvoice> => {
   const urlFactura = `${envVariables.API_URL}/sale-invoices`;
   console.log('Creando factura en:', urlFactura);

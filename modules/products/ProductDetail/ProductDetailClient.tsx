@@ -25,7 +25,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                     <div className="col-span-2 p-4 bg-gray-50 rounded-lg">
                         <h3 className="font-bold text-xl mb-2 text-tertiary">{product.name}</h3>
                         <p className="text-sm text-gray-500">ID: {product.id}</p>

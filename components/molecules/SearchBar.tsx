@@ -18,7 +18,7 @@ interface SearchBarUniversalProps {
   onSearchTermChange?: (term: string) => void;
   showResults?: boolean;
   placeholder?: string;
-  searchType: "employees" | "products" | "suppliers" | "clients";
+  searchType: "employees" | "products" | "suppliers" | "clients" | "invoices";
 }
 
 function debounce<U extends unknown[], R>(

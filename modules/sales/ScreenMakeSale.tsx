@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 
 import Input from '@/components/atoms/Input';
-import Select from '@/components/atoms/select';
 import { getListClients } from '@/lib/api-clients';
 import { ClientDAO, SaleItem, Venta } from '@/types/Api';
 import { crearFacturaVenta } from '@/lib/api-saleInvoce';
