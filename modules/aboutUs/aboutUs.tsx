@@ -56,7 +56,7 @@ export default function AboutUs() {
 
             <h3 className="text-xl text-white font-semibold mb-2">Jassy</h3>
             <p className="text-gray-300 mb-2">Estudiante de ingeniería de sistemas</p>
-            <p className="text-gray-400">Fundadora</p>
+            <p className="text-gray-400">Desarrolladora</p>
           </div>
           
         </div>
