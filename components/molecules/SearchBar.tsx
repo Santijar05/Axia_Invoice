@@ -10,6 +10,7 @@ import { getListEmployeesByName } from "@/lib/api-employees";
 import { ProductDAO, EmployeeDAO, SupplierDAO, ClientDAO } from "@/types/Api";
 import Input from "@/components/atoms/Input";
 import CustomButton from "@/components/atoms/CustomButton";
+import { getListSuppliersByName } from "@/lib/api-suppliers";
 
 interface SearchBarUniversalProps {
   onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[]) => void;
@@ -72,7 +73,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
           } else if (searchType === "clients") {
             fetchedResults = (await getListClientsByName(term)) || [];
           } else if (searchType === "suppliers") {
-            // fetchedResults = await getListSuppliersByName(term) || [];
+            fetchedResults = await getListSuppliersByName(term) || [];
           } else {
             fetchedResults = await getListEmployeesByName(term) || [];
           }
