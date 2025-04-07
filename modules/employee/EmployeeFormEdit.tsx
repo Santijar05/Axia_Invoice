@@ -1,13 +1,12 @@
 import React, { forwardRef, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { employeeSchema } from "@/schemes/employeeScheme";
-import Input from "@/components/atoms/Input";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+import { useForm } from "react-hook-form";
+
 import { EmployeeDAO } from "@/types/Api";
+import Input from "@/components/atoms/Input";
 import { updateEmployee } from "@/request/users";
 import CustomButton from "@/components/atoms/CustomButton";
+import { employeeEditSchema } from "@/schemes/employeeEditScheme";
 
 type EmployeeFormData = {
     id?: string;
@@ -37,7 +36,7 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
         setValue,
         formState: { errors },
     } = useForm<EmployeeFormData>({
-        resolver: zodResolver(employeeSchema),
+        resolver: zodResolver(employeeEditSchema),
     });
 
     useEffect(() => {

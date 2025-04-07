@@ -1,12 +1,13 @@
 import React, { forwardRef, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { customertSchema } from "@/schemes/customerScheme";
-import Input from "@/components/atoms/Input";
+import { useForm } from "react-hook-form";
 import Cookies from "js-cookie"; 
-import { updateCustomer } from "@/request/users";
+
 import { ClientDAO } from "@/types/Api";
+import Input from "@/components/atoms/Input";
+import { updateCustomer } from "@/request/users";
 import CustomButton from "@/components/atoms/CustomButton";
+import { customertEditSchema } from "@/schemes/customerEditScheme";
 
 type CustomerFormData = {
     id?: string;
@@ -36,7 +37,7 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
         setValue,
         formState: { errors, isSubmitting },
     } = useForm<CustomerFormData>({
-        resolver: zodResolver(customertSchema),
+        resolver: zodResolver(customertEditSchema),
     });
 
     useEffect(() => {

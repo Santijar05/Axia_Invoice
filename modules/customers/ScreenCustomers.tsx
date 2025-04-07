@@ -161,7 +161,7 @@ export default function ScreenCustomers() {
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Gestión de Empleados"
+                title="Gestión de Clientes"
                 onAddNew={() => setIsAddModalOpen(true)} 
             />
             
@@ -171,7 +171,7 @@ export default function ScreenCustomers() {
                     setIsAddModalOpen(false);
                     fetchAllClients();
                 }} 
-                title="Agregar Nuevo Empleado"
+                title="Agregar Nuevo Cliente"
             >
                 <CustomerForm 
                     onSuccess={() => {
