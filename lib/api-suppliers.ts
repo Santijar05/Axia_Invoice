@@ -73,3 +73,29 @@ export const updateSupplier = async (body: SupplierDAO, id:string): Promise<Resp
 
   return fetchWithCredentials(url, headersOptions);
 };
+
+export const getListSuppliersByName = async (name: string): Promise<SupplierDAO[]> => {
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/suppliers/search?name=${encodeURIComponent(name)}`;
+    console.log('Searching suppliers by name:', url);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Suppliers search results:', data);
+    return data;
+  } catch (error) {
+    console.error('Error searching suppliers:', error);
+    return [];
+  }
+};
