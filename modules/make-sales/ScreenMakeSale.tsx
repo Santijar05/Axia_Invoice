@@ -5,7 +5,6 @@ import ProductSearch from './ProductSearch';
 import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
 import InvoiceModal from './InvoiceModal';
 
-// Interfaces
 interface SaleItem {
   id: number;
   name: string;
@@ -99,6 +98,16 @@ export default function ScreenMakeSale() {
       return;
     }
     setIsInvoiceModalOpen(true);
+  };
+
+  const handleResetSale = () => {
+    setItems([]);
+    setName('');
+    setQuantity(1);
+    setPrice('');
+    setStock(0);
+    setTax(0);
+    setNextId(1); // Opcional: reinicia el ID para nuevos ítems
   };
 
   return (
@@ -236,8 +245,8 @@ export default function ScreenMakeSale() {
           items={items}
           onSuccess={() => {
             console.log("Venta procesada");
-            setIsInvoiceModalOpen(false);
-            setItems([]);
+            handleResetSale(); 
+            setIsInvoiceModalOpen(false); 
           }}
           onCancel={() => setIsInvoiceModalOpen(false)}
         />

@@ -10,7 +10,6 @@ import { ClientDAO } from '@/types/Api';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// Interfaces
 interface PaymentMethod {
   id: string;
   name: string;
@@ -39,7 +38,7 @@ export interface InvoiceModalProps {
   taxTotal: number;
   total: number;
   items?: SaleItem[];
-  onSuccess?: () => void;
+  onSuccess: () => void;
   onCancel?: () => void;
 }
 
@@ -98,17 +97,15 @@ const InvoiceModal = forwardRef<HTMLFormElement, InvoiceModalProps>(
     const generatePDF = (data: InvoiceFormData) => {
       const doc = new jsPDF();
 
-      // Header
       doc.setFontSize(18);
       doc.text("Factura de Venta", 20, 20);
 
-      // Company Info
       doc.setFontSize(10);
       doc.text("Nombre Empresa", 20, 30);
       doc.text("NIT: XXX.XXX.XXX-X", 20, 35);
       doc.text("Dirección: Calle X #X-XX", 20, 40);
+      doc.text("Teléfono: XXX-XXX-XXX", 20, 45);
 
-      // Customer Info
       doc.text("Cliente:", 20, 50);
       doc.text(
         selectedCustomer
@@ -118,7 +115,6 @@ const InvoiceModal = forwardRef<HTMLFormElement, InvoiceModalProps>(
         55
       );
 
-      // Invoice Details
       doc.text(`Fecha: ${new Date().toLocaleDateString('es-CO')}`, 140, 20);
       doc.text(
         `Método de Pago: ${paymentMethods.find((m) => m.id === data.paymentMethod)?.name}`,
@@ -126,15 +122,15 @@ const InvoiceModal = forwardRef<HTMLFormElement, InvoiceModalProps>(
         25
       );
 
-      // Items Table
       doc.setFontSize(12);
       doc.text("Descripción de Productos", 20, 70);
 
-      const tableHeaders = ["Producto", "Cant.", "Precio Unit.", "Subtotal"];
+      const tableHeaders = ["Producto", "Cant.", "Precio Unit.", "Impuesto", "Subtotal"];
       const tableData = items.map((item) => [
         item.name,
         item.quantity.toString(),
-        formatCurrency(item.price),
+        formatCurrency(item.basePrice),
+        item.tax.toString(),
         formatCurrency(item.quantity * item.price),
       ]);
 
@@ -147,25 +143,27 @@ const InvoiceModal = forwardRef<HTMLFormElement, InvoiceModalProps>(
         headStyles: { fillColor: [66, 139, 202] },
       });
 
-      // Totals
       const finalY = (doc as any).lastAutoTable.finalY + 10;
       doc.text(`Subtotal: ${formatCurrency(subtotal)}`, 140, finalY);
       doc.text(`Impuestos: ${formatCurrency(taxTotal)}`, 140, finalY + 5);
       doc.setFontSize(14);
       doc.text(`TOTAL: ${formatCurrency(total)}`, 140, finalY + 15);
 
-      // Generate Blob for preview and save file
       const pdfBlob = doc.output('blob');
       const url = URL.createObjectURL(pdfBlob);
       setPdfUrl(url);
-      doc.save(`factura_${new Date().toISOString().split('T')[0]}.pdf`);
+      //doc.save(`factura_${new Date().toISOString().split('T')[0]}.pdf`);
     };
 
-    const onSubmit = (data: InvoiceFormData) => {
-      console.log('Datos de facturación:', data);
-      generatePDF(data);
-      onSuccess?.();
+    const onSubmit = async (data: InvoiceFormData) => {
+      try {
+        console.log('Datos de facturación:', data);
+        await generatePDF(data);
+      } catch (error) {
+        console.error('Error generando PDF o ejecutando onSuccess:', error);
+      }
     };
+    
 
     const handleCustomerChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
       const selectedId = event.target.value;
@@ -251,7 +249,6 @@ const InvoiceModal = forwardRef<HTMLFormElement, InvoiceModalProps>(
             />
           </Switch>
         </div>
-
         {pdfUrl && (
           <div className="mt-6">
             <h3 className="text-lg font-medium text-white mb-3">Vista previa del PDF</h3>
@@ -265,19 +262,34 @@ const InvoiceModal = forwardRef<HTMLFormElement, InvoiceModalProps>(
           </div>
         )}
 
-        <div className="flex justify-end gap-4 pt-4">
-          <CustomButton
-            text="Cancelar"
-            style="border text-gray-700 bg-white hover:bg-gray-50 border-gray-300"
-            typeButton="button"
-            onClickButton={onCancel}
-          />
-          <CustomButton
-            text="Confirmar Venta"
-            style="border text-white bg-blue-600 hover:bg-blue-700"
-            typeButton="submit"
-          />
-        </div>
+        {pdfUrl ? (
+          <div className="flex justify-end gap-4 pt-4">
+            <a
+              href={pdfUrl}
+              download={`factura_${new Date().toISOString().split('T')[0]}.pdf`}
+              className="text-white bg-green-600 px-4 py-2 rounded hover:bg-green-700"
+              onClick={() => {
+                onSuccess(); 
+              }}
+            >
+              Descargar Factura
+            </a>
+          </div>
+        ) : (
+          <div className="flex justify-end gap-4 pt-4">
+            <CustomButton
+              text="Cancelar"
+              style="border text-gray-700 bg-white hover:bg-gray-50 border-gray-300"
+              typeButton="button"
+              onClickButton={onCancel}
+            />
+            <CustomButton
+              text="Confirmar Venta"
+              style="border text-white bg-blue-600 hover:bg-blue-700"
+              typeButton="submit"
+            />
+          </div>
+        )}
       </form>
     );
   }
