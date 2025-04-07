@@ -1,7 +1,10 @@
+// ScreenMakeSale.tsx
 'use client';
 
 import { useState } from 'react';
 import ProductSearch from './ProductSearch';
+import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
+import InvoiceModal from './InvoiceModal';
 
 interface SaleItem {
   id: number;
@@ -11,6 +14,7 @@ interface SaleItem {
   tax: number;
   price: number;
   basePrice: number;
+  productId: string;
 }
 
 export default function ScreenMakeSale() {
@@ -21,12 +25,25 @@ export default function ScreenMakeSale() {
   const [stock, setStock] = useState(0);
   const [tax, setTax] = useState(0);
   const [nextId, setNextId] = useState(1);
+  const [productId, setProductId] = useState('');
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+
+  const resetSaleForm = () => {
+    setItems([]);
+    setName('');
+    setQuantity(1);
+    setPrice('');
+    setStock(0);
+    setTax(0);
+    setProductId('');
+    setNextId(1);
+  };
 
   const handleAddItem = () => {
     const priceValue = parseFloat(price);
     if (!name || isNaN(priceValue) || priceValue <= 0 || quantity <= 0) return;
 
-    const existingIndex = items.findIndex(item => item.name === name);
+    const existingIndex = items.findIndex((item) => item.name === name);
     const basePriceValue = priceValue;
     const priceWithTax = priceValue * (1 + tax / 100);
 
@@ -54,6 +71,7 @@ export default function ScreenMakeSale() {
         price: priceWithTax,
         basePrice: basePriceValue,
         tax,
+        productId,
       };
       setItems([...items, newItem]);
       setNextId(nextId + 1);
@@ -64,14 +82,15 @@ export default function ScreenMakeSale() {
     setPrice('');
     setStock(0);
     setTax(0);
+    setProductId('');
   };
 
   const handleRemoveItem = (id: number) => {
-    setItems(items.filter(item => item.id !== id));
+    setItems(items.filter((item) => item.id !== id));
   };
 
   const calculateSubtotal = () => {
-    return items.reduce((total, item) => total + (item.quantity * item.basePrice), 0);
+    return items.reduce((total, item) => total + item.quantity * item.basePrice, 0);
   };
 
   const calculateTaxTotal = () => {
@@ -82,7 +101,7 @@ export default function ScreenMakeSale() {
   };
 
   const calculateTotal = () => {
-    return items.reduce((total, item) => total + (item.quantity * item.price), 0);
+    return items.reduce((total, item) => total + item.quantity * item.price, 0);
   };
 
   const formatCurrency = (value: number) => {
@@ -90,20 +109,26 @@ export default function ScreenMakeSale() {
   };
 
   const handleCompleteSale = () => {
-    if (items.length > 0) {
-      alert(`Venta completada. Total: ${formatCurrency(calculateTotal())}`);
-      setItems([]);
-    } else {
+    if (items.length === 0) {
       alert('Agrega productos antes de completar la venta.');
+      return;
     }
+    setIsInvoiceModalOpen(true);
+  };
+
+  const handleSuccessSale = () => {
+    resetSaleForm();
+    alert('Venta completada con éxito.');
+    window.location.reload();
+    setIsInvoiceModalOpen(false);
   };
 
   return (
-    <div className="w-full mt-[-12] px-4">
+    <div className="w-full px-4 -mt-[20px] relative">
       <h1 className="text-2xl font-bold text-white mb-4">Nueva venta</h1>
 
       <div className="w-full space-y-6">
-        <div className="shadow-md rounded-lg mt-12 w-full">
+        <div className="shadow-md rounded-lg mt-8 w-full">
           <h2 className="text-xl font-semibold mb-4 text-white">Añadir Items</h2>
 
           <div className="flex flex-wrap gap-4 items-end">
@@ -115,6 +140,7 @@ export default function ScreenMakeSale() {
                   setPrice(product.price.toString());
                   setStock(product.stock);
                   setTax(product.tax);
+                  setProductId(product.id);
                 }}
                 value={name}
                 onChange={setName}
@@ -220,6 +246,21 @@ export default function ScreenMakeSale() {
           </div>
         </div>
       </div>
+
+      <CustomModalNoButton
+        isOpen={isInvoiceModalOpen}
+        onClose={() => setIsInvoiceModalOpen(false)}
+        title="Confirmar Venta"
+      >
+        <InvoiceModal
+          subtotal={calculateSubtotal()}
+          taxTotal={calculateTaxTotal()}
+          total={calculateTotal()}
+          items={items}
+          onSuccess={handleSuccessSale}
+          onCancel={() => setIsInvoiceModalOpen(false)}
+        />
+      </CustomModalNoButton>
     </div>
   );
 }

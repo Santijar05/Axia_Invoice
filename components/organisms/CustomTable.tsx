@@ -12,7 +12,7 @@ interface CustomTableProps {
   options?: boolean;
   data?: { [key: string]: string }[];
   onRowClick?: (id: string) => void;
-  contextType?: 'clients' | 'employees' | 'products' | 'suppliers';
+  contextType?: 'clients' | 'employees' | 'products' | 'suppliers' | 'invoices';
   customActions?: {
     edit?: (id: string) => void;
     view?: (id: string) => void;
@@ -35,13 +35,16 @@ export default function CustomTable({
   actionLabels = {
     edit: contextType === 'clients' ? 'Editar cliente' : 
           contextType === 'employees' ? 'Editar empleado' : 
-          contextType === 'suppliers' ? 'Editar proveedor' : 'Editar',
+          contextType === 'suppliers' ? 'Editar proveedor' :
+          contextType === 'invoices' ? 'Editar factura' : 'Editar',
     view: contextType === 'clients' ? 'Ver cliente' : 
           contextType === 'employees' ? 'Ver empleado' :
-          contextType === 'suppliers' ? 'Ver proveedor' : 'Ver',
+          contextType === 'suppliers' ? 'Ver proveedor' :
+          contextType === 'invoices' ? 'Ver factura' : 'Ver',
     delete: contextType === 'clients' ? 'Eliminar cliente' : 
             contextType === 'employees' ? 'Eliminar empleado' :
-            contextType === 'suppliers' ? 'Eliminar proveedor' : 'Eliminar' 
+            contextType === 'suppliers' ? 'Eliminar proveedor' :
+            contextType === 'invoices' ? 'Eliminar factura' : 'Eliminar' 
   }
 }: CustomTableProps) {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -87,13 +90,13 @@ export default function CustomTable({
 
   return (
     <div className="relative w-full h-screen text-white flex justify-center items-center">
-      {/*Image 
+      <Image 
         src="/Images/fondoHerooo.png" 
         alt="Background Image" 
         fill 
         className="absolute top-0 left-0 w-full h-full object-cover"
         priority
-      />*/}
+      />
 
       <div className="relative w-full h-full bg-transparent rounded-lg shadow-lg p-4">
         <h2 className="text-2xl font-semibold p-4 border-b text-white">{title}</h2>
@@ -122,11 +125,11 @@ export default function CustomTable({
                       <Dropdown
                         icon={<Menu color="white" size={25} />}
                         options={[
-                          { 
-                            text: actionLabels.edit || 'Edit', 
+                          ...(contextType !== 'invoices' ? [{
+                            text: actionLabels.edit || 'Edit',
                             icon: <FilePenLine size={20} />,
                             action: () => handleEdit(item.id)
-                          },
+                          }] : []),
                           { 
                             text: actionLabels.view || 'View', 
                             icon: <Eye size={20} />,
