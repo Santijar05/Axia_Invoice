@@ -17,7 +17,8 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     const router = useRouter();
     const [products, setProducts] = useState<{ [key: string]: string }[]>([]);
     const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]);
-    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -170,7 +171,7 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                 salePrice: parseFloat(productToEdit['p. venta']),
                 tenantId: "",
             });
-            setIsProductModalOpen(true);
+            setIsEditModalOpen(true);
         }
     };
 
@@ -180,23 +181,23 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
         <div className="container mx-auto">
             <Toolbar
             title="Gestión de Productos"
-            onAddNew={() => setIsProductModalOpen(true)}
+            onAddNew={() => setIsAddModalOpen(true)}
             />
 
             <CustomModalNoButton 
-            isOpen={isProductModalOpen}
-            onClose={() => {
-                setIsProductModalOpen(false);
-                currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts();
-            }}
-            title="Nuevo Producto"
-            >
-            <ProductForm 
-                onSuccess={() => {
-                setIsProductModalOpen(false);
-                currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts();
+                isOpen={isAddModalOpen}
+                onClose={() => {
+                    setIsAddModalOpen(false);
+                    currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts();
                 }}
-            />
+                title="Nuevo Producto"
+                >
+                <ProductForm 
+                    onSuccess={() => {
+                    setIsAddModalOpen(false);
+                    currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts();
+                    }}
+                />
             </CustomModalNoButton>
             
             <div className="flex justify-between items-center mb-4 mt-4">
@@ -244,9 +245,9 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                 />
             )}
             <CustomModalNoButton 
-                isOpen={isProductModalOpen} 
+                isOpen={isEditModalOpen} 
                 onClose={() => {
-                    setIsProductModalOpen(false); 
+                    setIsEditModalOpen(false); 
                     setTimeout(() => fetchAllProducts(), 0);
                 }}
                 title="Editar Proveedor"
@@ -255,7 +256,7 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                     product={currentProduct || undefined}
                     onSuccess={() => {
                         fetchAllProducts();
-                        setIsProductModalOpen(false);
+                        setIsEditModalOpen(false);
                     }} 
                 />
             </CustomModalNoButton>
