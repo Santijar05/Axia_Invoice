@@ -106,12 +106,16 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     },
     { 
       icon: Truck, 
-      label: "Sales",
+      label: "Ventas",
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
-          label: "Make Sales", 
+          label: "Hacer ventas", 
           href: "/sales/make-sales",
+          allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
+        }, { 
+          label: "Ver ventas", 
+          href: "/sales/view-sales",
           allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
       ],

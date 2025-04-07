@@ -96,3 +96,32 @@ export interface SaleItemForAPI {
     productId: string;
     quantity: number;
 }
+
+export interface CreatedInvoice {
+    id: string;
+    date: string;
+    totalPrice: number;
+    electronicBill: boolean;
+    clientId: string;
+    tenantId: string;
+    invoiceProducts: SaleProduct[];
+}
+
+export interface SaleProduct {
+    productId: string;
+    quantity: number;
+}
+
+export interface Venta {
+    clientId: string;
+    electronicBill?: boolean;
+    products: {
+        tenantId: string; 
+        productId: string;
+        quantity: number;
+    }[];
+        payment?: {
+        amount: number;
+        method: string;
+    };
+}
