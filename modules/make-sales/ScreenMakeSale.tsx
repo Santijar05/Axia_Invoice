@@ -1,6 +1,7 @@
+// ScreenMakeSale.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ProductSearch from './ProductSearch';
 import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
 import InvoiceModal from './InvoiceModal';
@@ -13,7 +14,7 @@ interface SaleItem {
   tax: number;
   price: number;
   basePrice: number;
-  productId: string; // Add productId
+  productId: string;
 }
 
 export default function ScreenMakeSale() {
@@ -26,25 +27,6 @@ export default function ScreenMakeSale() {
   const [nextId, setNextId] = useState(1);
   const [productId, setProductId] = useState('');
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
-  const [saleCompleted, setSaleCompleted] = useState(false);
-
-  // Efecto para restablecer el formulario cuando se completa una venta
-  useEffect(() => {
-    if (saleCompleted) {
-      // Restablece todo
-      setItems([]);
-      setName('');
-      setQuantity(1);
-      setPrice('');
-      setStock(0);
-      setTax(0);
-      setProductId('');
-      setNextId(1);
-      setIsInvoiceModalOpen(false);
-      // Resetea el indicador de venta completada
-      setSaleCompleted(false);
-    }
-  }, [saleCompleted]);
 
   const resetSaleForm = () => {
     setItems([]);
@@ -55,7 +37,6 @@ export default function ScreenMakeSale() {
     setTax(0);
     setProductId('');
     setNextId(1);
-    setIsInvoiceModalOpen(false);
   };
 
   const handleAddItem = () => {
@@ -135,14 +116,11 @@ export default function ScreenMakeSale() {
     setIsInvoiceModalOpen(true);
   };
 
-  const handleResetSale = () => {
-    setItems([]);
-    setName('');
-    setQuantity(1);
-    setPrice('');
-    setStock(0);
-    setTax(0);
-    setNextId(1); // Opcional: reinicia el ID para nuevos ítems
+  const handleSuccessSale = () => {
+    resetSaleForm();
+    alert('Venta completada con éxito.');
+    window.location.reload();
+    setIsInvoiceModalOpen(false);
   };
 
   return (
@@ -162,7 +140,7 @@ export default function ScreenMakeSale() {
                   setPrice(product.price.toString());
                   setStock(product.stock);
                   setTax(product.tax);
-                  setProductId(product.id); // Update ProductSearch component
+                  setProductId(product.id);
                 }}
                 value={name}
                 onChange={setName}
@@ -279,16 +257,7 @@ export default function ScreenMakeSale() {
           taxTotal={calculateTaxTotal()}
           total={calculateTotal()}
           items={items}
-          onSuccess={() => {
-            console.log("Iniciando limpieza...");
-            
-            resetSaleForm();
-            
-            setSaleCompleted(true);
-            
-            console.log("Limpieza completada"); 
-            setIsInvoiceModalOpen(false); 
-          }}
+          onSuccess={handleSuccessSale}
           onCancel={() => setIsInvoiceModalOpen(false)}
         />
       </CustomModalNoButton>

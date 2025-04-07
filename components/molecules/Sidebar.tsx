@@ -69,7 +69,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   const menuItems: MenuItem[] = [
     { 
       icon: Home, 
-      label: "Home", 
+      label: "Inicio", 
       href: basePath,
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
     },
@@ -94,7 +94,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     ] : []),
     { 
       icon: ArchiveRestore, 
-      label: "Store",
+      label: "Tienda",
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
@@ -122,7 +122,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     },
     { 
       icon: ShoppingCart, 
-      label: "Shopping",
+      label: "Compras",
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         ...(role === "EMPLOYEE" ? [
@@ -144,16 +144,16 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     ...(role === "ADMIN" || role === "SUPERADMIN" ? [
       { 
         icon: User, 
-        label: "Users",
+        label: "Usuarios",
         allowedRoles: ["ADMIN", "SUPERADMIN"],
         subOptions: [
           { 
-            label: "Customers", 
+            label: "Clientes", 
             href: "/users/customers",
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
           { 
-            label: "Employees", 
+            label: "Empleados", 
             href: "/users/employees",
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
