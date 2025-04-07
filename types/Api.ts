@@ -16,7 +16,9 @@ export interface ClientDAO {
     identification: string;
     firstName: string;
     lastName: string;
-    email: string;
+    email?: string;
+    phone?: string;
+    address?: string;
 }
 
 export interface SupplierDAO {
@@ -77,4 +79,20 @@ export interface ApiError {
 
 export interface ProductFormProps {
     onSuccess?: () => Promise<void> | void;
+}
+
+export interface SaleItem {
+    id: number;
+    name: string;
+    quantity: number;
+    stock: number;
+    tax: number;
+    price: number;
+    basePrice: number;
+    productId: string; 
+}
+
+export interface SaleItemForAPI {
+    productId: string;
+    quantity: number;
 }

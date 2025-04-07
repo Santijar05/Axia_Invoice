@@ -26,6 +26,8 @@ export default function ProductSearch({ onSelect, value, onChange }: ProductSear
   const inputRef = useRef<HTMLInputElement>(null);
   const productSelectedRef = useRef(false); 
 
+  const [productId, setProductId] = useState<string | null>(null); // Added state for productId
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -97,6 +99,10 @@ export default function ProductSearch({ onSelect, value, onChange }: ProductSear
       tax: product.tax,
       stock: product.stock,
     });
+
+    // Update the onSelect handler to include productId
+    setProductId(product.id); // Add productId to the item for API communication
+
     setIsDropdownOpen(false);
   };
 
