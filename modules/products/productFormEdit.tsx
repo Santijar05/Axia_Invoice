@@ -5,17 +5,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productSchema } from "@/schemes/productSheme";
 import Input from "@/components/atoms/Input";
-import Select from "@/components/atoms/select";
 import CustomButton from "@/components/atoms/CustomButton";
-import { getListSuppliers } from "@/lib/api-suppliers";
-import { createProduct } from "@/lib/api-products-status";
-import { ProductDAO, ProductFormProps, Supplier, SupplierDAO } from "@/types/Api";
+import { updateProduct } from "@/lib/api-products-status";
+import { ProductDAO, SupplierDAO } from "@/types/Api";
 import Cookies from "js-cookie"; 
 import { jwtDecode } from "jwt-decode";
 
 type ProductFormData = {
   id: string;
-  supplier: Supplier;
+  supplierId: string;
   name: string;
   stock: number;
   tax: number;
@@ -23,8 +21,14 @@ type ProductFormData = {
   salePrice: number;
 };
 
-const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
-  ({ onSuccess }, ref) => {
+export interface ProductFormProps {
+    product?: ProductDAO; 
+    onSuccess?: () => void;
+    onClose?: () => void;
+    supplier?: string ;
+  }
+
+const ProductFormEdit = forwardRef<HTMLFormElement, ProductFormProps>(({ product, supplier, onSuccess, onClose }, ref) => {
     const {
       register,
       handleSubmit,
@@ -35,42 +39,21 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       resolver: zodResolver(productSchema),
     });
 
-    const [proveedores, setProveedores] = useState<SupplierDAO[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string>("");
     const [selectedSupplier, setSelectedSupplier] = useState<SupplierDAO>();
 
     useEffect(() => {
-      async function fetchProveedores() {
-        try {
-          const data = await getListSuppliers();
-          setProveedores(data);
-        } catch (err: any) {
-          setError(err.message || "Error inesperado");
-        } finally {
-          setLoading(false);
+        if (product) {
+            reset({
+                ...product,
+            });
         }
-      }
-      fetchProveedores();
-    }, []);
-
-    if (loading) return <div>Cargando proveedores...</div>;
-    if (error) return <div>{error}</div>;
-
-    const handleSupplierChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const selectedId = event.target.value;
-      const selectedSupplier = proveedores.find((p) => p.id === selectedId);
-      if (selectedSupplier) {
-        setSelectedSupplier(selectedSupplier); 
-      }
-    };
+    }, [product, reset]);
 
     const onSubmit = async (data: ProductFormData) => {
-      console.log("onSubmit", data);
       const authToken = Cookies.get("authToken");
       if (!authToken) {
-          console.error("No hay authToken");
-          throw new Error("Authentication token is missing");
+        console.error("No hay authToken");
+        throw new Error("Authentication token is missing");
       }
       
       const decoded: any = jwtDecode(authToken);
@@ -79,19 +62,21 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
       try {
         const productData: ProductDAO = {
           ...data,
-          tenantId, 
-          supplier: selectedSupplier ?? ({} as Supplier),
-          id: "", 
+          tenantId,
+          supplier: selectedSupplier || ({} as SupplierDAO),
+          id: product?.id || "",
         };
-        const response = await createProduct(productData);
-        if (response.status === 201) {
-          alert("Producto creado exitosamente");
+
+        const response = await updateProduct(productData, product?.id || "");
+
+        if (response.ok) {
+          alert(`Producto ${product?.id ? "actualizado" : "creado"} exitosamente`);
           reset();
           onSuccess?.();
         } else {
           const errorData = await response.json();
-          console.error("Error al crear el producto:", errorData);
-          alert("Error al crear el producto");
+          console.error(`Error al ${product?.id ? "actualizar" : "crear"} el producto:`, errorData);
+          alert(`Error al ${product?.id ? "actualizar" : "crear"} el producto`);
         }
       } catch (error) {
         console.error("Error en onSubmit:", error);
@@ -113,22 +98,21 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
             placeholder="AUTOGENERADO"
             type="text"
             disabled={true}
+            {...register("id")}
           />
         </div>
 
         <div>
-          <label className="text-sm font-semibold text-gray-500">
+        <label className="text-sm font-semibold text-gray-500">
             Proveedor
-          </label>
-          <Select
-            className="text-homePrimary-200"
-            placeholder="Seleccionar proveedor"
-            options={proveedores.map((proveedor) => ({
-              value: proveedor.id,
-              label: proveedor.name,
-            }))}
-            onChange={handleSupplierChange}
-          />
+        </label>
+        <Input
+            placeholder="Proveedor"
+            type="text"
+            disabled={true}
+            value={selectedSupplier?.name || product?.supplier?.name || ""}
+            onChange={(e) => setSelectedSupplier({ ...selectedSupplier, name: e.target.value } as SupplierDAO)}
+        />
         </div>
 
         <div>
@@ -206,13 +190,22 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
         </div>
 
         <div className="col-span-2 flex justify-end gap-2 mt-4">
-          <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
-          <CustomButton text={ 'Crear Producto'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
+          <CustomButton 
+            text="Cerrar" 
+            style="border text-white bg-homePrimary hover:bg-blue-500" 
+            typeButton="button" 
+            onClickButton={onClose || onSuccess}  
+          />
+          <CustomButton 
+            text={product?.id ? 'Actualizar Producto' : 'Crear Producto'} 
+            style="border text-white bg-homePrimary hover:bg-blue-500" 
+            typeButton="submit" 
+          />
         </div>    
       </form>
     );
   }
 );
 
-ProductForm.displayName = "ProductForm";
-export default ProductForm;
+ProductFormEdit.displayName = "ProductFormEdit";
+export default ProductFormEdit;

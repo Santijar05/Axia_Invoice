@@ -1,8 +1,6 @@
 import { envVariables } from "@/utils/config";
 import { ProductDAO } from "@/types/Api";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/products`;
-
 const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promise<T> => {
   const response = await fetch(url, {
     ...options,
@@ -15,20 +13,6 @@ const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promi
   }
 
   return response.json() as Promise<T>;
-};
-
-export const createProduct = async (body: ProductDAO): Promise<Response> => {
-  const url = `${API_BASE_URL}`;
-
-  const headersOptions: RequestInit = {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  return fetchWithCredentials(url, headersOptions);
 };
 
 export const getListproducts = async (params?: {

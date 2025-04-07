@@ -10,6 +10,8 @@ import ProductForm from "./ProductForm";
 import TableFilter from "@/components/molecules/TableFilter";
 import EmptyState from '@/components/molecules/EmptyState';
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
+import { deleteProduct } from "@/lib/api-products-status";
+import ProductFormEdit from "./productFormEdit";
 
 export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     const router = useRouter();
@@ -19,6 +21,8 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
+    const [currentProduct, setCurrentProduct] = useState<ProductDAO | null>(null);
+
     const initialFetchDone = useRef(false);
     
     const fieldMapping: { [key: string]: string } = {
@@ -143,9 +147,31 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
         router.push(`/store/products/${productId}`);
     };
 
-    // Función para manejar la eliminación de productos
     const handleDeleteProduct = async (productId: string) => {
-        // Implementar lógica de eliminación
+            try {
+                await deleteProduct(productId);
+                fetchAllProducts();
+            } catch (err) {
+                console.error("Error al eliminar producto:", err);
+                alert("No se pudo eliminar el producto");
+            }
+    };
+
+    const handleEditProduct = (productId: string) => {
+        const productToEdit = products.find(product => product.id === productId);
+        if (productToEdit) {
+            setCurrentProduct({
+                id: productToEdit.id,
+                name: productToEdit.producto,
+                supplier: { name: productToEdit.proveedor } as SupplierDAO,
+                tax: parseFloat(productToEdit.impuesto),
+                stock: parseInt(productToEdit.stock),
+                purchasePrice: parseFloat(productToEdit['p. compra']),
+                salePrice: parseFloat(productToEdit['p. venta']),
+                tenantId: "",
+            });
+            setIsProductModalOpen(true);
+        }
     };
 
     const tableHeaders = ["Código", "Producto", "Proveedor", "Impuesto", "Stock", "P. Compra", "P. Venta"];
@@ -207,7 +233,7 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                     onRowClick={handleRowClick}
                     customActions={{
                         delete: handleDeleteProduct,
-                        edit: (id) => router.push(`/store/products/edit/${id}`),
+                        edit: handleEditProduct,
                         view: handleRowClick
                     }}
                     actionLabels={{
@@ -217,6 +243,22 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                     }}
                 />
             )}
+            <CustomModalNoButton 
+                isOpen={isProductModalOpen} 
+                onClose={() => {
+                    setIsProductModalOpen(false); 
+                    setTimeout(() => fetchAllProducts(), 0);
+                }}
+                title="Editar Proveedor"
+            >
+                <ProductFormEdit 
+                    product={currentProduct || undefined}
+                    onSuccess={() => {
+                        fetchAllProducts();
+                        setIsProductModalOpen(false);
+                    }} 
+                />
+            </CustomModalNoButton>
         </div>
     );
 }
