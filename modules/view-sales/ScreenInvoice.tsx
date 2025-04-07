@@ -66,7 +66,10 @@ export default function ScreenInvoices() {
 
     return (
         <div className="container mx-auto">
-            <Toolbar title="Gestión de Facturas" invoice={true} />
+            <Toolbar
+                title="Gestión de Facturas"
+                onAddNew={() => router.push("/sales/make-sales")}
+            />
 
             {isLoading ? (
                 <p className="text-gray-500 text-sm mb-2 mt-4">Cargando facturas...</p>
