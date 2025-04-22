@@ -71,6 +71,7 @@ export async function middleware(request: Request) {
         "/shopping/make-purchase",
         "/users/customers",
         "/users/employees",
+        "/sales/view-sales",
       ],
     };
 

@@ -35,13 +35,16 @@ export default function CustomTable({
   actionLabels = {
     edit: contextType === 'clients' ? 'Editar cliente' : 
           contextType === 'employees' ? 'Editar empleado' : 
-          contextType === 'suppliers' ? 'Editar proveedor' : 'Editar',
+          contextType === 'suppliers' ? 'Editar proveedor' :
+          contextType === 'invoices' ? 'Editar factura' : 'Editar',
     view: contextType === 'clients' ? 'Ver cliente' : 
           contextType === 'employees' ? 'Ver empleado' :
-          contextType === 'suppliers' ? 'Ver proveedor' : 'Ver',
+          contextType === 'suppliers' ? 'Ver proveedor' :
+          contextType === 'invoices' ? 'Ver factura' : 'Ver',
     delete: contextType === 'clients' ? 'Eliminar cliente' : 
             contextType === 'employees' ? 'Eliminar empleado' :
-            contextType === 'suppliers' ? 'Eliminar proveedor' : 'Eliminar' 
+            contextType === 'suppliers' ? 'Eliminar proveedor' :
+            contextType === 'invoices' ? 'Eliminar factura' : 'Eliminar' 
   }
 }: CustomTableProps) {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);

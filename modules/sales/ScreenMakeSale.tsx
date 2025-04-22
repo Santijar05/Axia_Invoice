@@ -1,13 +1,15 @@
+// ScreenMakeSale.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from "next/image";
 
+import InvoiceModal from './InvoiceModal';
 import Input from '@/components/atoms/Input';
-import { getListClients } from '@/lib/api-clients';
 import { ClientDAO, SaleItem, Venta } from '@/types/Api';
 import { crearFacturaVenta } from '@/lib/api-saleInvoce';
 import SearchBarUniversal from '@/components/molecules/SearchBar';
+import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
 
 export default function ScreenMakeSale() {
   const [selectedProductId, setSelectedProductId] = useState('');
@@ -21,27 +23,25 @@ export default function ScreenMakeSale() {
   const [stock, setStock] = useState(0);
   const [name, setName] = useState('');
   const [tax, setTax] = useState(0);
+  const [productId, setProductId] = useState('');
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const res = await getListClients();
-        if (res && Array.isArray(res)) {
-          setClientes(res);
-        }
-      } catch (err) {
-        console.error('Error al obtener clientes:', err);
-      }
-    };
-
-    fetchClients();
-  }, []);
+  const resetSaleForm = () => {
+    setItems([]);
+    setName('');
+    setQuantity(1);
+    setPrice('');
+    setStock(0);
+    setTax(0);
+    setProductId('');
+    setNextId(1);
+  };
 
   const handleAddItem = () => {
     const priceValue = parseFloat(price);
     if (!name || isNaN(priceValue) || priceValue <= 0 || quantity <= 0) return;
 
-    const existingIndex = items.findIndex(item => item.name === name);
+    const existingIndex = items.findIndex((item) => item.name === name);
     const basePriceValue = priceValue;
     const priceWithTax = priceValue * (1 + tax / 100);
 
@@ -81,14 +81,15 @@ export default function ScreenMakeSale() {
     setPrice('');
     setStock(0);
     setTax(0);
+    setProductId('');
   };
 
   const handleRemoveItem = (id: number) => {
-    setItems(items.filter(item => item.id !== id));
+    setItems(items.filter((item) => item.id !== id));
   };
 
   const calculateSubtotal = () => {
-    return items.reduce((total, item) => total + (item.quantity * item.basePrice), 0);
+    return items.reduce((total, item) => total + item.quantity * item.basePrice, 0);
   };
 
   const calculateTaxTotal = () => {
@@ -99,7 +100,7 @@ export default function ScreenMakeSale() {
   };
 
   const calculateTotal = () => {
-    return items.reduce((total, item) => total + (item.quantity * item.price), 0);
+    return items.reduce((total, item) => total + item.quantity * item.price, 0);
   };
 
   const formatCurrency = (value: number) => {
@@ -122,13 +123,14 @@ export default function ScreenMakeSale() {
       })),
     };
 
-    try {
-      const factura = await crearFacturaVenta(venta);
-      alert(`Venta completada. ID factura: ${factura.id}`);
-      setItems([]);
-    } catch (error) {
-      alert('Error al procesar la venta.');
-    }
+    setIsInvoiceModalOpen(true);
+  };
+
+  const handleSuccessSale = () => {
+    resetSaleForm();
+    alert('Venta completada con éxito.');
+    window.location.reload();
+    setIsInvoiceModalOpen(false);
   };
 
   return (
@@ -201,23 +203,6 @@ export default function ScreenMakeSale() {
               </button>
             </div>
           </div>
-  
-          <div className="flex-1 min-w-[300px] border border-gray-600 bg-transparent p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4 text-white">Cliente</h2>
-
-            <div className="flex flex-col">
-              <label className="mb-1 text-sm font-medium text-white">Selecciona un cliente</label>
-              <SearchBarUniversal
-                searchType="clients"
-                showResults={true}
-                onAddToCart={(cliente) => {
-                  setClientId(cliente.id);
-                }}
-                placeholder="Selecciona un cliente"
-              />
-
-            </div>
-          </div>
         </div>
 
         <div className="mt-6 border border-gray-600 bg-transparent shadow-md rounded-lg p-6 w-full text-white min-h-[600px] max-h-[600px] flex flex-col">
@@ -287,6 +272,21 @@ export default function ScreenMakeSale() {
           </div>
         </div>
       </div>
+
+      <CustomModalNoButton
+        isOpen={isInvoiceModalOpen}
+        onClose={() => setIsInvoiceModalOpen(false)}
+        title="Confirmar Venta"
+      >
+        <InvoiceModal
+          subtotal={calculateSubtotal()}
+          taxTotal={calculateTaxTotal()}
+          total={calculateTotal()}
+          items={items}
+          onSuccess={handleSuccessSale}
+          onCancel={() => setIsInvoiceModalOpen(false)}
+        />
+      </CustomModalNoButton>
     </div>
   );
 }

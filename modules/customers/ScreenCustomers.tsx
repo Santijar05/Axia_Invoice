@@ -63,7 +63,7 @@ export default function ScreenCustomers() {
             identification: client.identification,
             "first name": client.firstName,
             "last name": client.lastName,
-            email: client.email,
+            email: client.email || "",
         }));
         return formattedClients;
     };
@@ -229,7 +229,13 @@ export default function ScreenCustomers() {
                 title="Editar Cliente"
             >
                 <CustomerFormEdit 
-                    client={currentClient || undefined}
+                    client={currentClient ? {
+                        id: currentClient.id,
+                        identification: currentClient.identification,
+                        firstName: currentClient.firstName,
+                        lastName: currentClient.lastName,
+                        email: currentClient.email || ""
+                    } : undefined}
                     onSuccess={() => {
                         fetchAllClients();
                         setIsModalOpen(false);
