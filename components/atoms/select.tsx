@@ -9,7 +9,7 @@ interface SelectProps {
 
 const Select: React.FC<SelectProps> = ({ className, options, placeholder, ...props }) => (
   <select
-    className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 appearance-none bg-black text-black ${className}`}
+    className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 appearance-none bg-black text-gray-500 ${className}`}
     {...props}
   >
     {placeholder && (

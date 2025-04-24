@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import { createSaleInvoice, createPayment } from '@/lib/api-sales';
-import { SaleItem, SaleItemForAPI } from '@/types/Api';
-import { ClientDAO } from '@/types/Api';
-import ClientSelector from './ClientSelector';
-import { Switch } from '@headlessui/react';
 import { jsPDF } from 'jspdf';
+import { useState } from 'react';
 import autoTable from 'jspdf-autotable';
+import { useAuth } from '@/context/AuthContext';
+
+import { ClientDAO } from '@/types/Api';
+import Select from '@/components/atoms/select';
+import { SaleItem, SaleItemForAPI } from '@/types/Api';
+import SearchBarUniversal from '@/components/molecules/SearchBar';
+import { createSaleInvoice, createPayment } from '@/lib/api-sales';
+import { ToggleSwitch } from '@/components/molecules/ToggleSwitch';
 
 interface InvoiceModalProps {
   subtotal: number;
@@ -155,38 +157,39 @@ export default function InvoiceModal({
       
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1 text-white">Cliente</label>
-        <ClientSelector onSelect={setSelectedClient} />
+        <SearchBarUniversal
+          searchType="clients"
+          onAddToCart={(item) => setSelectedClient(item as ClientDAO)} 
+
+          showResults={true}
+          placeholder="Cliente que realiza la compra"
+        />
       </div>
       
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1 text-white">Método de Pago</label>
-        <select
+        <Select
           value={paymentMethod}
-          onChange={(e) => setPaymentMethod(e.target.value)}
+          onChange={(e: any) => setPaymentMethod(e.target.value)}
           className="w-full p-2 border rounded"
-        >
-          <option value="CASH">Efectivo</option>
-          <option value="CARD">Tarjeta</option>
-          <option value="TRANSFER">Transferencia</option>
-        </select>
+
+          options={[
+            { value: "CASH", label: "Efectivo" },
+            { value: "CARD", label: "Tarjeta" },
+            { value: "TRANSFER", label: "Transferencia" }
+          ]}
+          placeholder="Selecciona un método de pago"
+        />
       </div>
       
       <div className="mb-4">
         <div className="flex items-center justify-between">
           <span className='text-white'>Generar Factura Electrónica</span>
-          <Switch
-            checked={isElectronicBill}
-            onChange={setIsElectronicBill}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              isElectronicBill ? 'bg-blue-600' : 'bg-gray-300'
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
-                isElectronicBill ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
-          </Switch>
+          <ToggleSwitch
+            options={['No', 'Sí']}
+            activeIndex={isElectronicBill ? 1 : 0} 
+            onChange={(index) => setIsElectronicBill(index === 1)} 
+          />
         </div>
       </div>
       

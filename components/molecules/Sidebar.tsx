@@ -113,13 +113,9 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
           label: "Hacer ventas", 
           href: "/sales/make-sales",
           allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
-        }, { 
-          label: "Ver ventas", 
-          href: "/sales/view-sales",
-          allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
         { 
-          label: "Sales Invoices", 
+          label: "Ver ventas", 
           href: "/sales/sales-invoices",
           allowedRoles: ["ADMIN", "SUPERADMIN"]
         },

@@ -18,7 +18,7 @@ import {
 
 interface SearchBarUniversalProps {
   onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[]) => void;
-  onAddToCart?: (product: ProductDAO) => void;
+  onAddToCart?: (item: ProductDAO | ClientDAO | SupplierDAO | EmployeeDAO) => void;
   onSearchTermChange?: (term: string) => void;
   showResults?: boolean;
   placeholder?: string;

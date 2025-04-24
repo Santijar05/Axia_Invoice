@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import InvoiceModal from './InvoiceModal';
 import Input from '@/components/atoms/Input';
-import { ClientDAO, SaleItem, Venta } from '@/types/Api';
+import { ClientDAO, ProductDAO, SaleItem, Venta } from '@/types/Api';
 import { crearFacturaVenta } from '@/lib/api-saleInvoce';
 import SearchBarUniversal from '@/components/molecules/SearchBar';
 import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
@@ -157,19 +157,23 @@ export default function ScreenMakeSale() {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col">
                 <label className="mb-1 text-sm font-medium text-white">Producto</label>
+                
                 <SearchBarUniversal
-                  onAddToCart={(product) => {
+                  searchType="products"
+                  onAddToCart={(item) => {
+                    const product = item as ProductDAO;  
                     setName(product.name);
                     setPrice(product.salePrice.toString());
                     setStock(product.stock);
                     setTax(product.tax);
-                    setSelectedProductId(product.id); 
+                    setSelectedProductId(product.id);
                     settenantIdProduct(product.tenantId);
                   }}
+                  
                   showResults={true}
                   placeholder="Buscar productos para comprar..."
-                  searchType="products"
                 />
+
               </div>
 
               <div className="flex flex-row space-x-7">
