@@ -9,7 +9,7 @@ import { ClientDAO } from '@/types/Api';
 import Select from '@/components/atoms/select';
 import { SaleItem, SaleItemForAPI } from '@/types/Api';
 import SearchBarUniversal from '@/components/molecules/SearchBar';
-import { createSaleInvoice, createPayment } from '@/lib/api-sales';
+import { createPayment } from '@/lib/api-sales';
 import { ToggleSwitch } from '@/components/molecules/ToggleSwitch';
 import { crearFacturaVenta } from '@/lib/api-saleInvoce';
 

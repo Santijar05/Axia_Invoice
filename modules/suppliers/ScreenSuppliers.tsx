@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
 import { getListSuppliers, deleteSupplier } from "@/lib/api-suppliers";
@@ -13,20 +14,24 @@ import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import TableFilter from "@/components/molecules/TableFilter";
 import EmptyState from '@/components/molecules/EmptyState';
 import SupplierDetail from "./SupplierDetail/SupplierDetail";
+import ChatBot from "@/modules/suppliers/ChatBot";
 
+// Nuevo estado para controlar la visibilidad del chatbot
 export default function ScreenSuppliers() {
     const router = useRouter();
-    const [suppliers, setSuppliers] = useState<{ [key: string]: string }[]>([]);
-    const [initialSuppliers, setInitialSuppliers] = useState<{ [key: string]: string }[]>([]);
+    
+    const initialFetchDone = useRef(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [suppliers, setSuppliers] = useState<{ [key: string]: string }[]>([]);
     const [currentSupplier, setCurrentSupplier] = useState<SupplierDAO | null>(null);
+    const [initialSuppliers, setInitialSuppliers] = useState<{ [key: string]: string }[]>([]);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
-    const [searchTerm, setSearchTerm] = useState('');
-    const initialFetchDone = useRef(false);
-    
+
+
     useEffect(() => {
         if (!initialFetchDone.current) {
             fetchAllSuppliers();
@@ -240,6 +245,8 @@ export default function ScreenSuppliers() {
                 isOpen={isViewModalOpen}
                 onClose={() => setIsViewModalOpen(false)}
             />
+
+            <ChatBot />
         </div>
     );
 }

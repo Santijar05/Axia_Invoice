@@ -113,16 +113,6 @@ export default function ScreenMakeSale() {
       return;
     }
 
-    const venta: Venta = {
-      clientId,
-      electronicBill: false,
-      products: items.map(item => ({
-        tenantId: item.tenantId,
-        productId: item.productId,
-        quantity: item.quantity,
-      })),
-    };
-
     setIsInvoiceModalOpen(true);
   };
 

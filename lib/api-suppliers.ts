@@ -16,6 +16,27 @@ const fetchWithCredentials = async (url: string, options: RequestInit): Promise<
   return response;
 };
 
+export const findBetterSuppliers = async (productId: string, searchPriority: string) => {
+  try {
+    const response = await fetchWithCredentials(`${process.env.NEXT_PUBLIC_API_URL}/ai/find-better-suppliers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        productId,
+        searchPriority,
+      }),
+    });
+
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error('Error fetching better suppliers:', error);
+    throw error; 
+  }
+};
+
 export const getListSuppliers = async (): Promise<SupplierDAO[]> => {
   const url = `${API_BASE_URL}`;
   console.log('Fetching products from:', url);
