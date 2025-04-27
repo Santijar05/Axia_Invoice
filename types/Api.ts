@@ -29,16 +29,13 @@ export interface SaleItem {
     basePrice: number;
     tenantId: string; // ← agregar esto
 }  
-  
+
 export interface Venta {
     clientId: string;
+    totalPrice: number;
     electronicBill?: boolean;
-    products: {
-        tenantId: string; 
-        productId: string;
-        quantity: number;
-    }[];
-        payment?: {
+    products: SaleItemForAPI[];
+    payment?: {
         amount: number;
         method: string;
     };
@@ -76,6 +73,7 @@ export interface InvoiceProduct {
     productId: string;
     invoiceId: string;
     quantity: number;
+    product?: ProductDAO; 
 }
 
 export interface EmployeeDAO {
@@ -156,47 +154,8 @@ export interface ProductFormProps {
     onSuccess?: () => Promise<void> | void;
 }
 
-export interface SaleItem {
-    id: number;
-    name: string;
-    quantity: number;
-    stock: number;
-    tax: number;
-    price: number;
-    basePrice: number;
-    productId: string; 
-}
-
 export interface SaleItemForAPI {
-    productId: string;
-    quantity: number;
-}
-
-export interface CreatedInvoice {
-    id: string;
-    date: string;
-    totalPrice: number;
-    electronicBill: boolean;
-    clientId: string;
     tenantId: string;
-    invoiceProducts: SaleProduct[];
-}
-
-export interface SaleProduct {
     productId: string;
     quantity: number;
-}
-
-export interface Venta {
-    clientId: string;
-    electronicBill?: boolean;
-    products: {
-        tenantId: string; 
-        productId: string;
-        quantity: number;
-    }[];
-        payment?: {
-        amount: number;
-        method: string;
-    };
 }

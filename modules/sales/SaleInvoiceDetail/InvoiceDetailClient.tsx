@@ -80,15 +80,16 @@ export default function InvoiceDetailClient({ invoice }: InvoiceDetailClientProp
                             <p>No hay productos asociados.</p>
                         ) : (
                             <ul className="list-disc pl-5 space-y-2">
-                                {invoice.invoiceProducts.map((item, index) => (
-                                    <li key={item.id}>
-                                        <p><span className="text-gray-400">Producto ID:</span> {item.productId}</p>
-                                        <p><span className="text-gray-400">Cantidad:</span> {item.quantity}</p>
-                                    </li>
-                                ))}
+                            {invoice.invoiceProducts.map((item) => (
+                                <li key={item.id}>
+                                <p><span className="text-gray-400">Producto:</span> {item.product?.name}</p> 
+                                <p><span className="text-gray-400">Cantidad:</span> {item.quantity}</p>
+                                </li>
+                            ))}
                             </ul>
                         )}
                     </div>
+
                 </div>
             </div>
         </div>

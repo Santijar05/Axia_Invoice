@@ -11,6 +11,7 @@ import { SaleItem, SaleItemForAPI } from '@/types/Api';
 import SearchBarUniversal from '@/components/molecules/SearchBar';
 import { createSaleInvoice, createPayment } from '@/lib/api-sales';
 import { ToggleSwitch } from '@/components/molecules/ToggleSwitch';
+import { crearFacturaVenta } from '@/lib/api-saleInvoce';
 
 interface InvoiceModalProps {
   subtotal: number;
@@ -106,6 +107,8 @@ export default function InvoiceModal({
       setError('Debe seleccionar un cliente');
       return;
     }
+
+    console.log('User en InvoiceModal:', user);
     
     if (!user?.tenantId) {
       setError('Error de autenticación');
@@ -117,24 +120,24 @@ export default function InvoiceModal({
     
     try {
       const productsForAPI: SaleItemForAPI[] = items.map(item => ({
-        productId: item.productId || '', 
+        tenantId: user?.tenantId || '', 
+        productId: item.productId || '',
         quantity: item.quantity
       }));
       
-      const invoiceResponse = await createSaleInvoice({
-        tenantId: user.tenantId,
+      const invoiceResponse = await crearFacturaVenta({
         clientId: selectedClient.id,
         totalPrice: total,
         electronicBill: isElectronicBill,
         products: productsForAPI
-      }) as { invoice: { id: string } };
+      });
       
       await createPayment({
         tenantId: user.tenantId,
         amount: total,
         paymentMethod: paymentMethod,
         reference: `PAY-${Date.now()}`,
-        invoiceId: invoiceResponse.invoice.id
+        invoiceId: invoiceResponse.id
       });
 
       generatePDF();

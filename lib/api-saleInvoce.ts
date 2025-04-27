@@ -61,24 +61,9 @@ export const crearFacturaVenta = async (venta: Venta): Promise<CreatedInvoice> =
   const urlFactura = `${envVariables.API_URL}/sale-invoices`;
   console.log('Creando factura en:', urlFactura);
 
-  // Obtener precios de productos
-  const productResponses = await Promise.all(
-    venta.products.map(p =>
-      fetchWithCredentials<{ salePrice: number }>(
-        `${envVariables.API_URL}/products/${p.productId}`,
-        { method: 'GET' }
-      )
-    )
-  );
-
-  // Calcular precio total
-  const totalPrice = productResponses.reduce((acc, prod, i) => {
-    return acc + prod.salePrice * venta.products[i].quantity;
-  }, 0);
-
   const facturaPayload = {
     clientId: venta.clientId,
-    totalPrice,
+    totalPrice: venta.totalPrice,
     electronicBill: venta.electronicBill ?? false,
     payment: venta.payment ?? null
   };
@@ -105,39 +90,6 @@ export const crearFacturaVenta = async (venta: Venta): Promise<CreatedInvoice> =
       })
     )
   );
-
-  const urlPayment = `${envVariables.API_URL}/payments`;
-  // Registrar pago si aplica
-  if (venta.payment) {
-    await fetchWithCredentials<void>(urlPayment, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...venta.payment,
-        invoiceId: factura.id
-      })
-    });
-  }
-
-  const pdfUrl = `${envVariables.API_URL}/sale-invoices/${factura.id}/pdf`;
-  const pdfResponse = await fetch(pdfUrl, {
-    method: 'GET',
-    credentials: 'include',
-  });
-
-  if (!pdfResponse.ok) {
-    throw new Error('No se pudo generar el PDF de la factura');
-  }
-
-  const blob = await pdfResponse.blob();
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `factura-${factura.id}.pdf`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.URL.revokeObjectURL(url);
 
   return factura;
 };
