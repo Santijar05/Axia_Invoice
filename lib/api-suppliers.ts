@@ -16,6 +16,28 @@ const fetchWithCredentials = async (url: string, options: RequestInit): Promise<
   return response;
 };
 
+export async function getSectorTrends(tenantId: string, region: string, companySize: string) {
+  try {
+    const response = await fetchWithCredentials(`${process.env.NEXT_PUBLIC_API_URL}/ai/sector-trends`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ tenantId, region, companySize }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch sector trends');
+    }
+
+    const data = await response.json();
+    return data.trends;  
+  } catch (error) {
+    console.error('Error fetching sector trends:', error);
+    throw error;
+  }
+}
+
 export const findBetterSuppliers = async (productId: string, searchPriority: string) => {
   try {
     const response = await fetchWithCredentials(`${process.env.NEXT_PUBLIC_API_URL}/ai/find-better-suppliers`, {
