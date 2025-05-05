@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Filter } from 'lucide-react';
+import { HiMiniChevronDown, HiMiniChevronUp, HiMiniFunnel } from 'react-icons/hi2';
 
 interface TableFilterProps {
   headers: string[];
@@ -28,12 +28,12 @@ const TableFilter: React.FC<TableFilterProps> = ({ headers, onSort }) => {
           className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <Filter className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <HiMiniFunnel className="h-5 w-5 text-gray-400" aria-hidden="true" />
           Ordenar por
           {isOpen ? (
-            <ChevronUp className="h-4 w-4 ml-1" />
+            <HiMiniChevronUp className="h-4 w-4 ml-1" />
           ) : (
-            <ChevronDown className="h-4 w-4 ml-1" />
+            <HiMiniChevronDown className="h-4 w-4 ml-1" />
           )}
         </button>
       </div>

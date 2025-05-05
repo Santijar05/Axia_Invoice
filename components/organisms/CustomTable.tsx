@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from "react";
 import Image from "next/image";
-import { FilePenLine, Eye, Menu, Trash2 } from "lucide-react"; 
+import { LuFilePenLine, LuEye, LuMenu, LuTrash2 } from "react-icons/lu";
 
 import Dropdown from "../molecules/Dropdown";
 import CustomButton from "../atoms/CustomButton";
@@ -123,21 +123,21 @@ export default function CustomTable({
                   {options && (
                     <td className="p-3 text-homePrimary-200 relative" onClick={(e) => e.stopPropagation()}>
                       <Dropdown
-                        icon={<Menu color="white" size={25} />}
+                        icon={<LuMenu color="white" size={25} />}
                         options={[
                           ...(contextType !== 'invoices' ? [{
                             text: actionLabels.edit || 'Edit',
-                            icon: <FilePenLine size={20} />,
+                            icon: <LuFilePenLine size={20} />,
                             action: () => handleEdit(item.id)
                           }] : []),
                           { 
                             text: actionLabels.view || 'View', 
-                            icon: <Eye size={20} />,
+                            icon: <LuEye size={20} />,
                             action: () => handleView(item.id)
                           },
                           { 
                             text: actionLabels.delete || 'Delete', 
-                            icon: <Trash2 size={20} className="text-red-400" />,
+                            icon: <LuTrash2 size={20} className="text-red-400" />,
                             action: () => handleDelete(item.id),
                           }
                         ]}

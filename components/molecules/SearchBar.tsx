@@ -125,8 +125,6 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
 
       <div className="relative">
       <Input
-        icon={MagnifyingGlassIcon}
-
         placeholder={placeholder}
         value={searchTerm}
         onChange={handleSearch}

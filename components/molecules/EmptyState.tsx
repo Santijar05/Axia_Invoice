@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchX } from 'lucide-react';
+import { HiMiniMagnifyingGlassCircle } from 'react-icons/hi2';
 
 interface EmptyStateProps {
   message: string;
@@ -10,7 +10,7 @@ interface EmptyStateProps {
 const EmptyState: React.FC<EmptyStateProps> = ({ 
   message, 
   searchTerm, 
-  icon = <SearchX size={38} className="text-homePrimary-100" />
+  icon = <HiMiniMagnifyingGlassCircle size={38} className="text-homePrimary-100" />
 }) => {
   return (
     <div className="w-full py-12 flex flex-col items-center justify-center bg-transparent border border-homePrimary-400 rounded-md shadow-sm">

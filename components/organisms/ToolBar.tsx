@@ -1,5 +1,5 @@
 import React from "react";
-import { CirclePlus, Printer } from "lucide-react";
+import { HiPlusCircle, HiOutlinePrinter } from "react-icons/hi2";
 import CustomButton from "../atoms/CustomButton";
 
 interface ToolbarProps {
@@ -22,7 +22,7 @@ export default function Toolbar({ title, onAddNew, showAddButton = true, invoice
                             <CustomButton
                                 text="Agregar Nuevo/a" 
                                 style="px-4 py-2 rounded-lg text-white bg-homePrimary-400 hover:bg-blue-800" 
-                                icon={CirclePlus} 
+                                icon={HiPlusCircle} 
                                 onClickButton={onAddNew} 
                             />
                         )}
@@ -30,7 +30,7 @@ export default function Toolbar({ title, onAddNew, showAddButton = true, invoice
                         <CustomButton 
                             text="Imprimir Reporte" 
                             style="px-4 py-2 rounded-lg text-white bg-homePrimary hover:bg-blue-500" 
-                            icon={Printer} 
+                            icon={HiOutlinePrinter} 
                         />
                     </div>
                 )}

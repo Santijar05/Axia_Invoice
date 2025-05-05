@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronDown } from "lucide-react";
+import { HiChevronDown } from "react-icons/hi";
 
 interface Option {
     text: string;
@@ -50,7 +50,7 @@ export default function Dropdown({
             >
                 {useIconButton ? icon : (
                     <>
-                        {selected} <ChevronDown className="w-4 h-4" />
+                        {selected} <HiChevronDown className="w-4 h-4" />
                     </>
                 )}
             </button>
