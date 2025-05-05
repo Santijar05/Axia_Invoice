@@ -1,7 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { ClipboardPenLine } from 'lucide-react';
+import { FaPen } from 'react-icons/fa'; 
 import React, { useRef, ReactElement, cloneElement } from "react";
-import CustomButton from "../atoms/CustomButton";
 
 interface CustomModalProps {
     isOpen: boolean;
@@ -25,7 +24,7 @@ export default function CustomModalNoButton({ isOpen, onClose, title, children }
                 <Dialog.Content className="fixed inset-0 flex items-center justify-center p-4">
                     <div className="w-full border max-w-lg bg-black rounded-lg shadow-lg p-6 max-h-[80vh] overflow-y-auto">
                         <div className="flex flex-row gap-x-3">
-                            <ClipboardPenLine color="white" />
+                            <FaPen color="white" />
                             <Dialog.Title className="text-lg font-bold border-b pb-2 mb-4 text-homePrimary-200">{title}</Dialog.Title>
                         </div>
 

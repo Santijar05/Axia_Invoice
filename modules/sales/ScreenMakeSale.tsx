@@ -6,25 +6,22 @@ import Image from "next/image";
 
 import InvoiceModal from './InvoiceModal';
 import Input from '@/components/atoms/Input';
-import { ClientDAO, ProductDAO, SaleItem, Venta } from '@/types/Api';
-import { crearFacturaVenta } from '@/lib/api-saleInvoce';
+import { ProductDAO, SaleItem, Venta } from '@/types/Api';
 import SearchBarUniversal from '@/components/molecules/SearchBar';
 import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
 
 export default function ScreenMakeSale() {
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [tenantIdProduct, settenantIdProduct] = useState('');
-  const [clientes, setClientes] = useState<ClientDAO[]>([]);
   const [items, setItems] = useState<SaleItem[]>([]);
-  const [clientId, setClientId] = useState('');
+  const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [nextId, setNextId] = useState(1);
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState(0);
   const [name, setName] = useState('');
   const [tax, setTax] = useState(0);
-  const [productId, setProductId] = useState('');
-  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
 
   const resetSaleForm = () => {
     setItems([]);
@@ -168,13 +165,17 @@ export default function ScreenMakeSale() {
 
               <div className="flex flex-row space-x-7">
                 <div className="flex flex-col w-full">
-                  <label className="mb-1 text-sm font-medium text-white">Cantidad</label>
-                  <Input
-                    type="number"
-                    value={quantity}
-                    onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
-                    placeholder="Ingrese la cantidad"
-                  />
+                <label htmlFor="cantidad" className="mb-1 text-sm font-medium text-white">
+                  Cantidad
+                </label>
+                <input
+                  id="cantidad"
+                  className="flex-1 outline-none bg-transparent text-white w-full"
+                  placeholder="Ingrese la cantidad"
+                  type="number"
+                  defaultValue={5}
+                />
+
                 </div>
 
                 <div className="flex flex-col w-full">
@@ -190,7 +191,6 @@ export default function ScreenMakeSale() {
 
               <button
                 onClick={handleAddItem}
-                disabled={!name}
                 className="px-6 py-2 bg-homePrimary text-white rounded-md hover:bg-homePrimary-400 disabled:bg-gray-500 transition-colors w-full"
               >
                 Añadir producto
@@ -258,7 +258,6 @@ export default function ScreenMakeSale() {
 
             <button
               onClick={handleCompleteSale}
-              disabled={items.length === 0}
               className="w-full px-6 py-3 mt-4 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-500 transition-colors text-lg font-medium"
             >
               Finalizar venta

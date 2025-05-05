@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Search } from "lucide-react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 import Input from "@/components/atoms/Input";
 import { getListClientsByName } from "@/lib/api-clients";
@@ -124,12 +124,14 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
     <div className="w-full">
 
       <div className="relative">
-        <Input
-          icon={Search}
-          placeholder={placeholder}
-          value={searchTerm}
-          onChange={handleSearch}
-        />
+      <Input
+        icon={MagnifyingGlassIcon}
+
+        placeholder={placeholder}
+        value={searchTerm}
+        onChange={handleSearch}
+      />
+
       </div>
 
       {showResultsInternal && (

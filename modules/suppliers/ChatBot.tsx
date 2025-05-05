@@ -182,7 +182,7 @@ export default function ChatBot() {
             } else if (question === "companySize") {
                 setStep(4);
 
-                if (newAnswers.region && answer) { // Si ya tiene región y companySize
+                if (newAnswers.region && answer) { 
                     try {
                         setIsLoadingResults(true);
                         const trends = await getSectorTrends(user?.tenantId ?? '', newAnswers.region, answer);

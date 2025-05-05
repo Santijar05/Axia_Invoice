@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; 
 
 type InputProps = {
   placeholder?: string;
@@ -37,9 +37,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               className="text-gray-500 ml-2"
             >
               {showPassword ? (
-                <Eye color="white" size={20} />
+                <FaEye color="white" size={20} />
               ) : (
-                <EyeOff color="white" size={20} />
+                <FaEyeSlash color="white" size={20} />
               )}
             </button>
           )}

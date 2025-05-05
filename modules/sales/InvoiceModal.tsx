@@ -10,7 +10,6 @@ import Select from '@/components/atoms/select';
 import { SaleItem, SaleItemForAPI } from '@/types/Api';
 import SearchBarUniversal from '@/components/molecules/SearchBar';
 import { createPayment } from '@/lib/api-sales';
-import { ToggleSwitch } from '@/components/molecules/ToggleSwitch';
 import { crearFacturaVenta } from '@/lib/api-saleInvoce';
 
 interface InvoiceModalProps {
@@ -188,11 +187,7 @@ export default function InvoiceModal({
       <div className="mb-4">
         <div className="flex items-center justify-between">
           <span className='text-white'>Generar Factura Electrónica</span>
-          <ToggleSwitch
-            options={['No', 'Sí']}
-            activeIndex={isElectronicBill ? 1 : 0} 
-            onChange={(index) => setIsElectronicBill(index === 1)} 
-          />
+          
         </div>
       </div>
       
