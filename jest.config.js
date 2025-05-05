@@ -7,13 +7,11 @@ const createJestConfig = nextJest({
 const customJestConfig = {
     setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
     moduleNameMapper: {
-        // Soporte para imports con "@"
-        '^@/(.*)$':'<rootDir>/$1',
-        // Mock de archivos estáticos (imagenes, css)
-        '\\.(css|less|scss|sass)$':'identity-obj-proxy',
+        '^@/(.*)$': '<rootDir>/$1',
+        '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     },
 
     testEnvironment: 'jest-environment-jsdom',
 };
 
-module.exports = createJestConfig(customJestConfig); 
+module.exports = createJestConfig(customJestConfig);

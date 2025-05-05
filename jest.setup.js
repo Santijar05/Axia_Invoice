@@ -1,33 +1,42 @@
 import '@testing-library/jest-dom'; 
 
 Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
-    value: () => {
-      return {
-        fillRect: () => {},
-        clearRect: () => {},
-        getImageData: () => ({ data: [] }),
-        putImageData: () => {},
-        createImageData: () => [],
-        setTransform: () => {},
-        drawImage: () => {},
-        save: () => {},
-        fillText: () => {},
-        restore: () => {},
-        beginPath: () => {},
-        moveTo: () => {},
-        lineTo: () => {},
-        closePath: () => {},
-        stroke: () => {},
-        translate: () => {},
-        scale: () => {},
-        rotate: () => {},
-        arc: () => {},
-        fill: () => {},
-        measureText: () => ({ width: 0 }),
-        transform: () => {},
-        rect: () => {},
-        clip: () => {},
-      };
-    },
-  });
-  
+  value: () => {
+    return {
+      fillRect: () => {},
+      clearRect: () => {},
+      getImageData: () => ({ data: [] }),
+      putImageData: () => {},
+      createImageData: () => [],
+      setTransform: () => {},
+      drawImage: () => {},
+      save: () => {},
+      fillText: () => {},
+      restore: () => {},
+      beginPath: () => {},
+      moveTo: () => {},
+      lineTo: () => {},
+      closePath: () => {},
+      stroke: () => {},
+      translate: () => {},
+      scale: () => {},
+      rotate: () => {},
+      arc: () => {},
+      fill: () => {},
+      measureText: () => ({ width: 0 }),
+      transform: () => {},
+      rect: () => {},
+      clip: () => {},
+    };
+  },
+});
+
+global.TextEncoder = require('util').TextEncoder;
+global.TextDecoder = require('util').TextDecoder;
+
+global.Response = require('node-fetch').Response;
+
+global.BroadcastChannel = jest.fn().mockImplementation(() => ({
+  postMessage: jest.fn(),
+  close: jest.fn(),
+}));
