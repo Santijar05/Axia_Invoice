@@ -1,5 +1,5 @@
-import { envVariables } from "@/utils/config";
-import { SaleItemForAPI } from "@/types/Api";
+import { envVariables } from "@/src/utils/config";
+import { SaleItemForAPI } from "@/src/types/Api";
 
 const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promise<T> => {
   const response = await fetch(url, {
