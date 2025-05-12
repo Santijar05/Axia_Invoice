@@ -113,6 +113,7 @@ export interface UserDataRegister {
 export interface Supplier {
     name:string
 }
+
 export interface ProductDAO {
     tenantId: string;
     supplier: Supplier;

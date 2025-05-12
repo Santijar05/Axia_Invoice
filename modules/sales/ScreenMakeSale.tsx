@@ -1,4 +1,3 @@
-// ScreenMakeSale.tsx
 'use client';
 
 import { useState } from 'react';
@@ -6,25 +5,22 @@ import Image from "next/image";
 
 import InvoiceModal from './InvoiceModal';
 import Input from '@/components/atoms/Input';
-import { ClientDAO, ProductDAO, SaleItem, Venta } from '@/types/Api';
-import { crearFacturaVenta } from '@/lib/api-saleInvoce';
+import { ProductDAO, SaleItem } from '@/types/Api';
 import SearchBarUniversal from '@/components/molecules/SearchBar';
 import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
 
 export default function ScreenMakeSale() {
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [tenantIdProduct, settenantIdProduct] = useState('');
-  const [clientes, setClientes] = useState<ClientDAO[]>([]);
   const [items, setItems] = useState<SaleItem[]>([]);
-  const [clientId, setClientId] = useState('');
+  const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [nextId, setNextId] = useState(1);
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState(0);
   const [name, setName] = useState('');
   const [tax, setTax] = useState(0);
-  const [productId, setProductId] = useState('');
-  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
 
   const resetSaleForm = () => {
     setItems([]);
