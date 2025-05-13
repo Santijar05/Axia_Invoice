@@ -23,5 +23,83 @@
       "passwordMin": "Password must be at least 6 characters",
       "passwordMax": "Password must not exceed 50 characters"
     }
+  },  
+
+  "EmployeeDashboard": {
+    "latestProducts": "Latest Products",
+    "distributor": "Distributor",
+    "product": "Product",
+    "brand": "Brand",
+    "stock": "Stock",
+    "price": "Price"
+  },
+
+  "Employees": {
+    "title": "Employee Management",
+    "addNew": "Add New Employee",
+    "edit": "Edit Employee",
+    "listTitle": "Employee List",
+    "searchPlaceholder": "Search employees...",
+    "loading": "Loading employees...",
+    "noResults": "No employees found",
+    "noResultsFor": "No employees found for: \"{{term}}\"",
+    "fetchError": "Error fetching employees:",
+    "deleteError": "Error deleting employee:",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Name",
+      "role": "Role",
+      "email": "Email"
+    }
+  },
+
+  "employeeForm": {
+    "id": "ID",
+    "generated": "AUTO-GENERATED",
+    "role": "Role",
+    "roleExample": "E.g. admin",
+    "name": "Name",
+    "nameExample": "E.g. John",
+    "email": "Email*",
+    "emailExample": "E.g. john@example.com",
+    "password": "Password*",
+    "newPassword": "New Password",
+    "close": "Close",
+    "update": "Update Employee",
+    "create": "Create Employee",
+    "updateSuccess": "Employee updated successfully",
+    "updateError": "Error updating employee",
+    "noIdError": "Client ID not available",
+    "errorSubmit": "Error en onSubmit:"
+  },
+
+  "CustomTable":{
+    "edit": {
+      "clients": "Edit client",
+      "employees": "Edit employee",
+      "suppliers": "Edit supplier",
+      "invoices": "Edit invoice",
+      "default": "Edit"
+    },
+    "view": {
+      "clients": "View client",
+      "employees": "View employee",
+      "suppliers": "View supplier",
+      "invoices": "View invoice",
+      "default": "View"
+    },
+    "delete": {
+      "clients": "Delete client",
+      "employees": "Delete employee",
+      "suppliers": "Delete supplier",
+      "invoices": "Delete invoice",
+      "default": "Delete"
+    },
+    "options": "Options",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "delete_confirmation": "Are you sure you want to delete this?"
   }
 }

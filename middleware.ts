@@ -1,41 +1,35 @@
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { jwtDecode } from "jwt-decode";
-import { routing } from './i18n/routing';
+ import { NextRequest, NextResponse } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+import { jwtDecode } from "jwt-decode";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-export async function middleware(request: NextRequest) {
-  // Aplica el middleware de internacionalización primero
+export function middleware(request: NextRequest) {
   const intlResponse = intlMiddleware(request);
 
-  const locale = request.nextUrl.locale || 'es';
+  const pathnameParts = request.nextUrl.pathname.split('/');
+  const locale = pathnameParts[1] ?? routing.defaultLocale;
+  const pathname = '/' + pathnameParts.slice(2).join('/');
+
   const authToken = request.cookies.get("authToken")?.value;
-  const url = new URL(request.url);
-  const rawPathname = url.pathname;
-  const pathname = removeLocalePrefix(rawPathname, locale);
 
-  function removeLocalePrefix(pathname: string, locale: string): string {
-    if (pathname.startsWith(`/${locale}`)) {
-      return pathname.replace(`/${locale}`, '') || '/';
-    }
-    return pathname;
-  }
-
-  console.log("Middleware ejecutado en:", pathname);
-  console.log("Token presente:", authToken ? "Sí" : "No");
+  console.log("Locale:", locale);
+  console.log("Pathname:", pathname);
+  console.log("Token:", authToken ? "Sí" : "No");
 
   const publicRoutes = ["/login", "/register"];
   const routesClients = ["/", "/aboutus", "/contactus"];
 
+  // Rutas públicas y de clientes sin token
   if ((publicRoutes.includes(pathname) || routesClients.includes(pathname)) && !authToken) {
     return intlResponse;
   }
 
+  // Si no hay token y no es pública: redirige
   if (!authToken) {
-    console.log("Sin token. Redirigiendo a /login.");
-    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+    console.log("🔁 Sin token. Redirigiendo a /login");
+    return NextResponse.redirect(new URL(`/${locale}/login`, request.nextUrl.origin));
   }
 
   try {
@@ -43,19 +37,50 @@ export async function middleware(request: NextRequest) {
     const userRole = decoded.role;
 
     const allowedRoutes = {
-      USER: ["/employee", "/store/products", "/sales/make-sales"],
-      ADMIN: ["/admin", "/box/cash-history", "/box/manage-cash", "/store/products", "/sales/make-sales", "/sales/sales-invoices", "/shopping/make-purchase", "/shopping/suppliers", "/users/customers", "/users/employees"],
-      SUPERADMIN: ["/admin", "/box/cash-history", "/box/manage-cash", "/store/products", "/sales/make-sales", "/sales/sales-invoices", "/shopping/suppliers", "/shopping/make-purchase", "/users/customers", "/users/employees", "/sales/view-sales"],
+      USER: [
+        "/employee", 
+        "/store/products", 
+        "/sales/make-sales",
+        "/shopping/make-purchase",
+      ],
+
+      ADMIN: [
+        "/admin", 
+        "/box/cash-history", 
+        "/box/manage-cash", 
+        "/store/products", 
+        "/sales/make-sales", 
+        "/sales/sales-invoices", 
+        "/shopping/make-purchase", 
+        "/shopping/suppliers", 
+        "/users/customers", 
+        "/users/employees"
+      ],
+
+      SUPERADMIN:[
+        "/admin", 
+        "/box/cash-history", 
+        "/box/manage-cash", 
+        "/store/products", 
+        "/sales/make-sales", 
+        "/sales/sales-invoices", 
+        "/shopping/make-purchase", 
+        "/shopping/suppliers", 
+        "/users/customers", 
+        "/users/employees"
+      ],
+    
     };
 
-    if (userRole in allowedRoutes) {
-      const userRoutes = allowedRoutes[userRole as keyof typeof allowedRoutes];
+    const userRoutes = allowedRoutes[userRole as keyof typeof allowedRoutes];
 
-      if (!userRoutes.some(route => pathname.startsWith(route))) {
-        return NextResponse.redirect(new URL(`/${locale}/${userRole === "ADMIN" || userRole === "SUPERADMIN" ? "admin" : "employee"}`, request.url));
+    const fallback = userRole === "ADMIN" || userRole === "SUPERADMIN" ? "/admin" : "/employee";
+
+    // Solo redirige si NO está en la ruta esperada
+    if (!userRoutes?.some(route => pathname.startsWith(route))) {
+      if (pathname !== fallback) {
+        return NextResponse.redirect(new URL(`/${locale}${fallback}`, request.nextUrl.origin));
       }
-    } else {
-      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
     }
 
     const response = intlResponse;
@@ -64,14 +89,12 @@ export async function middleware(request: NextRequest) {
 
   } catch (error) {
     console.error("Error al decodificar el token:", error);
-    const response = NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+    const response = NextResponse.redirect(new URL(`/${locale}/login`, request.nextUrl.origin));
     response.headers.set("Set-Cookie", "authToken=; Path=/; HttpOnly; Max-Age=0");
     return response;
   }
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|trpc|_next|_vercel|.*\\..*).*)',
-  ],
+  matcher: '/((?!api|trpc|_next|_vercel|.*\\..*).*)'
 };

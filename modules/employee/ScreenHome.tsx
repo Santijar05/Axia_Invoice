@@ -1,11 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl";
 import MetricCards from "@/components/molecules/MetricCard"
 import CustomTable from "@/components/organisms/CustomTable"
 
 export default function DashboardPage() {
   const [tableData, setTableData] = useState<{ [key: string]: string }[]>([]);
+  const t = useTranslations("EmployeeDashboard");
 
   useEffect(() => {
     const mockData = Array(8).fill(null).map((_, index) => ({
@@ -22,15 +24,24 @@ export default function DashboardPage() {
 
   return (
     <div className="p-4">
+
       <MetricCards />
       <div className="pt-10">
+
         <CustomTable 
-          title="Últimos Productos" 
-          headers={["Distribuidor", "Producto", "Marca", "Stock", "Precio"]}
+          title={t("latestProducts")}
+          headers={[
+            t("distributor"),
+            t("product"),
+            t("brand"),
+            t("stock"),
+            t("price")
+          ]}
           options={false} 
           data={tableData}
           contextType="products"
         />
+
       </div>
     </div>
   )

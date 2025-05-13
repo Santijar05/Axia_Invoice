@@ -1,6 +1,8 @@
 'use client'
-import React, { useState } from "react";
+
 import Image from "next/image";
+import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import { FilePenLine, Eye, Menu, Trash2 } from "lucide-react"; 
 
 import Dropdown from "../molecules/Dropdown";
@@ -32,23 +34,11 @@ export default function CustomTable({
   data = [], 
   contextType = 'products',
   customActions,
-  actionLabels = {
-    edit: contextType === 'clients' ? 'Editar cliente' : 
-          contextType === 'employees' ? 'Editar empleado' : 
-          contextType === 'suppliers' ? 'Editar proveedor' :
-          contextType === 'invoices' ? 'Editar factura' : 'Editar',
-    view: contextType === 'clients' ? 'Ver cliente' : 
-          contextType === 'employees' ? 'Ver empleado' :
-          contextType === 'suppliers' ? 'Ver proveedor' :
-          contextType === 'invoices' ? 'Ver factura' : 'Ver',
-    delete: contextType === 'clients' ? 'Eliminar cliente' : 
-            contextType === 'employees' ? 'Eliminar empleado' :
-            contextType === 'suppliers' ? 'Eliminar proveedor' :
-            contextType === 'invoices' ? 'Eliminar factura' : 'Eliminar' 
-  }
+  actionLabels
 }: CustomTableProps) {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const t = useTranslations("CustomTable");
   const itemsPerPage = 10;
 
   const handleToggle = (index: number) => {
@@ -73,7 +63,7 @@ export default function CustomTable({
 
   const handleDelete = (id: string) => {
     if (customActions?.delete) {
-      if (confirm(`Estas seguro que quieres eliminar el ${contextType}?`)) {
+      if (confirm(`${t('delete_confirmation'+ contextType)}?`)) {
         customActions.delete(id);
       }
     } else {
@@ -87,6 +77,12 @@ export default function CustomTable({
     (currentPage - 1) * itemsPerPage, 
     Math.min(currentPage * itemsPerPage, safeData.length)
   );
+
+  const labels = actionLabels || {
+    edit: t(`edit.${contextType}`) || t('edit.default'),
+    view: t(`view.${contextType}`) || t('view.default'),
+    delete: t(`delete.${contextType}`) || t('delete.default'),
+  };
 
   return (
     <div className="relative w-full h-screen text-white flex justify-center items-center">
@@ -108,7 +104,7 @@ export default function CustomTable({
                 {headers.map((header, index) => (
                   <th key={index} className="p-3 text-left text-medium text-homePrimary-200">{header}</th>
                 ))}
-                {options && <th className="p-3 text-left text-medium text-homePrimary-200">Options</th>}
+                {options && <th className="p-3 text-left text-medium text-homePrimary-200">{t('options')}</th>}
               </tr>
             </thead>
 
@@ -126,17 +122,17 @@ export default function CustomTable({
                         icon={<Menu color="white" size={25} />}
                         options={[
                           ...(contextType !== 'invoices' ? [{
-                            text: actionLabels.edit || 'Edit',
+                            text: labels.edit || 'Edit',
                             icon: <FilePenLine size={20} />,
                             action: () => handleEdit(item.id)
                           }] : []),
                           { 
-                            text: actionLabels.view || 'View', 
+                            text: labels.view || 'View', 
                             icon: <Eye size={20} />,
                             action: () => handleView(item.id)
                           },
                           { 
-                            text: actionLabels.delete || 'Delete', 
+                            text: labels.delete || 'Delete', 
                             icon: <Trash2 size={20} className="text-red-400" />,
                             action: () => handleDelete(item.id),
                           }
@@ -157,20 +153,20 @@ export default function CustomTable({
         {totalPages > 1 && (
           <div className="flex justify-between items-center p-4">
             <CustomButton
-              text="Previous"
+              text={t('previous')}
               onClickButton={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               style="bg-homePrimary rounded disabled:opacity-50 hover:bg-blue-800"
               typeButton="button"
               disabled={currentPage === 1}
             />
             <div>
-              <span className="text-homePrimary-200"> Page </span>
+              <span className="text-homePrimary-200"> {t('page')} </span>
               <span className="text-homePrimary"> {currentPage} </span>
-              <span className="text-homePrimary-200"> of </span>
+              <span className="text-homePrimary-200">{t('of')} </span>
               <span className="text-homePrimary"> {totalPages} </span>
             </div>
             <CustomButton
-              text="Next"
+              text={t('next')}
               onClickButton={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               style="bg-homePrimary rounded disabled:opacity-50 hover:bg-blue-800"
               typeButton="button"

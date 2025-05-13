@@ -1,5 +1,6 @@
 import React, { forwardRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
 import { EmployeeDAO } from "@/types/Api";
@@ -29,6 +30,8 @@ interface EmployeeFormProps {
 }
 
 const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ employee, onSuccess }, ref) => {
+    const t = useTranslations();
+
     const {
         register,
         handleSubmit,
@@ -53,7 +56,7 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
     const onSubmit = async (data: EmployeeFormData) => {
     
         if (!employee?.id) {
-            alert("ID de cliente no disponible");
+            alert(t("employeeForm.noIdError"));
             return;
         }
     
@@ -70,14 +73,14 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
     
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || "Error al actualizar el empleado");
+                throw new Error(errorData.message || t("employeeForm.updateError"));
             }
     
-            alert("Empleado actualizado correctamente");
+            alert(t("employeeForm.updateSuccess"));
             if (onSuccess) onSuccess();
             
         } catch (error) {
-            console.error("Error en onSubmit:", error);
+            console.error(t("employeeForm.errorSubmit"), error);
         }
     };
 
@@ -85,9 +88,9 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
     return (
         <form ref={ref} onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-                <label className="text-sm font-semibold text-gray-500">ID</label>
+                <label className="text-sm font-semibold text-gray-500">{t("employeeForm.id")}</label>
                 <Input
-                    placeholder="AUTOGENERADO"
+                    placeholder={t("employeeForm.generated")}
                     type="text"
                     disabled
                     {...register("id")}
@@ -95,9 +98,9 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Role</label>
+                <label className="text-sm font-semibold text-gray-500">{t("employeeForm.role")}</label>
                 <Input 
-                    placeholder="Ej. admin" 
+                    placeholder={t("employeeForm.roleExample")} 
                     type="text" 
                     disabled
                     {...register("role")} 
@@ -106,9 +109,9 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Nombre</label>
+                <label className="text-sm font-semibold text-gray-500">{t("employeeForm.name")}</label>
                 <Input 
-                    placeholder="Ej. Juan" 
+                    placeholder={t("employeeForm.nameExample")}
                     type="text" 
                     {...register("name")} 
                 />
@@ -116,9 +119,9 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Email*</label>
+                <label className="text-sm font-semibold text-gray-500">{t("employeeForm.email")}</label>
                 <Input 
-                    placeholder="Ej. juan@example.com" 
+                    placeholder={t("employeeForm.emailExample")} 
                     type="email" 
                     {...register("email")} 
                 />
@@ -127,10 +130,10 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
 
             <div>
                 <label className="text-sm font-semibold text-gray-500">
-                    {employee?.id ? "Nueva Contraseña" : "Contraseña*"}
+                    {employee?.id ? t("employeeForm.newPassword") : t("employeeForm.password")}
                 </label>
                 <Input 
-                    placeholder={"Contraseña"} 
+                    placeholder={t("employeeForm.password")}
                     type="password" 
                     {...register("password")} 
                 />
@@ -138,8 +141,8 @@ const EmployeeFormEdit = forwardRef<HTMLFormElement, EmployeeFormProps>(({ emplo
             </div>
 
             <div className="col-span-2 flex justify-end gap-2 mt-4">
-                <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
-                <CustomButton text={employee?.id ? 'Actualizar Empleado' : 'Crear Empleado'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
+                <CustomButton text={t("employeeForm.close")} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
+                <CustomButton text={employee?.id ? t("employeeForm.update") : t("employeeForm.create")} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
             </div>
         </form>
     );

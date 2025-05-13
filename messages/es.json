@@ -23,5 +23,83 @@
       "passwordMin": "La contraseña debe tener al menos 6 caracteres",
       "passwordMax": "La contraseña no puede exceder 50 caracteres"
     }
+  }, 
+
+  "EmployeeDashboard": {
+    "latestProducts": "Últimos Productos",
+    "distributor": "Distribuidor",
+    "product": "Producto",
+    "brand": "Marca",
+    "stock": "Stock",
+    "price": "Precio"
+  }, 
+
+  "Employees": {
+    "title": "Gestión de Empleados",
+    "addNew": "Agregar Nuevo Empleado",
+    "edit": "Editar Empleado",
+    "listTitle": "Lista de Empleados",
+    "searchPlaceholder": "Buscar empleados...",
+    "loading": "Cargando empleados...",
+    "noResults": "No se encontraron empleados",
+    "noResultsFor": "No se encontraron empleados para: \"{searchTerm}\"",
+    "fetchError": "Error al obtener empleados:",
+    "deleteError": "Error al eliminar empleado:",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Nombre",
+      "role": "Rol",
+      "email": "Correo"
+    }
+  },
+
+  "employeeForm": {
+    "id": "ID",
+    "generated": "AUTOGENERADO",
+    "role": "Rol",
+    "roleExample": "Ej. admin",
+    "name": "Nombre",
+    "nameExample": "Ej. Juan",
+    "email": "Email*",
+    "emailExample": "Ej. juan@example.com",
+    "password": "Contraseña*",
+    "newPassword": "Nueva Contraseña",
+    "close": "Cerrar",
+    "update": "Actualizar Empleado",
+    "create": "Crear Empleado",
+    "updateSuccess": "Empleado actualizado correctamente",
+    "updateError": "Error al actualizar el empleado",
+    "noIdError": "ID de cliente no disponible",
+    "errorSubmit": "Error al realizar el envío:"
+  },
+
+  "CustomTable":{
+    "edit": {
+      "clients": "Editar cliente",
+      "employees": "Editar empleado",
+      "suppliers": "Editar proveedor",
+      "invoices": "Editar factura",
+      "default": "Editar"
+    },
+    "view":{
+      "clients": "Ver cliente",
+      "employees": "Ver empleado",
+      "suppliers": "Ver proveedor",
+      "invoices": "Ver factura",
+      "default": "Ver"
+    },
+    "delete": {
+      "clients": "Eliminar cliente",
+      "employees": "Eliminar empleado",
+      "suppliers": "Eliminar proveedor",
+      "invoices": "Eliminar factura",
+      "default": "Eliminar"
+    },
+    "options": "Opciones",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "page": "Página",
+    "of": "de",
+    "delete_confirmation": "¿Estás seguro de que deseas eliminar este?"
   }
 }
