@@ -1,6 +1,27 @@
 {
-  "HomePage": {
-    "title": "Hola",
-    "about": "Bienvenido a nuestro sitio"
+  "EmployeeForm": {
+    "codeLabel": "Código",
+    "codePlaceholder": "AUTOGENERADO",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "Ej. Juan",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "Ej. Juan@gmail.com",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "Contraseña",
+    "roleLabel": "Rol",
+    "rolePlaceholder": "Ej. admin",
+    "createButton": "Crear Cliente",
+    "closeButton": "Cerrar",
+    "success": "Empleado creado exitosamente",
+    "connectionError": "Error de conexión. Inténtalo nuevamente.",
+    "errors": {
+      "nameMin": "El nombre debe tener al menos 3 caracteres",
+      "nameMax": "El nombre no puede exceder 50 caracteres",
+      "roleRequired": "Debes seleccionar un rol",
+      "emailInvalid": "Debe ser un email válido",
+      "emailMax": "El email no puede exceder 100 caracteres",
+      "passwordMin": "La contraseña debe tener al menos 6 caracteres",
+      "passwordMax": "La contraseña no puede exceder 50 caracteres"
+    }
   }
 }

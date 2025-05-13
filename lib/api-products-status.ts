@@ -1,4 +1,4 @@
-import { ProductDAO } from "@/src/types/Api";
+import { ProductDAO } from "@/types/Api";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/products`;
 

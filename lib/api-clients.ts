@@ -1,5 +1,5 @@
-import { envVariables } from "@/src/utils/config";
-import { ClientDAO } from "@/src/types/Api";
+import { envVariables } from "@/utils/config";
+import { ClientDAO } from "@/types/Api";
 
 const fetchWithCredentials = async <T>(url: string, options: RequestInit): Promise<T> => {
   const response = await fetch(url, {
