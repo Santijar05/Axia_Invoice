@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import React, { useState, useEffect } from "react";
 import { 
   User, 
@@ -33,6 +33,7 @@ type UserRole = "EMPLOYEE" | "ADMIN" | "SUPERADMIN" | null;
 
 export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   const t = useTranslations("sidebar");
+  const locale = useLocale();
 
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -76,7 +77,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     );
   }
 
-  const basePath = role === "EMPLOYEE" ? "/employee" : "/admin";
+  const basePath = role === "EMPLOYEE" ? `/${locale}/employee` : `/${locale}/admin`;
 
   const menuItems: MenuItem[] = [
     { 
@@ -111,7 +112,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
       subOptions: [
         { 
           label: t("products"), 
-          href: "/store/products",
+          href: `/${locale}/store/products`,
           allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
       ],
@@ -123,12 +124,12 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
       subOptions: [
         { 
           label: t("makeSales"),
-          href: "/sales/make-sales",
+          href: `/${locale}/sales/make-sales`,
           allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
         { 
           label: t("viewSales"),
-          href: "/sales/sales-invoices",
+          href: `/${locale}/sales/sales-invoices`,
           allowedRoles: ["ADMIN", "SUPERADMIN"]
         },
       ],
@@ -141,14 +142,14 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [
           { 
             label: t("makePurchase"),
-            href: "/shopping/make-purchase",
+            href: `/${locale}/shopping/make-purchase`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           }
         ] : []),
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [
           { 
             label: t("supplier"),
-            href: "/shopping/suppliers",
+            href: `/${locale}/shopping/suppliers`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           }
         ] : []),
@@ -162,12 +163,12 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
         subOptions: [
           { 
             label: t("customers"), 
-            href: "/users/customers",
+            href: `/${locale}/users/customers`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
           { 
             label: t("employees"),
-            href: "/users/employees",
+            href: `/${locale}/users/employees`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
         ],
@@ -242,7 +243,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
       ))}
       <div className="mt-auto p-2">
         <Link 
-          href="/login"
+          href={`/${locale}/login`}
           onClick={(e) => {
             e.preventDefault(); 
 
@@ -250,7 +251,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
 
             useUserStore.getState().setRole(null);
 
-            window.location.href = "/login";
+            window.location.href = `/${locale}/login`;
           }}
           className={`flex items-center gap-3 p-2 rounded-lg text-white transition-colors ${
             !isOpen ? "justify-center" : ""

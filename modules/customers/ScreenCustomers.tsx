@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 import CustomerForm from "./CustomerForm";
 import CustomerFormEdit from "./CustomerFormEdit";
@@ -18,6 +18,7 @@ import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
 export default function ScreenCustomers() {
     const router = useRouter();
     const t = useTranslations("customers");
+    const locale = useLocale();
 
     const initialFetchDone = useRef(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -145,7 +146,7 @@ export default function ScreenCustomers() {
                 lastName: clientToView["last name"],
                 email: clientToView.email,
             });
-            router.push(`/users/customers/${clientId}`);
+            router.push(`/${locale}/users/customers/${clientId}`);
         }
     };
 

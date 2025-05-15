@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 import { BrandSection } from "../molecules/homeFooter/BrandSection";
 import { LinksColumn } from "../molecules/homeFooter/Links";
@@ -9,18 +9,19 @@ interface HomeFooterProps {
 
 export default function HomeFooter({style}: HomeFooterProps) {
     const t = useTranslations("footer");
+    const locale = useLocale();
 
     const quickLinks = [
-        { href: "/", label: t("quickLinks.home") },
-        { href: "/services", label: t("quickLinks.services") },
-        { href: "/aboutus", label: t("quickLinks.aboutUs") },
-        { href: "/contactus", label: t("quickLinks.contact") },
+        { href: `/${locale}/`, label: t("quickLinks.home") },
+        { href: `/${locale}/services`, label: t("quickLinks.services") },
+        { href: `/${locale}/aboutus`, label: t("quickLinks.aboutUs") },
+        { href: `/${locale}/contactus`, label: t("quickLinks.contact") },
     ];
 
     const copyrightLinks = [
-        { href: "/privacy", label: t("copyright.privacy") },
-        { href: "/terms", label: t("copyright.terms") },
-        { href: "/about", label: t("copyright.about") },
+        { href: `/${locale}/privacy`, label: t("copyright.privacy") },
+        { href: `/${locale}/terms`, label: t("copyright.terms") },
+        { href: `/${locale}/about`, label: t("copyright.about") },
     ];
 
     const socialLinks = [

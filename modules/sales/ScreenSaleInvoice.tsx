@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 
 import Toolbar from "@/components/organisms/ToolBar";
@@ -11,6 +11,7 @@ import { deleteSaleInvoice, getListSaleInvoices } from "@/lib/api-saleInvoce";
 
 export default function ScreenInvoices() {
     const router = useRouter();
+    const locale = useLocale();
     const [invoices, setInvoices] = useState<{ [key: string]: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -57,7 +58,7 @@ export default function ScreenInvoices() {
     };
 
     const handleViewInvoice = (invoiceId: string) => {
-        router.push(`/sales/sales-invoices/${invoiceId}`);
+        router.push(`/${locale}/sales/sales-invoices/${invoiceId}`);
     };
 
     const handleDeleteInvoice = async (invoiceId: string) => {

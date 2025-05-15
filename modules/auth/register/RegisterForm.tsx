@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import Select from "@/components/atoms/select";
@@ -24,6 +24,7 @@ type RegisterFormData = {
 const RegisterForm: React.FC = () => {
   const router = useRouter();
   const t = useTranslations("register");
+  const locale = useLocale();
   const registerSchema = registerScheme(t);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,7 +50,7 @@ const RegisterForm: React.FC = () => {
       if (response.status === 201) {
         const responseData = await response.json();
         console.log("Registro exitoso:", responseData);
-        router.push("/login");
+        router.push(`/${locale}/login`);
       } else {
         const errorData = await response.json().catch(() => ({
           message: t("unknownServerError")
@@ -143,7 +144,7 @@ const RegisterForm: React.FC = () => {
       <div className="w-full items-center pl-3 pr-3">
         <div className="justify-center pt-7 flex flex-row gap-2">
           <p className="text-sm text-center">{t("joinedBefore")}</p>
-          <Link href="/login" className="text-secondary">
+          <Link href={`/${locale}/login`} className="text-secondary">
             <p className="text-sm text-center">
               {t("buttons.login")}
             </p>

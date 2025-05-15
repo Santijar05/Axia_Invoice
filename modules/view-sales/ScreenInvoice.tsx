@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations, useLocale } from "next-intl";
 
 import CustomTable from "@/components/organisms/CustomTable";
 import Toolbar from "@/components/organisms/ToolBar";
@@ -10,6 +11,9 @@ import { deleteSaleInvoice, getListSaleInvoices } from "@/lib/api-saleInvoce";
 
 export default function ScreenInvoices() {
     const router = useRouter();
+    const locale = useLocale();
+    const t = useTranslations("invoices");
+
     const [invoices, setInvoices] = useState<{ [key: string]: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -51,7 +55,7 @@ export default function ScreenInvoices() {
     };
 
     const handleViewInvoice = (invoiceId: string) => {
-        router.push(`/sales/sales-invoices/${invoiceId}`);
+        router.push(`/${locale}/sales/sales-invoices/${invoiceId}`);
     };
 
     const handleDeleteInvoice = async (invoiceId: string) => {
@@ -68,7 +72,7 @@ export default function ScreenInvoices() {
         <div className="container mx-auto">
             <Toolbar
                 title="Gestión de Facturas"
-                onAddNew={() => router.push("/sales/make-sales")}
+                onAddNew={() => router.push(`/${locale}/sales/make-sales`)}
             />
 
             {isLoading ? (
