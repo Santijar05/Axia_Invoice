@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { 
-  User, Home, Truck, ShoppingCart, ChevronDown, ChevronUp, HandCoins, ArchiveRestore, LogOut} from "lucide-react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { useTranslations } from "next-intl";
+import React, { useState, useEffect } from "react";
+import { 
+  User, 
+  Home, 
+  Truck, 
+  ShoppingCart,
+  ChevronDown, 
+  ChevronUp, 
+  HandCoins, 
+  ArchiveRestore, 
+  LogOut
+} from "lucide-react";
 
 import { useUserStore } from "@/store/UserStore";
 
@@ -22,6 +32,8 @@ type MenuItem = {
 type UserRole = "EMPLOYEE" | "ADMIN" | "SUPERADMIN" | null;
 
 export default function Sidebar({ isOpen }: { isOpen: boolean }) {
+  const t = useTranslations("sidebar");
+
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { role, setRole } = useUserStore();
@@ -59,7 +71,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
       <aside className={`bg-black min-h-[calc(100vh-64px)] flex flex-col items-center justify-center ${
         isOpen ? "w-56" : "w-14"
       }`}>
-        <div className="animate-pulse text-gray-500">Loading...</div>
+        <div className="animate-pulse text-gray-500">{t("loading")}</div>
       </aside>
     );
   }
@@ -69,23 +81,23 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   const menuItems: MenuItem[] = [
     { 
       icon: Home, 
-      label: "Inicio", 
+      label: t("home"), 
       href: basePath,
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
     },
     ...(role === "ADMIN" || role === "SUPERADMIN" ? [
       { 
         icon: HandCoins, 
-        label: "Box",
+        label: t("box"),
         allowedRoles: ["ADMIN", "SUPERADMIN"],
         subOptions: [
           { 
-            label: "History Cash", 
+            label: t("historyCash"),
             href: `${basePath}/box/cash-history`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
           { 
-            label: "Manage Cash", 
+            label: t("manageCash"),
             href: `${basePath}/box/manage-cash`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
@@ -94,11 +106,11 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     ] : []),
     { 
       icon: ArchiveRestore, 
-      label: "Tienda",
+      label: t("store"),
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
-          label: "Productos", 
+          label: t("products"), 
           href: "/store/products",
           allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
@@ -106,16 +118,16 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     },
     { 
       icon: Truck, 
-      label: "Ventas",
+      label: t("sales"),
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
-          label: "Hacer ventas", 
+          label: t("makeSales"),
           href: "/sales/make-sales",
           allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
         { 
-          label: "Ver ventas", 
+          label: t("viewSales"),
           href: "/sales/sales-invoices",
           allowedRoles: ["ADMIN", "SUPERADMIN"]
         },
@@ -123,19 +135,19 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     },
     { 
       icon: ShoppingCart, 
-      label: "Compras",
+      label: t("shopping"),
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [
           { 
-            label: "Make Purchase", 
+            label: t("makePurchase"),
             href: "/shopping/make-purchase",
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           }
         ] : []),
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [
           { 
-            label: "Supplier", 
+            label: t("supplier"),
             href: "/shopping/suppliers",
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           }
@@ -145,16 +157,16 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     ...(role === "ADMIN" || role === "SUPERADMIN" ? [
       { 
         icon: User, 
-        label: "Usuarios",
+        label: t("users"),
         allowedRoles: ["ADMIN", "SUPERADMIN"],
         subOptions: [
           { 
-            label: "Clientes", 
+            label: t("customers"), 
             href: "/users/customers",
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
           { 
-            label: "Empleados", 
+            label: t("employees"),
             href: "/users/employees",
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
@@ -245,7 +257,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
           }`}
         >
           <LogOut className="h-5 w-5 text-" />
-          {isOpen && <span className="text-gray-500">Cerrar sesión</span>}
+          {isOpen && <span className="text-gray-500">{t("logout")}</span>}
         </Link>
       </div>
     </aside>

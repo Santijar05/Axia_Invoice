@@ -4,6 +4,8 @@ import Link from 'next/link';
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation"; 
+import { useTranslations } from 'next-intl';
+
 import { loginUser } from "@/request/access";
 import Input from "../../../components/atoms/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,12 +19,15 @@ type LoginFormData = {
 };
 
 const LoginForm: React.FC = () => {
+  const t = useTranslations("login"); 
+  const loginSchema = loginScheme(t);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginScheme),
+    resolver: zodResolver(loginSchema),
   });
 
   const [loading, setLoading] = useState(false);
@@ -51,11 +56,11 @@ const LoginForm: React.FC = () => {
       } else {
         // Manejar respuesta de error
         const errorData = await response.json();
-        setErrorMessage(errorData.error || "Error de autenticación");
+        setErrorMessage(errorData.error || t("authError"));
       }
     } catch (error) {
       console.error(error);
-      setErrorMessage("Error de conexión. Inténtalo nuevamente.");
+      setErrorMessage(t("connectionError"));
     } finally {
       setLoading(false);
     }
@@ -69,7 +74,7 @@ const LoginForm: React.FC = () => {
       >
         <div className="w-full mb-3">
           <Input
-            placeholder="Correo electrónico"
+            placeholder={t("emailPlaceholder")}
             {...register("email")}
           />
           {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
@@ -77,7 +82,7 @@ const LoginForm: React.FC = () => {
 
         <div className="w-full mb-7">
           <Input
-            placeholder="Contraseña"
+            placeholder={t("passwordPlaceholder")}
             type="password"
             {...register("password")}
           />
@@ -92,7 +97,7 @@ const LoginForm: React.FC = () => {
 
         <div className="w-full">
           <CustomButton 
-            text={loading ? "Loading..." : "INGRESAR"}
+            text={loading ? t("loading") : t("login")}
             style="w-full text-white bg-homePrimary"
             typeButton='submit'
             disabled={loading}
@@ -102,12 +107,12 @@ const LoginForm: React.FC = () => {
 
       <div className="w-full items-center pl-3 pr-3">
         <div className="flex justify-between w-full text-sm text-white mt-2">
-          <Link href="/register">olvidaste tu contraseña?</Link>
+          <Link href="/register">{t("forgotPassword")}</Link>
         </div>
 
         <div className="relative flex items-center w-full my-4">
           <span className="flex-grow border-t border-gray-300"></span>
-          <span className="px-2 text-white text-sm">o continuar con</span>
+          <span className="px-2 text-white text-sm">{t("orContinueWith")}</span>
           <span className="flex-grow border-t border-gray-300"></span>
         </div>
 

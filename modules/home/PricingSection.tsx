@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import Image from "next/image";
 
 import { ToggleSwitch } from '../../components/molecules/ToggleSwitch';
@@ -8,6 +9,8 @@ import pricingBg from '@/public/Images/pricing-bg1.png';
 import { PricingCard } from './pricing/PricingCard';
 
 export const PricingSection: React.FC = () => {
+  const t = useTranslations("home.pricing");
+
   const [billingPeriod, setBillingPeriod] = useState<'mo' | 'yr'>('mo');
   const [activeToggleIndex, setActiveToggleIndex] = useState(0);
 
@@ -52,40 +55,20 @@ export const PricingSection: React.FC = () => {
 
   const plans = [
     {
-      title: 'Basic Plan',
+      title: t('plans.basic.title'),
       price: getPrice(19),
-      features: [
-        'Herramientas de facturación e inventario básicas',
-        'Gestión de proveedores y clientes',
-        'Facturación electrónica básica',
-        'Reportes de ventas mensuales',
-        'Soporte vía email'
-      ],
+      features: t.raw('plans.basic.features') as string[],
     },
     {
-      title: 'Pro Plan',
+      title: t('plans.pro.title'),
       price: getPrice(49),
-      features: [
-        'Todo lo del Plan Básico',
-        'Gestión avanzada de clientes y proveedores',
-        'Análisis de datos en tiempo real',
-        'Integración básica de IA para pronósticos de ventas e inventario',
-        'Soporte prioritario vía email',
-        'Reportes de ventas semanales'
-      ],
+      features: t.raw('plans.pro.features') as string[],
       highlighted: true,
     },
     {
-      title: 'All-in Plan',
+      title: t('plans.allin.title'),
       price: getPrice(99),
-      features: [
-        'Todo lo del Plan Pro',
-        'Integración completa de IA con inteligencia predictiva',
-        'Alertas inteligentes y detección de anomalías',
-        'Automatización de reordenes de inventario',
-        'Soporte 24/7 premium',
-        'Chatbot con IA para consultas y soporte'
-      ],
+      features: t.raw('plans.allin.features') as string[],
     },
   ];
 
@@ -114,16 +97,16 @@ export const PricingSection: React.FC = () => {
       <div className="relative z-10 max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Elige tu Plan<br />¡Crece sin Límites!
+            {t("header1")} <br /> {t("header2")}
           </h2>
           
           <p className="text-gray-200 max-w-2xl mx-auto">
-            Precios claros y honestos para cada etapa de tu negocio. Sin sorpresas, solo crecimiento.
+            {t('subtitle')}
           </p>
 
           <div className="mt-8">
             <ToggleSwitch
-              options={['Monthly', 'Yearly']}
+              options={[t('billing.monthly'), t('billing.yearly')]}
               activeIndex={activeToggleIndex}
               onChange={handleToggleChange}
             />

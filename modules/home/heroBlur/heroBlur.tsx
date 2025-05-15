@@ -1,11 +1,14 @@
 'use client';
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState, useRef } from "react";
 import { FaFileInvoiceDollar, FaMoneyCheckAlt, FaChartLine, FaUniversity } from 'react-icons/fa';
 
 import CardHeroBlur from './cardHeroBlur';
 
 export default function HeroBlur() {
+  const t = useTranslations("home");
+
   const [isVisible, setIsVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -13,23 +16,23 @@ export default function HeroBlur() {
   const features = [
     {
       icon: <FaFileInvoiceDollar className="text-3xl text-homePrimary-200 mb-4" />,
-      title: "Facturación Electrónica",
-      description: "Emite facturas electrónicas cumpliendo con la normativa, de forma rápida.",
+      title: t("features.invoicing.title"),
+      description: t("features.invoicing.description"),
     },
     {
       icon: <FaMoneyCheckAlt className="text-3xl text-homePrimary-200 mb-4" />,
-      title: "Gestión de Cobros",
-      description: "Administra tus cobros y pagos de manera centralizada y automatizada.",
+      title: t("features.collection.title"),
+      description: t("features.collection.description"),
     },
     {
       icon: <FaChartLine className="text-3xl text-homePrimary-200 mb-4" />,
-      title: "Contabilidad en Tiempo Real",
-      description: "Genera reportes y analiza tu contabilidad al instante..",
+      title: t("features.realTimeAccounting.title"),
+      description: t("features.realTimeAccounting.description"),
     },
     {
       icon: <FaUniversity className="text-3xl text-homePrimary-200 mb-4" />,
-      title: "Integración Bancaria",
-      description: "Conecta y concilia tus transacciones bancarias de forma automática y segura.",
+      title: t("features.bankIntegration.title"),
+      description: t("features.bankIntegration.description"),
     },
   ];
 
@@ -78,7 +81,7 @@ export default function HeroBlur() {
             : 'opacity-0 translate-y-10'
           }`}
         >
-          Axia Invoice Simplifica tu facturación y contabilidad
+          {t("heroBlur.headline")}
         </h1>
         
         <p className={`text-gray-300 mb-16 transition-all duration-700 ease-out transform delay-150 ${
@@ -87,7 +90,7 @@ export default function HeroBlur() {
             : 'opacity-0 translate-y-10'
           }`}
         >
-          Emite facturas electrónicas, gestiona tus cobros y lleva tu contabilidad de forma intuitiva y eficiente.
+          {t("heroBlur.subheadline")}
         </p>
         
         <div className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-700 ease-out transform delay-300 ${

@@ -1,35 +1,36 @@
 import { z } from "zod";
+import { useTranslations } from "next-intl";
 
-export const customertSchema = z.object({
+export const customertSchema = (t: ReturnType<typeof useTranslations>) => z.object({
     firstName: z.string()
-            .nonempty({ message: "Name is required" })
-            .min(4, {message: "Name must be at least 4 characters long"})
-            .max(40)
+            .nonempty({ message: t("errors.firstName.required") })
+            .min(4, {message: t("errors.firstName.min") })
+            .max(40, t("errors.firstName.max"))
 			.refine(
 				(value) => /^[a-zA-Z]+$/.test(value ?? ""),
-				{ message: "Name cannot contain special characters or spaces or numbers" }
+				{ message: t("errors.firstName.invalid") }
 			),
 
     lastName: z.string()
-                .nonempty({ message: "Lastname is required" })
-                .min(4, {message: "Lastname must be at least 4 characters long"})
-                .max(40)
+                .nonempty({ message: t("errors.lastName.required")  })
+                .min(4, {message: t("errors.lastName.min") })
+                .max(40, t("errors.lastName.max"))
                 .refine(
                     (value) => /^[a-zA-Z]+$/.test(value ?? ""),
-                    { message: "Lastname cannot contain special characters or spaces or numbers" }
+                    { message: t("errors.lastName.invalid") }
                 ),
 
     identification: z.string()
-                .nonempty({ message: "Identification is required" })
-                .min(6, {message: "Identification must be at least 6 characters long"})
-                .max(15, {message: "Identification must be at most 15 characters long"})
+                .nonempty({ message: t("errors.identification.required") })
+                .min(6, {message: t("errors.identification.min")})
+                .max(15, {message: t("errors.identification.max")})
                 .refine(
                     (value) => /^[0-9]+$/.test(value ?? ""),
-                     { message: "La identificacion solo puede contener numeros" }
+                     { message: t("errors.identification.invalid") }
                 ),
 
     email: z.string()
-			.nonempty({ message: "Email is required" })
-			.email({message: "Please enter a valid email"})
-			.max(40),
+			.nonempty({ message: t("errors.email.required") })
+			.email({message: t("errors.email.invalid") })
+			.max(40, t("errors.email.max")),
 });

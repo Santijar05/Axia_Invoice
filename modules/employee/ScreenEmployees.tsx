@@ -2,9 +2,9 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import EmployeeForm from "./EmployeeForm";
-import { useTranslations } from "next-intl";
 import EmployeeFormEdit from "./EmployeeFormEdit";
 import Toolbar from "@/components/organisms/ToolBar";
 import EmptyState from '@/components/molecules/EmptyState';
@@ -154,10 +154,10 @@ export default function ScreenEmployees() {
     };
 
     const tableHeaders = [
-        t("tableHeaders.id"),
-        t("tableHeaders.name"),
-        t("tableHeaders.role"),
-        t("tableHeaders.email"),
+        { label: t("tableHeaders.id"), key: "id" },
+        { label: t("tableHeaders.name"), key: "name" },
+        { label: t("tableHeaders.role"), key: "role" },
+        { label: t("tableHeaders.email"), key: "email" },
     ];
 
     return (
@@ -194,7 +194,7 @@ export default function ScreenEmployees() {
                     />
                 </div>
                 <TableFilter 
-                    headers={tableHeaders} 
+                    headers={tableHeaders.map((h) => h.key)}
                     onSort={handleSort} 
                 />
             </div>

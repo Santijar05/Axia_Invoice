@@ -70,11 +70,30 @@
     "updateSuccess": "Empleado actualizado correctamente",
     "updateError": "Error al actualizar el empleado",
     "noIdError": "ID de cliente no disponible",
-    "errorSubmit": "Error al realizar el envío:"
+    "errorSubmit": "Error al realizar el envío:",
+
+    "errors":{
+      "name": {
+        "min": "El nombre debe tener al menos 3 caracteres",
+        "max": "El nombre no puede exceder 50 caracteres"
+      },
+      "role": {
+        "required": "Debes seleccionar un rol"
+      },
+      "email": {
+        "invalid": "Debe ser un email válido",
+        "max": "El email no puede exceder 100 caracteres"
+      },
+      "password": {
+        "min": "La contraseña debe tener al menos 6 caracteres",
+        "max": "La contraseña no puede exceder 50 caracteres"
+      }
+    }
   },
 
   "CustomTable":{
     "edit": {
+      "products": "Editar producto",
       "clients": "Editar cliente",
       "employees": "Editar empleado",
       "suppliers": "Editar proveedor",
@@ -82,6 +101,7 @@
       "default": "Editar"
     },
     "view":{
+      "products": "Ver producto",
       "clients": "Ver cliente",
       "employees": "Ver empleado",
       "suppliers": "Ver proveedor",
@@ -89,6 +109,7 @@
       "default": "Ver"
     },
     "delete": {
+      "products": "Eliminar producto",
       "clients": "Eliminar cliente",
       "employees": "Eliminar empleado",
       "suppliers": "Eliminar proveedor",
@@ -101,5 +122,787 @@
     "page": "Página",
     "of": "de",
     "delete_confirmation": "¿Estás seguro de que deseas eliminar este?"
+  },
+
+  "EmployeeDetailClient": {
+    "title": "Detalle del empleado",
+    "backButton": "Volver",
+    "id": "ID",
+    "email": "Correo electrónico",
+    "role": "Cargo"
+  },
+
+  "employeeDetails": {
+    "title": "Detalle del empleado",
+    "closeButton": "Cerrar",
+    "id": "ID",
+    "email": "Correo electrónico",
+    "role": "Cargo"
+  }, 
+
+  "customers": {
+    "title": "Gestión de Clientes",
+    "add": "Agregar Nuevo Cliente",
+    "edit": "Editar Cliente",
+    "listTitle": "Lista de Clientes",
+    "searchPlaceholder": "Buscar clientes...",
+    "loading": "Cargando clientes...",
+    "noResults": "No se encontraron clientes",
+    "noResultsMsg": "No se encontraron clientes para: \"{{searchTerm}}\"",
+    "table": {
+      "id": "ID",
+      "identification": "Identificación",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo electrónico"
+    }
+  },
+
+  "customerEdit": {
+    "fields": {
+      "id": "ID",
+      "identification": "Identificación",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo electrónico"
+    },
+    "placeholders": {
+      "id": "Ej. 123456789",
+      "identification": "Ej. 123456789",
+      "firstName": "Ej. Juan",
+      "lastName": "Ej. Pérez",
+      "email": "Ej. juan.perez@email.com"
+    },
+    "buttons": {
+      "close": "Cerrar",
+      "create": "Crear Cliente",
+      "update": "Actualizar Cliente",
+      "processing": "Procesando..."
+    },
+    "alerts": {
+      "noClientId": "ID de cliente no disponible",
+      "updateSuccess": "Cliente actualizado correctamente",
+      "updateError": "Error al actualizar el cliente"
+    },
+    "errors": {
+      "firstName": {
+        "required": "El nombre es obligatorio",
+        "min": "El nombre debe tener al menos 4 caracteres",
+        "max": "El nombre no puede tener más de 40 caracteres",
+        "invalid": "El nombre no puede contener caracteres especiales, espacios ni números"
+      },
+      "lastName": {
+        "required": "El apellido es obligatorio",
+        "min": "El apellido debe tener al menos 4 caracteres",
+        "max": "El apellido no puede tener más de 40 caracteres",
+        "invalid": "El apellido no puede contener caracteres especiales, espacios ni números"
+      },
+      "email": {
+        "required": "El correo electrónico es obligatorio",
+        "invalid": "Por favor ingresa un correo electrónico válido",
+        "max": "El correo electrónico no puede tener más de 40 caracteres"
+      }
+    }
+  },
+
+  "customerForm": {
+    "codeLabel": "Código",
+    "codePlaceholder": "AUTOGENERADO",
+
+    "identificationLabel": "Identificación",
+    "identificationPlaceholder": "Ej. 123456789",
+
+    "firstNameLabel": "Nombre",
+    "firstNamePlaceholder": "Ej. Juan",
+
+    "lastNameLabel": "Apellido",
+    "lastNamePlaceholder": "Ej. Pérez",
+
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "Ej. juan.perez@email.com",
+
+    "closeButton": "Cerrar",
+    "submitButton": "Crear Cliente",
+
+    "successMessage": "Cliente creado exitosamente",
+    "creationError": "Error al crear el cliente:",
+    "connectionError": "Error de conexión. Inténtalo nuevamente.",
+    "authTokenMissing": "Falta el token de autenticación",
+
+    "errors": {
+      "firstName": {
+        "required": "El nombre es obligatorio",
+        "min": "El nombre debe tener al menos 4 caracteres",
+        "max": "El nombre no puede tener más de 40 caracteres",
+        "invalid": "El nombre no puede contener caracteres especiales, espacios ni números"
+      },
+      "lastName": {
+        "required": "El apellido es obligatorio",
+        "min": "El apellido debe tener al menos 4 caracteres",
+        "max": "El apellido no puede tener más de 40 caracteres",
+        "invalid": "El apellido no puede contener caracteres especiales, espacios ni números"
+      },
+      "identification": {
+        "required": "La identificación es obligatoria",
+        "min": "La identificación debe tener al menos 6 caracteres",
+        "max": "La identificación no puede tener más de 15 caracteres",
+        "invalid": "La identificación solo puede contener números"
+      },
+      "email": {
+        "required": "El correo electrónico es obligatorio",
+        "invalid": "Por favor ingresa un correo electrónico válido",
+        "max": "El correo electrónico no puede tener más de 40 caracteres"
+      }
+    }
+  },
+
+  "customerDetail": {
+    "title": "Detalle del cliente",
+    "backButton": "Volver",
+    "id": "ID",
+    "email": "Correo electrónico",
+    "identification": "Identificación"
+  },
+
+  "purchase": {
+    "title": "Tienda",
+    "addItem": "Añadir Items",
+    "productLabel": "Producto",
+    "productPlaceholder": "Buscar productos para comprar...",
+    "quantityLabel": "Cantidad",
+    "quantityPlaceholder": "Ingrese la cantidad",
+    "purchasePriceLabel": "Precio de compra",
+    "pricePlaceholder": "Ingrese el precio",
+    "addProductButton": "Añadir producto",
+    "purchaseDetailTitle": "Detalle de Compra",
+    "emptyCart": "El carrito está vacío.",
+    "product": "Producto",
+    "quantity": "Cantidad",
+    "basePrice": "Precio sin imp.",
+    "tax": "Impuesto %",
+    "priceWithTax": "Precio c/imp.",
+    "subtotal": "Subtotal",
+    "action": "Acción",
+    "delete": "Eliminar",
+    "total": "Total",
+    "clearCart": "Vaciar Carrito"
+  },
+
+  "supplier": {
+    "title": "Proveedores",
+    "new": "Agregar nuevo proveedor",
+    "edit": "Editar Proveedor",
+    "list": "Lista de Proveedores",
+    "searchPlaceholder": "Buscar proveedores...",
+    "loading": "Cargando proveedores...",
+    "noResults": "No se encontraron proveedores",
+    "notFoundFor": "No se encontraron proveedores para: \"{term}\"",
+    "id": "ID",
+    "nit": "NIT",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "deleteError": "No se pudo eliminar el proveedor"
+  },
+
+  "supplierForm": {
+    "code": "Código",
+    "autoGenerated": "AUTOGENERADO",
+    "name": "Nombre",
+    "namePlaceholder": "Ej. Proveedora S.A.",
+    "nit": "NIT",
+    "nitPlaceholder": "Ej. 123456789-0",
+    "phone": "Teléfono",
+    "phonePlaceholder": "Ej. 987654321",
+    "address": "Dirección",
+    "addressPlaceholder": "Ej. Calle 123 #45-67",
+    "close": "Cerrar",
+    "create": "Crear Proveedor",
+    "successMessage": "Proveedor creado exitosamente",
+    "errorMessage": "Error al crear el proveedor",
+    "connectionError": "Error de conexión. Inténtalo nuevamente.",
+    "errors":
+    {
+      "nit": {
+        "min": "El NIT debe tener al menos 5 caracteres",
+        "max": "El NIT no puede exceder los 20 caracteres",
+        "regex": "Solo números y guiones permitidos"
+      },
+      "name": {
+        "min": "Nombre muy corto (mínimo 3 caracteres)",
+        "max": "Nombre muy largo (máximo 100 caracteres)"
+      },
+      "phone": {
+        "min": "Teléfono muy corto (mínimo 7 dígitos)",
+        "max": "Teléfono muy largo (máximo 15 dígitos)",
+        "regex": "Solo números permitidos"
+      },
+      "address": {
+        "min": "Dirección muy corta (mínimo 5 caracteres)",
+        "max": "Dirección muy larga (máximo 200 caracteres)"
+      }
+    }
+
+  },
+
+  "supplierEdit": {
+    "fields": {
+      "id": "Código",
+      "name": "Nombre del Proveedor",
+      "nit": "NIT",
+      "phone": "Teléfono",
+      "address": "Dirección"
+    },
+    "placeholders": {
+      "id": "AUTOGENERADO",
+      "name": "Ej. Proveedora S.A.",
+      "nit": "Ej. 123456789-0",
+      "phone": "Ej. 987654321",
+      "address": "Ej. Calle 123 #45-67"
+    },
+    "buttons": {
+      "close": "Cerrar",
+      "update": "Actualizar Proveedor"
+    },
+    "success": {
+      "updated": "Proveedor actualizado correctamente"
+    },
+    "error": {
+      "noId": "ID de proveedor no disponible",
+      "update": "Error al actualizar el proveedor"
+    },
+    "errors":{
+      "nit": {
+        "min": "El NIT debe tener al menos 5 caracteres",
+        "max": "El NIT no puede exceder los 20 caracteres",
+        "regex": "Solo números y guiones permitidos"
+      },
+      "name": {
+        "min": "Nombre muy corto (mínimo 3 caracteres)",
+        "max": "Nombre muy largo (máximo 100 caracteres)"
+      },
+      "phone": {
+        "min": "Teléfono muy corto (mínimo 7 dígitos)",
+        "max": "Teléfono muy largo (máximo 15 dígitos)",
+        "regex": "Solo números permitidos"
+      },
+      "address": {
+        "min": "Dirección muy corta (mínimo 5 caracteres)",
+        "max": "Dirección muy larga (máximo 200 caracteres)"
+      }
+    }
+  },
+
+  "supplierDetail": {
+    "title": "Detalle del proveedor",
+    "close": "Cerrar",
+    "phone": "Teléfono",
+    "address": "Dirección"
+  },
+
+  "products": {
+    "title": "Gestión de Productos",
+    "newProduct": "Nuevo Producto",
+    "searchPlaceholder": "Buscar productos...",
+    "loading": "Cargando productos...",
+    "noResults": "No se encontraron productos",
+    "productNotFound": "No se encontraron productos para: \"{term}\"",
+    "tableTitle": "Lista de Productos",
+    "edit": "Editar Producto",
+    "headers": {
+      "code": "Código",
+      "product": "Producto",
+      "supplier": "Proveedor",
+      "tax": "Impuesto",
+      "stock": "Stock",
+      "purchasePrice": "P. Compra",
+      "salePrice": "P. Venta"
+    }
+  },
+
+  "productForm": {
+    "loadingSuppliers": "Cargando proveedores...",
+    "code": "Código",
+    "autogenerated": "AUTOGENERADO",
+    "supplier": "Proveedor",
+    "selectSupplier": "Seleccionar proveedor",
+    "name": "Nombre",
+    "exampleName": "Ej. MOUSE RAZER",
+    "stock": "Stock",
+    "exampleStock": "EJ. 10",
+    "tax": "Impuesto",
+    "exampleTax": "EJ. 19%",
+    "purchasePrice": "Precio de compra",
+    "examplePurchase": "EJ. 1.00",
+    "salePrice": "Precio de venta",
+    "exampleSale": "EJ. 1.00",
+    "close": "Cerrar",
+    "createProduct": "Crear Producto",
+    "successCreate": "Producto creado exitosamente",
+    "errorCreate": "Error al crear el producto",
+    "connectionError": "Error de conexión. Inténtalo nuevamente.",
+    "authTokenMissing": "Falta el token de autenticación",
+
+    "errors":{
+      "name": {
+        "required": "El nombre es requerido"
+      },
+      "stock": {
+        "number": "El stock debe ser un número",
+        "min": "El stock no puede ser negativo"
+      },
+      "tax": {
+        "number": "El impuesto debe ser un número",
+        "min": "El impuesto no puede ser negativo",
+        "max": "El impuesto no puede ser mayor a 100"
+      },
+      "purchasePrice": {
+        "number": "El precio de compra debe ser un número",
+        "min": "El precio de compra no puede ser negativo"
+      },
+      "salePrice": {
+        "number": "El precio de venta debe ser un número",
+        "min": "El precio de venta no puede ser negativo"
+      }
+    }
+  },
+
+  "productEdit": {
+    "code": "Código",
+    "supplier": "Proveedor",
+    "name": "Nombre",
+    "namePlaceholder": "Ej. MOUSE RAZER",
+    "stock": "Stock",
+    "stockPlaceholder": "Ej. 10",
+    "tax": "Impuesto",
+    "taxPlaceholder": "Ej. 19%",
+    "purchasePrice": "Precio de compra",
+    "purchasePricePlaceholder": "Ej. 1.00",
+    "salePrice": "Precio de venta",
+    "salePricePlaceholder": "Ej. 1.00",
+    "close": "Cerrar",
+    "createProduct": "Crear Producto",
+    "updateProduct": "Actualizar Producto",
+    "productCreated": "Producto creado exitosamente",
+    "productUpdated": "Producto actualizado exitosamente",
+    "createError": "Error al crear el producto",
+    "updateError": "Error al actualizar el producto",
+    "connectionError": "Error de conexión. Inténtalo nuevamente.",
+    "autoGenerated": "AUTOGENERADO",
+    "authTokenMissing": "Falta el token de autenticación",
+
+    "errors":{
+      "name": {
+        "required": "El nombre es requerido"
+      },
+      "stock": {
+        "number": "El stock debe ser un número",
+        "min": "El stock no puede ser negativo"
+      },
+      "tax": {
+        "number": "El impuesto debe ser un número",
+        "min": "El impuesto no puede ser negativo",
+        "max": "El impuesto no puede ser mayor a 100"
+      },
+      "purchasePrice": {
+        "number": "El precio de compra debe ser un número",
+        "min": "El precio de compra no puede ser negativo"
+      },
+      "salePrice": {
+        "number": "El precio de venta debe ser un número",
+        "min": "El precio de venta no puede ser negativo"
+      }
+    }
+  },
+
+  "productDetail": {
+    "title": "Detalle del producto",
+    "close": "Cerrar",
+    "id": "ID",
+    "back": "Volver",
+    "supplier": "Proveedor",
+    "tax": "Impuesto",
+    "stock": "Stock",
+    "units": "unidades",
+    "purchasePrice": "Precio de compra",
+    "salePrice": "Precio de venta"
+  },
+
+  "toolbar":{
+    "add": "Agregar Nuevo/a",
+    "imprimir": "Imprimir Reporte"
+  },
+
+  "makeSale": {
+    "title": "Nueva venta",
+    "addItems": "Añadir Items",
+    "product": "Producto",
+    "searchPlaceholder": "Buscar productos para comprar...",
+    "quantityPlaceholder": "Ingrese la cantidad",
+    "pricePlaceholder": "Ingrese el precio",
+    "addProduct": "Añadir producto",
+    "quantity": "Quantity",
+    "table": {
+      "product": "Producto",
+      "quantity": "Cantidad",
+      "priceNoTax": "Precio sin imp.",
+      "tax": "Impuesto %",
+      "priceWithTax": "Precio c/imp.",
+      "subtotal": "Subtotal",
+      "action": "Acción"
+    },
+    "apricewTx": "Precio sin impuesto",
+    "remove": "Eliminar",
+    "noItems": "No hay productos aún.",
+    "subtotal": "Subtotal",
+    "totalTaxes": "Total Impuestos",
+    "totalToPay": "Total a pagar",
+    "completeSale": "Finalizar venta",
+    "confirmSale": "Confirmar Venta",
+    "addBeforeComplete": "Agrega productos antes de completar la venta.",
+    "success": "Venta completada con éxito.",
+    "notEnoughStock": "No hay suficiente stock. Disponible: "
+  },
+
+  "sidebar": {
+    "loading": "Cargando...",
+    "logout": "Cerrar sesión",
+    "home": "Inicio",
+    "box": "Caja",
+    "historyCash": "Historial de caja",
+    "manageCash": "Gestionar caja",
+    "store": "Tienda",
+    "products": "Productos",
+    "sales": "Ventas",
+    "makeSales": "Hacer ventas",
+    "viewSales": "Ver ventas",
+    "shopping": "Compras",
+    "makePurchase": "Hacer compra",
+    "supplier": "Proveedores",
+    "users": "Usuarios",
+    "customers": "Clientes",
+    "employees": "Empleados"
+  },
+
+  "saleInvoice": {
+    "title": "Gestión de Facturas",
+    "loading": "Cargando facturas...",
+    "empty": "No hay facturas registradas.",
+    "tableTitle": "Lista de Facturas",
+    "headers": {
+      "client": "Cliente",
+      "date": "Fecha",
+      "total": "Total"
+    },
+    "deleteError": "Ocurrió un error al eliminar la factura."
+  },
+
+  "invoiceDetail": {
+    "title": "Detalle de la factura",
+    "backButton": "Volver",
+    "invoiceId": "ID de Factura",
+    "date": "Fecha",
+    "electronic": "Factura electrónica",
+    "yes": "Sí",
+    "no": "No",
+    "clientSection": "Cliente",
+    "client": {
+      "name": "Nombre",
+      "id": "Identificación",
+      "email": "Email",
+      "clientId": "ID Cliente"
+    },
+    "companySection": "Empresa",
+    "company": {
+      "name": "Nombre",
+      "nit": "NIT",
+      "address": "Dirección",
+      "phone": "Teléfono"
+    },
+    "productsSection": "Productos",
+    "noProducts": "No hay productos asociados.",
+    "product": "Producto",
+    "quantity": "Cantidad"
+  },
+
+  "invoiceModal": {
+    "title": "Facturar venta",
+    "client": "Cliente",
+    "clientPlaceholder": "Buscar cliente",
+    "payment": "Método de pago",
+    "paymentPlaceholder": "Seleccionar método",
+    "paymentMethods": {
+      "CASH": "Efectivo",
+      "CARD": "Tarjeta",
+      "TRANSFER": "Transferencia"
+    },
+    "electronicBill": "¿Factura electrónica?",
+    "toggle": {
+      "yes": "Sí",
+      "no": "No"
+    },
+    "labels": {
+      "subtotal": "Subtotal",
+      "tax": "Impuestos",
+      "total": "Total"
+    },
+    "errors": {
+      "noClient": "Por favor selecciona un cliente.",
+      "auth": "No se encontró la información del usuario.",
+      "sale": "Error al procesar la venta."
+    },
+    "submit": "Procesar venta",
+    "cancel": "Cancelar",
+    "processing": "Procesando...",
+    "preview": {
+      "title": "Vista previa de la factura",
+      "download": "Descargar PDF",
+      "finish": "Finalizar"
+    },
+    "pdf": {
+      "title": "Factura de Venta",
+      "companyName": "Nombre de la empresa",
+      "nit": "NIT",
+      "address": "Dirección",
+      "phone": "Teléfono",
+      "client": "Cliente",
+      "date": "Fecha",
+      "paymentMethod": "Método de pago",
+      "productDescription": "Descripción del producto",
+      "headers": {
+        "product": "Producto",
+        "quantity": "Cantidad",
+        "unitPrice": "Precio Unitario",
+        "tax": "Impuesto",
+        "subtotal": "Subtotal"
+      }
+    }
+  },
+
+  "admin": {
+    "tableTitle": "Lista de Productos",
+    "headers": {
+      "code": "Código",
+      "product": "Producto",
+      "supplier": "Proveedor",
+      "tax": "Impuesto",
+      "stock": "Stock",
+      "purchasePrice": "P. compra",
+      "salePrice": "P. venta"
+    }
+  },
+
+  "metrics": {
+    "purchasesOfMonth": "Compras del Mes",
+    "salesOfDay": "Ventas del Día",
+    "productRotation": "Rotación de Producto",
+    "service": "Servicio",
+    "suppliers": "Proveedores",
+    "customers": "Clientes",
+    "bestKnown30Days": "Más Conocido en 30 Días",
+    "pendingOrders": "Órdenes Pendientes"
+  },
+
+  "login": {
+    "title": "Bienvenido de nuevo",
+    "emailPlaceholder": "Correo electrónico",
+    "passwordPlaceholder": "Contraseña",
+    "loading": "Cargando...",
+    "login": "INGRESAR",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "orContinueWith": "o continuar con",
+    "authError": "Error de autenticación",
+    "connectionError": "Error de conexión. Inténtalo nuevamente.",
+    "errors": {
+      "emailRequired": "El correo es obligatorio",
+      "emailInvalid": "Por favor ingresa un correo válido",
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+      "passwordFormat": "La contraseña solo debe contener letras y números"
+    }
+  },
+
+  "register": {
+    "placeholders": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "password": "Contraseña"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "user": "Usuario",
+      "editor": "Invitado"
+    },
+    "buttons": {
+      "sending": "Enviando...",
+      "createAccount": "Crear cuenta",
+      "login": "Iniciar sesión"
+    },
+
+    "errors":{
+      "nameRequired": "El nombre es obligatorio",
+      "nameMin": "El nombre de usuario debe tener al menos 4 caracteres",
+      "nameFormat": "El nombre de usuario no puede contener caracteres especiales, espacios ni números",
+      "emailRequired": "El correo es obligatorio",
+      "emailInvalid": "Por favor ingresa un correo válido",
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+      "passwordFormat": "La contraseña solo debe contener letras, números y los caracteres especiales permitidos (@, ., -, _, !, #, $, %, &)"
+    },
+
+    "title": "Crear una cuenta",
+    "joinedBefore": "¿Ya te has unido antes?",
+    "orContinueWith": "o continúa con",
+    "unknownServerError": "Error desconocido en el servidor",
+    "unexpectedError": "Ocurrió un error inesperado. Por favor intenta nuevamente."
+  },
+
+  "home":{
+    "inicio": "Inicio",
+    "aboutus": "Sobre nosotros", 
+    "contactus": "Contactanos",
+    "placeholderPlatform": "Plataforma",
+    "headline": "Contabilidad clara y sin complicaciones",
+    "subheadline": "Axia Invoice te ayuda a mantener tus finanzas en orden de manera sencilla. Menos tiempo en trámites, más tiempo para tu negocio.",
+    "startButton": "Empezar",
+    "learnMoreButton": "Saber más",
+
+    "heroBlur": {
+      "headline": "Axia Invoice Simplifica tu facturación y contabilidad",
+      "subheadline": "Emite facturas electrónicas, gestiona tus cobros y lleva tu contabilidad de forma intuitiva y eficiente."
+    },
+    "features": {
+      "invoicing": {
+        "title": "Facturación Electrónica",
+        "description": "Emite facturas electrónicas cumpliendo con la normativa, de forma rápida."
+      },
+      "collection": {
+        "title": "Gestión de Cobros",
+        "description": "Administra tus cobros y pagos de manera centralizada y automatizada."
+      },
+      "realTimeAccounting": {
+        "title": "Contabilidad en Tiempo Real",
+        "description": "Genera reportes y analiza tu contabilidad al instante."
+      },
+      "bankIntegration": {
+        "title": "Integración Bancaria",
+        "description": "Conecta y concilia tus transacciones bancarias de forma automática y segura."
+      }
+    },
+
+    "contentHero": {
+      "title": "Revolucionando la Gestión Financiera",
+      "description": "En Axia transformamos la contabilidad y facturación electrónica con soluciones innovadoras y seguras. Optimizamos procesos empresariales para impulsar el crecimiento y la productividad de nuestros clientes en un mundo financiero en constante evolución.",
+      "buttonText": "Comienza Ahora"
+    }, 
+
+    "pricing": {
+      "header1": "Elige tu Plan",
+      "header2": "¡Crece sin Límites!",
+      "subtitle": "Precios claros y honestos para cada etapa de tu negocio. Sin sorpresas, solo crecimiento.",
+      "billing": {
+        "monthly": "Mensual",
+        "yearly": "Anual"
+      },
+      "plans": {
+        "basic": {
+          "title": "Plan Básico",
+          "features": [
+            "Herramientas de facturación e inventario básicas",
+            "Gestión de proveedores y clientes",
+            "Facturación electrónica básica",
+            "Reportes de ventas mensuales",
+            "Soporte vía email"
+          ]
+        },
+        "pro": {
+          "title": "Plan Pro",
+          "features": [
+            "Todo lo del Plan Básico",
+            "Gestión avanzada de clientes y proveedores",
+            "Análisis de datos en tiempo real",
+            "Integración básica de IA para pronósticos de ventas e inventario",
+            "Soporte prioritario vía email",
+            "Reportes de ventas semanales"
+          ]
+        },
+        "allin": {
+          "title": "Plan All-in",
+          "features": [
+            "Todo lo del Plan Pro",
+            "Integración completa de IA con inteligencia predictiva",
+            "Alertas inteligentes y detección de anomalías",
+            "Automatización de reordenes de inventario",
+            "Soporte 24/7 premium",
+            "Chatbot con IA para consultas y soporte"
+          ]
+        }
+      },
+
+      "card":{
+        "start": "Comenzar"
+      }
+    }
+  },
+
+  "footer": {
+    "sections": {
+      "quickLinks": "Enlaces Rápidos",
+      "copyright": "Derechos y Políticas",
+      "social": "Redes Sociales"
+    },
+    "quickLinks": {
+      "home": "Inicio",
+      "services": "Servicios",
+      "aboutUs": "Sobre Nosotros",
+      "contact": "Contacto"
+    },
+    "copyright": {
+      "privacy": "Política de Privacidad",
+      "terms": "Términos de Servicio",
+      "about": "Acerca de"
+    },
+    "social": {
+      "twitter": "Twitter",
+      "discord": "Discord",
+      "github": "Github"
+    },
+    "copyrightText": "Todos los derechos reservados por Juan Campos Santi Jime."
+  },
+
+  "misionVision": {
+    "title": "Axia InvoIce SAS",
+    "description": "Axia InvoIce S.A.S. es una empresa innovadora en el ámbito de la tecnología financiera, especializada en el desarrollo de software de contabilidad y facturación electrónica. Fundada en 2023, nos comprometemos a transformar la gestión empresarial mediante soluciones eficientes y seguras que potencien el crecimiento y la productividad.",
+    "mission": {
+      "title": "Misión",
+      "text": "En Axia Invoice SAS, nos dedicamos a simplificar y optimizar la gestión financiera y contable de las empresas a través de soluciones tecnológicas innovadoras. Nuestro software de contabilidad y facturación electrónica está diseñado para ser intuitivo, eficiente y seguro, permitiendo a nuestros clientes ahorrar tiempo, reducir costos y cumplir con las normativas vigentes. Nos comprometemos a ofrecer herramientas que impulsen el crecimiento y la productividad de nuestros usuarios, brindando un soporte excepcional y adaptándonos a sus necesidades en constante evolución."
+    },
+    "vision": {
+      "title": "Visión",
+      "text": "Ser reconocidos como líderes en el desarrollo de software de contabilidad y facturación electrónica en América Latina para 2030. Aspiramos a transformar la manera en que las empresas gestionan sus finanzas, siendo sinónimo de innovación, confiabilidad y excelencia en el servicio. A través de la tecnología de vanguardia y un enfoque centrado en el cliente, buscamos empoderar a las empresas para que alcancen su máximo potencial, contribuyendo así al desarrollo económico y tecnológico de la región."
+    }
+  },
+
+  "aboutUs": {
+    "title": "Sobre Nosotros",
+    "description": "Somos tres estudiantes de Ingeniería de Sistemas apasionados por la tecnología y el desarrollo de software. Este proyecto es parte de nuestro aprendizaje y nuestra pasión por crear soluciones innovadoras.",
+    "person": {
+      "role": "Estudiante de ingeniería de sistemas",
+      "title": "Fundador"
+    }
+  },
+
+  "contactUs": {
+    "title": "Contáctanos",
+    "description": "Si tienes alguna pregunta o deseas más información, no dudes en ponerte en contacto con nosotros.",
+    "form": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "phone": "Teléfono (opcional)",
+      "subject": "Asunto",
+      "message": "Mensaje",
+      "send": "Enviar Mensaje"
+    }
   }
+
 }

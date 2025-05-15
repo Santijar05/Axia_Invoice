@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 import Toolbar from "@/components/organisms/ToolBar";
@@ -14,8 +15,13 @@ export default function ScreenInvoices() {
     const [isLoading, setIsLoading] = useState(false);
 
     const initialFetchDone = useRef(false);
+    const t = useTranslations("saleInvoice");
 
-    const tableHeaders = ["Cliente", "Fecha", "Total"];
+    const tableHeaders = [
+        { label: t("headers.client"), key: "cliente"},
+        { label: t("headers.date"), key: "fecha"},
+        { label: t("headers.total"), key: "total"},
+    ];
 
     useEffect(() => {
         if (!initialFetchDone.current) {
@@ -60,21 +66,21 @@ export default function ScreenInvoices() {
             setInvoices((prev) => prev.filter((inv) => inv.id !== invoiceId));
         } catch (err) {
             console.error("Error eliminando la factura:", err);
-            alert("Ocurrió un error al eliminar la factura.");
+            alert(t("deleteError"));
         }
     };
 
     return (
         <div className="container mx-auto">
-            <Toolbar title="Gestión de Facturas" invoice={true} />
+            <Toolbar title={t("title")} invoice={true} />
 
             {isLoading ? (
-                <p className="text-gray-500 text-sm mb-2 mt-4">Cargando facturas...</p>
+                <p className="text-gray-500 text-sm mb-2 mt-4">{t("loading")}</p>
             ) : invoices.length === 0 ? (
-                <EmptyState message="No hay facturas registradas." />
+                <EmptyState message={t("empty")} />
             ) : (
                 <CustomTable
-                    title="Lista de Facturas"
+                    title={t("tableTitle")}
                     headers={tableHeaders}
                     options={true}
                     data={invoices}
@@ -82,9 +88,6 @@ export default function ScreenInvoices() {
                     customActions={{
                         view: handleViewInvoice,
                         delete: handleDeleteInvoice,
-                    }}
-                    actionLabels={{
-                        view: "Ver Detalles"
                     }}
                 />
             )}

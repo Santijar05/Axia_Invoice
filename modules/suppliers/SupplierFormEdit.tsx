@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import React, { forwardRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -29,13 +30,16 @@ interface SupplierFormProps {
 }
 
 const SupplierFormEdit = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuccess, onClose, supplier }, ref) => {
+    const t = useTranslations("supplierEdit");
+    const editSupplierSchema = supplierSchema (t);
+
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors },
     } = useForm<SupplierFormData>({
-        resolver: zodResolver(supplierSchema),
+        resolver: zodResolver(editSupplierSchema),
     });
 
     useEffect(() => {
@@ -49,7 +53,7 @@ const SupplierFormEdit = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuc
     const onSubmit = async (data: SupplierFormData) => {
     
         if (!supplier?.id) {
-            alert("ID de cliente no disponible");
+            alert(t("error.noId"));
             return;
         }
     
@@ -68,10 +72,10 @@ const SupplierFormEdit = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuc
     
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || "Error al actualizar el empleado");
+                throw new Error(errorData.message || t("error.update"));
             }
     
-            alert("Proveedor actualizado correctamente");
+            alert(t("success.updated"));
             if (onSuccess) onSuccess();
             
         } catch (error) {
@@ -82,14 +86,14 @@ const SupplierFormEdit = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuc
     return (
         <form ref={ref} onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
             <div>
-                <label className="text-sm font-semibold text-gray-500">Código</label>
-                <Input placeholder="AUTOGENERADO" type="text" disabled={true} {...register("id")}/>
+                <label className="text-sm font-semibold text-gray-500">{t("fields.id")}</label>
+                <Input placeholder={t("placeholders.id")} type="text" disabled={true} {...register("id")}/>
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Nombre del Proveedor</label>
+                <label className="text-sm font-semibold text-gray-500">{t("fields.name")}</label>
                 <Input 
-                    placeholder="Ej. Proveedora S.A." 
+                    placeholder={t("placeholders.name")} 
                     type="text" 
                     {...register("name")}
                 />
@@ -97,9 +101,9 @@ const SupplierFormEdit = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuc
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">NIT</label>
+                <label className="text-sm font-semibold text-gray-500">{t("fields.nit")}</label>
                 <Input  
-                    placeholder="Ej. 123456789-0" 
+                    placeholder={t("placeholders.nit")}
                     type="text" 
                     {...register("nit")}
                 />
@@ -107,9 +111,9 @@ const SupplierFormEdit = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuc
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Teléfono</label>
+                <label className="text-sm font-semibold text-gray-500">{t("fields.phone")}</label>
                 <Input 
-                    placeholder="Ej. 987654321" 
+                    placeholder={t("placeholders.phone")}
                     type="text" 
                     {...register("phone")}
                 />
@@ -118,9 +122,9 @@ const SupplierFormEdit = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuc
 
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Dirección</label>
+                <label className="text-sm font-semibold text-gray-500">{t("fields.address")}</label>
                 <Input 
-                    placeholder="Ej. Calle 123 #45-67" 
+                    placeholder={t("placeholders.address")}
                     type="text" 
                     {...register("address")}
                 />
@@ -129,8 +133,8 @@ const SupplierFormEdit = forwardRef<HTMLFormElement, SupplierFormProps>(({ onSuc
 
             <div className="col-span-2 flex justify-end gap-2 mt-4">
             <div className="col-span-2 flex justify-end gap-2 mt-4">
-                <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
-                <CustomButton text={ 'Actualizar Proveedor'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
+                <CustomButton text={t("buttons.close")} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
+                <CustomButton text={t("buttons.update")} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
             </div>   
             </div>
         </form>

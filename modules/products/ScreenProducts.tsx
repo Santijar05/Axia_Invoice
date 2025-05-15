@@ -1,21 +1,25 @@
 'use client'
+
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import CustomTable from "@/components/organisms/CustomTable";
+import { useTranslations } from "next-intl";
+
+import ProductForm from "./ProductForm";
+import ProductFormEdit from "./productFormEdit";
 import Toolbar from "@/components/organisms/ToolBar";
 import { getListproducts } from "@/lib/api-products";
-import { ClientDAO, EmployeeDAO, ProductDAO, ProductFormProps, SupplierDAO } from "@/types/Api";
-import SearchBarUniversal from "@/components/molecules/SearchBar";
-import ProductForm from "./ProductForm";
-import TableFilter from "@/components/molecules/TableFilter";
-import EmptyState from '@/components/molecules/EmptyState';
-import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import { deleteProduct } from "@/lib/api-products-status";
-import ProductFormEdit from "./productFormEdit";
+import EmptyState from '@/components/molecules/EmptyState';
+import CustomTable from "@/components/organisms/CustomTable";
+import TableFilter from "@/components/molecules/TableFilter";
+import SearchBarUniversal from "@/components/molecules/SearchBar";
 import ProductDetailModal from "./ProductDetail/ProductDetailModal";
+import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
+import { ClientDAO, EmployeeDAO, ProductDAO, ProductFormProps, SupplierDAO } from "@/types/Api";
 
 export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     const router = useRouter();
+    const t = useTranslations("products");
 
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
     const [initialProducts, setInitialProducts] = useState<{ [key: string]: string }[]>([]);
@@ -107,7 +111,7 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
             setProducts([{
                 id: "no-results",
                 código: "",
-                producto: `No se encontraron productos para: "${searchTerm}"`,
+                producto: t("productNotFound", { term: searchTerm }),
                 proveedor: "",
                 impuesto: "",
                 stock: "",
@@ -193,13 +197,21 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
         }
     };
 
-    const tableHeaders = ["Código", "Producto", "Proveedor", "Impuesto", "Stock", "P. Compra", "P. Venta"];
+    const tableHeaders = [
+        { label: t("headers.code"), key: "código"},
+        { label: t("headers.product"), key: "producto"},
+        { label: t("headers.supplier"), key: "proveedor"},
+        { label: t("headers.tax"), key: "impuesto"},
+        { label: t("headers.stock"), key: "stock"},
+        { label: t("headers.purchasePrice"), key: "p. compra"},
+        { label: t("headers.salePrice"), key: "p. venta"}
+    ];
 
     return (
         <div className="container mx-auto">
             <Toolbar
-            title="Gestión de Productos"
-            onAddNew={() => setIsAddModalOpen(true)}
+                title={t("title")}
+                onAddNew={() => setIsAddModalOpen(true)}
             />
 
             <CustomModalNoButton 
@@ -208,12 +220,12 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                     setIsAddModalOpen(false);
                     currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts();
                 }}
-                title="Nuevo Producto"
-                >
+                title={t("newProduct")}
+            >
                 <ProductForm 
                     onSuccess={() => {
-                    setIsAddModalOpen(false);
-                    currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts();
+                        setIsAddModalOpen(false);
+                        currentSort ? fetchAllProducts({ sortBy: currentSort.field, order: currentSort.direction }) : fetchAllProducts();
                     }}
                 />
             </CustomModalNoButton>
@@ -223,28 +235,28 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                     <SearchBarUniversal 
                         onResultsFound={handleProductsFound} 
                         showResults={false}
-                        placeholder="Buscar productos..."
+                        placeholder={t("searchPlaceholder")}
                         searchType="products"
                         onSearchTermChange={setSearchTerm}
                     />
                 </div>
                 <TableFilter 
-                    headers={tableHeaders} 
+                    headers={tableHeaders.map((h) => h.key)}
                     onSort={handleSort} 
                 />
             </div>
             
-            {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando productos...</p>}
+            {isLoading && <p className="text-gray-500 text-sm mb-2">{t("loading")}</p>}
             
             {/* Show empty state when search has no results */}
             {searchTerm && searchTerm.length >= 2 && products.length === 1 && products[0].id === "no-results" ? (
                 <EmptyState 
-                    message="No se encontraron productos" 
+                    message={t("noResults")} 
                     searchTerm={searchTerm} 
                 />
             ) : (
                 <CustomTable
-                    title="Lista de Productos"
+                    title={t("tableTitle")}
                     headers={tableHeaders}
                     options={true}
                     data={products.filter(p => p.id !== "no-results")}
@@ -255,11 +267,6 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                         edit: handleEditProduct,
                         view: handleRowClick
                     }}
-                    actionLabels={{
-                        delete: "Eliminar",
-                        edit: "Editar",
-                        view: "Ver Detalles"
-                    }}
                 />
             )}
 
@@ -269,7 +276,7 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                     setIsEditModalOpen(false); 
                     setTimeout(() => fetchAllProducts(), 0);
                 }}
-                title="Editar Producto"
+                title={t("edit")}
             >
                 <ProductFormEdit 
                     product={currentProduct || undefined}

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { useTranslations } from "next-intl";
 
-export const employeeSchema =  (t: ReturnType<typeof useTranslations>) => z.object({
+export const employeeSchema = (t: ReturnType<typeof useTranslations>) => z.object({
     name: z.string()
         .min(3, t("errors.nameMin"))
         .max(50, t("errors.nameMax")),

@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Hero() {
+    const t = useTranslations("home");
+
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -26,14 +29,14 @@ export default function Hero() {
                     isMounted ? 'opacity-100' : 'opacity-0'
                     }`}
                 >
-                    Contabilidad clara y sin complicaciones
+                    {t("headline")}
                 </h1>
                 
                 <p className={`text-gray-300 mt-4 max-w-2xl mx-auto transition-opacity duration-1000 ease-in-out delay-300 ${
                     isMounted ? 'opacity-100' : 'opacity-0'
                     }`}
                 >
-                    Axia Invoice te ayuda a mantener tus finanzas en orden de manera sencilla. Menos tiempo en trámites, más tiempo para tu negocio.
+                    {t("subheadline")}
                 </p>
                 
                 <div className={`mt-6 space-x-4 transition-opacity duration-1000 ease-in-out delay-500 ${
@@ -42,12 +45,12 @@ export default function Hero() {
                 >
                     <Link href={"/register"}> 
                         <button className="bg-homePrimary px-6 py-2 rounded-lg text-white font-semibold">
-                            Empezar
+                            {t("startButton")}
                         </button>
                     </Link>
 
                     <button className="border border-homePrimary px-6 py-2 rounded-lg text-homePrimary font-semibold">
-                        Learn More
+                        {t("learnMoreButton")}
                     </button>
                 </div>
             </div>

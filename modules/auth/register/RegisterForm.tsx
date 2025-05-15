@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
 import Link from "next/link";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import Select from "@/components/atoms/select";
 import { registerUser } from "@/request/access";
 import Input from "../../../components/atoms/Input";
 import { registerScheme } from "@/schemes/registerScheme";
 import CustomButton from "../../../components/atoms/CustomButton";
 import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
-import Select from "@/components/atoms/select";
 
 type RegisterFormData = {
   name: string;
@@ -22,6 +23,9 @@ type RegisterFormData = {
 
 const RegisterForm: React.FC = () => {
   const router = useRouter();
+  const t = useTranslations("register");
+  const registerSchema = registerScheme(t);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -30,7 +34,7 @@ const RegisterForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerScheme),
+    resolver: zodResolver(registerSchema),
   });
 
   const onSubmit = async (data: RegisterFormData) => {
@@ -48,14 +52,14 @@ const RegisterForm: React.FC = () => {
         router.push("/login");
       } else {
         const errorData = await response.json().catch(() => ({
-          message: "Error desconocido en el servidor"
+          message: t("unknownServerError")
         }));
         console.error("Registro fallido:", errorData);
         setSubmitError(errorData.message || response.statusText);
       }
     } catch (error) {
       console.error("Error inesperado:", error);
-      setSubmitError("Ocurrió un error inesperado. Por favor intenta nuevamente.");
+      setSubmitError(t("unexpectedError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -77,7 +81,7 @@ const RegisterForm: React.FC = () => {
         noValidate
       >
         <div className="w-full mb-3">
-          <Input placeholder="Name" type="text" {...register("name")} />
+          <Input placeholder={t("placeholders.name")} type="text" {...register("name")} />
           {errors.name && (
             <p className="text-red-500 text-sm">{errors.name.message}</p>
           )}
@@ -86,9 +90,9 @@ const RegisterForm: React.FC = () => {
         <div className="w-full mb-3">
           <Select
             options={[
-              { value: "ADMIN", label: "Administrador" },
-              { value: "USER", label: "Usuario" },
-              { value: "EDITOR", label: "Invitado" },
+              { value: "ADMIN", label: t("roles.admin") },
+              { value: "USER", label: t("roles.user") },
+              { value: "EDITOR", label: t("roles.editor") },
             ]}
             disabled={false}
             {...register("role")}
@@ -100,7 +104,7 @@ const RegisterForm: React.FC = () => {
 
         <div className="w-full mb-3">
           <Input
-            placeholder="Email"
+            placeholder={t("placeholders.email")}
             type="email"
             {...register("email")}
           />
@@ -111,7 +115,7 @@ const RegisterForm: React.FC = () => {
 
         <div className="w-full mb-3">
           <Input
-            placeholder="Password"
+            placeholder={t("placeholders.password")}
             type="password"
             {...register("password")}
           />
@@ -128,7 +132,7 @@ const RegisterForm: React.FC = () => {
 
         <div className="w-full">
           <CustomButton
-            text={isSubmitting ? "Enviando..." : "Create account"}
+            text={isSubmitting ? t("buttons.sending") : t("buttons.createAccount")}
             style="w-full text-white bg-secondary"
             typeButton="submit"
             disabled={isSubmitting}
@@ -138,17 +142,17 @@ const RegisterForm: React.FC = () => {
 
       <div className="w-full items-center pl-3 pr-3">
         <div className="justify-center pt-7 flex flex-row gap-2">
-          <p className="text-sm text-center">Joined us before?</p>
+          <p className="text-sm text-center">{t("joinedBefore")}</p>
           <Link href="/login" className="text-secondary">
             <p className="text-sm text-center">
-              Login
+              {t("buttons.login")}
             </p>
           </Link>
         </div>
 
         <div className="relative flex items-center w-full my-4">
           <span className="flex-grow border-t border-gray-300"></span>
-          <span className="px-2 text-gray-500 text-sm">or continue with</span>
+          <span className="px-2 text-gray-500 text-sm">{t("orContinueWith")}</span>
           <span className="flex-grow border-t border-gray-300"></span>
         </div>
 

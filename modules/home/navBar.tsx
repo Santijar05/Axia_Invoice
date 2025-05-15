@@ -4,12 +4,15 @@ import React from "react";
 import Link from "next/link";
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from "next-intl";
 
 import CustomButton from "@/components/atoms/CustomButton";
 import { standardLinkHome } from "@/utils/tokens";
 
 const Navbar = () => {
   const router = useRouter();
+
+  const t = useTranslations("home");
 
   return (
     <nav className="bg-black dark:bg-gray-900 fixed w-full z-20 top-0">
@@ -25,15 +28,15 @@ const Navbar = () => {
 
         <div className="hidden md:flex flex-grow justify-center">
           <ul className="flex space-x-8 font-medium">
-            <li><Link href="/" className={`${standardLinkHome}`}>Inicio</Link></li>
-            <li><Link href="/aboutus" className={`${standardLinkHome}`}>Sobre Nosotros</Link></li>
-            <li><Link href="/contactus" className={`${standardLinkHome}`}>Contactanos</Link></li>
+            <li><Link href="/" className={`${standardLinkHome}`}>{t("inicio")}</Link></li>
+            <li><Link href="/aboutus" className={`${standardLinkHome}`}>{t("aboutus")}</Link></li>
+            <li><Link href="/contactus" className={`${standardLinkHome}`}>{t("contactus")}</Link></li>
           </ul>
         </div>
 
         <div className="flex md:order-2">
           <CustomButton
-            text="Plataforma" 
+            text={t("placeholderPlatform")}
             style="bg-homePrimary text-white font-semibold" 
             onClickButton={() => router.push('/login')}
           />

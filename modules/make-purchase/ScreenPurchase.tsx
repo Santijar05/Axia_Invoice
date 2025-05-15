@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 import Image from "next/image";
 
@@ -14,6 +15,8 @@ export default function ScreenPurchase() {
   const [selectedProduct, setSelectedProduct] = useState<ProductDAO | null>(null);
   const [purchasePrice, setPurchasePrice] = useState<number>(0);
   const [quantity, setQuantity] = useState(1);
+  const t = useTranslations("purchase");
+
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const handleAddToCart = (item: any) => {
@@ -50,17 +53,17 @@ export default function ScreenPurchase() {
       <div className="relative w-full my-6 bg-blac bg-opacity-50 rounded-lg shadow-lg mt-5">
 
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-white">Tienda</h2>  
+          <h2 className="text-2xl font-semibold text-white">{t("title")}</h2>  
         </div>
 
         <div className="flex flex-row gap-6 flex-wrap mt-12">
         
           <div className="flex-1 min-w-[300px] border border-gray-600 bg-transparent p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4 text-white">Añadir Items</h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">{t("addItem")}</h2>
             
             <div className="flex flex-col gap-4">
               <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-white">Producto</label>
+                <label className="mb-1 text-sm font-medium text-white">{t("productLabel")}</label>
                   
                 <SearchBarUniversal 
                   onAddToCart={(item) => {
@@ -69,29 +72,29 @@ export default function ScreenPurchase() {
                     setPurchasePrice(product.purchasePrice);
                   }} 
                   showResults={true}
-                  placeholder="Buscar productos para comprar..."
+                  placeholder={t("productPlaceholder")}
                   searchType="products"
                 />
               </div>
 
               <div className="flex flex-row space-x-7">
                 <div className="flex flex-col w-full">
-                  <label className="mb-1 text-sm font-medium text-white">Cantidad</label>
+                  <label className="mb-1 text-sm font-medium text-white">{t("quantityLabel")}</label>
                   <Input
                     type="number"
                     value={quantity}
                     onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
-                    placeholder="Ingrese la cantidad"
+                    placeholder={t("quantityPlaceholder")}
                   />
                 </div>
 
                 <div className="flex flex-col w-full">
-                  <label className="mb-1 text-sm font-medium text-white">Precio de compra</label>
+                  <label className="mb-1 text-sm font-medium text-white">{t("purchasePriceLabel")}</label>
                   <Input
                     type="number"
                     value={purchasePrice}
                     onChange={(e) => setPurchasePrice(parseFloat(e.target.value))}
-                    placeholder="Ingrese el precio"
+                    placeholder={t("pricePlaceholder")}
                   />
                 </div>
               </div>
@@ -107,29 +110,29 @@ export default function ScreenPurchase() {
                 }}
                 disabled={!selectedProduct}
               >
-                Añadir producto
+                {t("addProductButton")}
               </button>
             </div>
           </div>
         </div>
 
         <div className="mt-6 border border-gray-600 bg-transparent shadow-md rounded-lg p-6 w-full text-white min-h-[600px] max-h-[600px] flex flex-col">
-          <h2 className="text-xl font-semibold mb-4 ">Detalle de Compra</h2>
+          <h2 className="text-xl font-semibold mb-4 ">{t("purchaseDetailTitle")}</h2>
 
           {cart.length === 0 ? (
-            <p className="text-gray-500">El carrito está vacío.</p>
+            <p className="text-gray-500">{t("emptyCart")}</p>
           ) : (
             <>
             <table className="min-w-full divide-y divide-gray-700">
                 <thead>
                   <tr className="text-left">
-                    <th className="px-4 py-2">Producto</th>
-                    <th className="px-4 py-2">Cantidad</th>
-                    <th className="px-4 py-2">Precio sin imp.</th>
-                    <th className="px-4 py-2">Impuesto %</th>
-                    <th className="px-4 py-2">Precio c/imp.</th>
-                    <th className="px-4 py-2">Subtotal</th>
-                    <th className="px-4 py-2">Acción</th>
+                    <th className="px-4 py-2">{t("product")}</th>
+                    <th className="px-4 py-2">{t("quantity")}</th>
+                    <th className="px-4 py-2">{t("basePrice")}</th>
+                    <th className="px-4 py-2">{t("tax")}</th>
+                    <th className="px-4 py-2">{t("priceWithTax")}</th>
+                    <th className="px-4 py-2">{t("subtotal")}</th>
+                    <th className="px-4 py-2">{t("action")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700">
@@ -146,7 +149,7 @@ export default function ScreenPurchase() {
                           onClick={() => removeFromCart(item.id)}
                           className="text-red-400 hover:text-red-600 px-3 py-1 rounded hover:bg-red-900/30 transition-colors"
                         >
-                          Eliminar
+                          {t("delete")}
                         </button>
                       </td>
                     </tr>
@@ -155,9 +158,9 @@ export default function ScreenPurchase() {
               </table>
 
               <div className="flex justify-between mt-4">
-                <span className="text-lg font-bold text-white">Total: ${total}</span>
+                <span className="text-lg font-bold text-white">{t("total")}: ${total}</span>
                 <CustomButton
-                  text="Vaciar Carrito"
+                  text={t("clearCart")}
                   onClickButton={clearCart}
                   style="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
                   typeButton="button"

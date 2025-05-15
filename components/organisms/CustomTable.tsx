@@ -8,9 +8,14 @@ import { FilePenLine, Eye, Menu, Trash2 } from "lucide-react";
 import Dropdown from "../molecules/Dropdown";
 import CustomButton from "../atoms/CustomButton";
 
+interface HeaderItem {
+  label: string; // texto visible, traducido
+  key: string;   // clave de acceso a los datos (en inglés, como en la DB)
+}
+
 interface CustomTableProps {
   title: string;
-  headers: string[];
+  headers: HeaderItem[];
   options?: boolean;
   data?: { [key: string]: string }[];
   onRowClick?: (id: string) => void;
@@ -29,7 +34,7 @@ interface CustomTableProps {
 
 export default function CustomTable({ 
   title, 
-  headers, 
+  headers,
   options, 
   data = [], 
   contextType = 'products',
@@ -102,7 +107,7 @@ export default function CustomTable({
             <thead className="bg-transparent border-b">
               <tr>
                 {headers.map((header, index) => (
-                  <th key={index} className="p-3 text-left text-medium text-homePrimary-200">{header}</th>
+                  <th key={index} className="p-3 text-left text-medium text-homePrimary-200">{header.label}</th>
                 ))}
                 {options && <th className="p-3 text-left text-medium text-homePrimary-200">{t('options')}</th>}
               </tr>
@@ -113,7 +118,7 @@ export default function CustomTable({
                 <tr key={index} className="border-b hover:bg-homePrimary-300">
                   {headers.map((header, idx) => (
                     <td key={idx} className="p-3 text-homePrimary-200">
-                      {item[header.toLowerCase()] || '-'}
+                      {item[header.key] || '-'}
                     </td>
                   ))}
                   {options && (
