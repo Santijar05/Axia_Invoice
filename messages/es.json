@@ -903,6 +903,10 @@
       "message": "Mensaje",
       "send": "Enviar Mensaje"
     }
+  },
+
+  "TableFilter": {
+    "filter": "Ordenar por"
   }
 
 }

@@ -202,7 +202,7 @@ export default function ScreenCustomers() {
                     />
                 </div>
                 <TableFilter 
-                    headers={tableHeaders.map((h) => h.key)} 
+                    headers={tableHeaders} 
                     onSort={handleSort} 
                 />
             </div>

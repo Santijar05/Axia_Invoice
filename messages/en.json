@@ -894,6 +894,10 @@
       "message": "Message",
       "send": "Send Message"
     }
+  },
+
+  "TableFilter": {
+    "filter": "Order by"
   }
 
 }

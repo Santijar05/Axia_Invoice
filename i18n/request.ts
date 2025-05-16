@@ -4,10 +4,12 @@ import { routing } from './routing';
 
 import en from '../messages/en.json';
 import es from '../messages/es.json'; // o el idioma que estés usando
+import fr from '../messages/fr.json';
 
 const messagesMap = {
   en,
   es,
+  fr,
   // agrega más locales aquí
 };
 

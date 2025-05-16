@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { useUserStore } from "@/store/UserStore";
+import LanguageSelector from "@/components/atoms/LanguageSelector";
 
 type MenuItem = {
   icon: React.ComponentType<{ className?: string }>;
@@ -241,6 +242,12 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
           )}
         </div>
       ))}
+      <div className="w-full">
+        <div className={`flex items-center justify-between rounded-lg hover:bg-gray-700 transition-all cursor-pointer`}>
+          <LanguageSelector variant="sidebar" isCollapsed={!isOpen} />
+        </div>
+      </div>
+
       <div className="mt-auto p-2">
         <Link 
           href={`/${locale}/login`}
@@ -257,7 +264,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
             !isOpen ? "justify-center" : ""
           }`}
         >
-          <LogOut className="h-5 w-5 text-" />
+          <LogOut className="h-5 w-5 text-gray-500" />
           {isOpen && <span className="text-gray-500">{t("logout")}</span>}
         </Link>
       </div>

@@ -241,7 +241,7 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
                     />
                 </div>
                 <TableFilter 
-                    headers={tableHeaders.map((h) => h.key)}
+                    headers={tableHeaders}
                     onSort={handleSort} 
                 />
             </div>

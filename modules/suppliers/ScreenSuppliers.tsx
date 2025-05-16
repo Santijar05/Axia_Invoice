@@ -204,7 +204,7 @@ export default function ScreenSuppliers() {
                     />
                 </div>
                 <TableFilter 
-                    headers={tableHeaders.map((h) => h.key)}
+                    headers={tableHeaders}
                     onSort={handleSort} 
                 />
             </div>

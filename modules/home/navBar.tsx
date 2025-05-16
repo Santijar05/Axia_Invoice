@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from "next-intl";
 
 import CustomButton from "@/components/atoms/CustomButton";
+import LanguageSelector from "@/components/atoms/LanguageSelector";
 import { standardLinkHome } from "@/utils/tokens";
 
 const Navbar = () => {
@@ -34,7 +35,9 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <div className="flex md:order-2">
+        <div className="flex md:order-2 items-center gap-4">
+          <LanguageSelector variant="navbar" />
+          
           <CustomButton
             text={t("placeholderPlatform")}
             style="bg-homePrimary text-white font-semibold" 
