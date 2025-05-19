@@ -1,9 +1,10 @@
 "use client";
 
-import { useLocale } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Globe, ChevronDown } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 
 interface LanguageSelectorProps {
   variant?: "navbar" | "sidebar";
@@ -14,15 +15,18 @@ export default function LanguageSelector({
   variant = "navbar", 
   isCollapsed = false 
 }: LanguageSelectorProps) {
+
+  const t = useTranslations("Lenguages")
+  
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   const languages = [
-    { code: "es", name: "Español" },
-    { code: "en", name: "English" },
-    { code: "fr", name: "Français" },
+    { code: "es", name: t("español") },
+    { code: "en", name: t("ingles") },
+    { code: "fr", name: t("frances") },
   ];
 
   const currentLanguage = languages.find(lang => lang.code === locale) || languages[0];

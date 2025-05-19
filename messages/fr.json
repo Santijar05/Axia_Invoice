@@ -867,6 +867,8 @@
       "discord": "Discord",
       "github": "Github"
     },
+    "brandsection1": "Innover en gestion d'entreprise : votre allié",
+    "brandsection2": "dans la facturation, l'inventaire et l'analyse des données.",
     "copyrightText": "Tous droits réservés par Juan Campos Santi Jime."
   },
 
@@ -907,5 +909,37 @@
 
   "TableFilter": {
     "filter": "Trier par"
+  },
+
+  "Lenguages": {
+    "español": "Espagnol",
+    "ingles": "Anglais",
+    "frances": "Français"
+  },
+
+  "notFoundHome": {
+    "description": "Désolé, nous n'avons pas pu trouver cette page.",
+    "button": "Retour à l'accueil"
+  },
+
+  "notFoundClient": {
+    "description": "Désolé, nous n'avons pas pu trouver ce client.",
+    "button": "Retour aux clients"
+  },
+
+  "notFoundEmployee": {
+    "description": "Désolé, nous n'avons pas pu trouver cet employé.",
+    "button": "Retour aux employés"
+  },
+
+  "notFoundProducts": {
+    "description": "Désolé, nous n'avons pas pu trouver ce produit",
+    "button": "Retour aux Produits"
+  },
+
+  "notFoundInvoice": {
+    "description": "Désolé, nous n'avons pas pu trouver cette facture",
+    "button": "Retour aux Factures"
   }
+
 }

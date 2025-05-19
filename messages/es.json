@@ -867,6 +867,8 @@
       "discord": "Discord",
       "github": "Github"
     },
+    "brandsection1": "Innovando la gestión empresarial: tu aliado",
+    "brandsection2": "en facturación, inventario y análisis de datos.",
     "copyrightText": "Todos los derechos reservados por Juan Campos Santi Jime."
   },
 
@@ -907,6 +909,37 @@
 
   "TableFilter": {
     "filter": "Ordenar por"
+  },
+
+  "Lenguages": {
+    "español": "Español",
+    "ingles": "Inglés",
+    "frances": "Francés"
+  },
+
+  "notFoundHome": {
+    "description": "Lo sentimos, no pudimos encontrar esta página.",
+    "button": "Volver al inicio"
+  },
+  
+  "notFoundClient": {
+    "description": "Lo sentimos, no pudimos encontrar a este cliente.",
+    "button": "Volver a Clientes"
+  },
+
+  "notFoundEmployee": {
+    "description": "Lo sentimos, no pudimos encontrar a este empleado.",
+    "button": "Volver a Empleados"
+  },
+
+  "notFoundProducts": {
+    "description": "Lo sentimos, no pudimos encontrar este producto",
+    "button": "Volver a Productos"
+  },
+  
+  "notFoundInvoice": {
+    "description": "Lo sentimos, no pudimos encontrar esta factura",
+    "button": "Volver a Facturas"
   }
 
 }

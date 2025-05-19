@@ -858,6 +858,8 @@
       "discord": "Discord",
       "github": "Github"
     },
+    "brandsection1": "Innovating business management: your ally",
+    "brandsection2": "in billing, inventory, and data analysis",
     "copyrightText": "All Rights Reserved by Juan Campos Santi Jime."
   },
 
@@ -898,6 +900,37 @@
 
   "TableFilter": {
     "filter": "Order by"
+  },
+
+  "Lenguages": {
+    "español": "Spanish",
+    "ingles": "English",
+    "frances": "French"
+  },
+
+  "notFoundHome": {
+    "description": "Sorry, we couldn't find this page.",
+    "button": "Return to Home"
+  },
+
+  "notFoundClient": {
+    "description": "Sorry we couldnt find this client",
+    "button": "Return to Clients"
+  },
+
+  "notFoundEmployee": {
+    "description": "Sorry, we couldn't find this employee.",
+    "button": "Return to Employees"
+  },
+
+  "notFoundProducts": {
+    "description": "Sorry we couldnt find this product",
+    "button": "Return to Producst"
+  },
+
+  "notFoundInvoice": {
+    "description": "Sorry we couldnt find this invoice",
+    "button": "Return to Invoices"
   }
 
 }

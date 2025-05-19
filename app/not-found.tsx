@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from "next/image";
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import pricingBg from '@/public/Images/pricing-bg1.png';
 
 export default function NotFoundPage() {
-
+  const t = useTranslations("notFoundHome"); 
   const locale = useLocale();
   return (
     <div className='min-h-screen w-full flex bg-black relative py-2'>
@@ -23,10 +23,10 @@ export default function NotFoundPage() {
 
         <div className="text-center space-y-6 relative z-10 max-w-6xl mx-auto px-4">
           <h1 className="text-9xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-white to-homePrimary mb-4 animate-pulse">404</h1>
-          <p className="text-2xl md:text-3xl"> Sorry we couldnt find this page</p>
+          <p className="text-2xl md:text-3xl"> {t('description')}</p>
           <Link href={`/${locale}/`} passHref>
             <button className="mt-6 inline-block bg-homePrimary hover:bg-primary text-white font-bold py-3 px-6 rounded-full shadow-lg transform hover:scale-110 transition duration-300">
-              Return to Home
+              {t('button')}
             </button>
           </Link>
         </div>
