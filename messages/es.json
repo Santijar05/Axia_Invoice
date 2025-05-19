@@ -23,16 +23,7 @@
       "passwordMin": "La contraseña debe tener al menos 6 caracteres",
       "passwordMax": "La contraseña no puede exceder 50 caracteres"
     }
-  }, 
-
-  "EmployeeDashboard": {
-    "latestProducts": "Últimos Productos",
-    "distributor": "Distribuidor",
-    "product": "Producto",
-    "brand": "Marca",
-    "stock": "Stock",
-    "price": "Precio"
-  }, 
+  },  
 
   "Employees": {
     "title": "Gestión de Empleados",
@@ -936,7 +927,7 @@
     "description": "Lo sentimos, no pudimos encontrar este producto",
     "button": "Volver a Productos"
   },
-  
+
   "notFoundInvoice": {
     "description": "Lo sentimos, no pudimos encontrar esta factura",
     "button": "Volver a Facturas"

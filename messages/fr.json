@@ -24,16 +24,7 @@
       "passwordMax": "Le mot de passe ne peut pas dépasser 50 caractères"
     }
   }, 
-
-  "EmployeeDashboard": {
-    "latestProducts": "Derniers Produits",
-    "distributor": "Distributeur",
-    "product": "Produit",
-    "brand": "Marque",
-    "stock": "Stock",
-    "price": "Prix"
-  }, 
-
+  
   "Employees": {
     "title": "Gestion des Employés",
     "addNew": "Ajouter un Nouvel Employé",

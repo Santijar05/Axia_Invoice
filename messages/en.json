@@ -24,16 +24,7 @@
       "passwordMax": "Password must not exceed 50 characters"
     }
   },  
-
-  "EmployeeDashboard": {
-    "latestProducts": "Latest Products",
-    "distributor": "Distributor",
-    "product": "Product",
-    "brand": "Brand",
-    "stock": "Stock",
-    "price": "Price"
-  },
-
+  
   "Employees": {
     "title": "Employee Management",
     "addNew": "New Employee",
