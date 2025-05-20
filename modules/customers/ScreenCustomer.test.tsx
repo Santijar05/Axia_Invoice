@@ -39,7 +39,6 @@ const mockRouter = {
   isFirstAccess: false,
 };
 
-// Componente wrapper para proveer el contexto del enrutador
 const renderWithRouter = (ui: React.ReactElement) => {
   const { AppRouterContext } = require('next/dist/shared/lib/app-router-context.shared-runtime');
   return render(
@@ -49,7 +48,6 @@ const renderWithRouter = (ui: React.ReactElement) => {
   );
 };
 
-// Datos mockeados
 const mockClients = [
   {
     id: '1',
@@ -67,7 +65,6 @@ const mockClients = [
   },
 ];
 
-// Mock de subcomponentes
 jest.mock('@/components/organisms/CustomTable', () => {
   return function MockCustomTable({ data, headers, customActions }: any) {
     return (
@@ -159,13 +156,10 @@ jest.mock('./CustomerFormEdit', () => {
 });
 
 describe('ScreenCustomers', () => {
-  // Guardar la referencia original de console.error
   const originalConsoleError = console.error;
   
   beforeAll(() => {
-    // Mockear console.error para filtrar mensajes específicos
     console.error = jest.fn((...args) => {
-      // Solo suprimir advertencias específicas de React
       const message = args[0];
       if (
         typeof message === 'string' && (
@@ -173,16 +167,14 @@ describe('ScreenCustomers', () => {
           message.includes('The current testing environment is not configured to support act')
         )
       ) {
-        return; // Suprimir estas advertencias específicas
+        return;
       }
       
-      // Permitir que otros errores pasen
       originalConsoleError(...args);
     });
   });
   
   afterAll(() => {
-    // Restaurar el console.error original después de las pruebas
     console.error = originalConsoleError;
   });
 

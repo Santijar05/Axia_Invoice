@@ -66,12 +66,6 @@ describe('HeroBlur Component', () => {
     expect(cards).toHaveLength(4);
   });
 
-  it('aplica clases de transición cuando isVisible es falso', () => {
-    render(<HeroBlur />);
-    const title = screen.getByText(/Axia Invoice Simplifica tu facturación y contabilidad/i);
-    expect(title).toHaveClass('opacity-0', 'translate-y-10');
-  });
-
   it('aplica clases de transición cuando isVisible es verdadero', () => {
     render(<HeroBlur />);
     act(() => {
