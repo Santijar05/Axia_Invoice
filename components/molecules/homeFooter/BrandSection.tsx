@@ -1,26 +1,29 @@
 import Image from "next/image";
 import React from "react";
+import { useTranslations } from "next-intl"; 
 import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 import axiaLogo from '@/public/Images/logo_blanco.png';
 
 export const BrandSection: React.FC = () => {
+    const t = useTranslations("footer");
+
     return (
         <div className="md:col-span-2">
             <div className="mb-4">
                 <Image
                     src={axiaLogo}
-                    alt="Axia Invoice"
+                    alt={t("brand.logoAlt")}
                     width={70}
                     height={40}
                 />
             </div>
 
             <p className="text-sm text-gray-400">
-                Innovando la gestión empresarial: tu aliado <br></br> en facturación, inventario y análisis de datos.
+                {t("brand.description")}
             </p>
             
             <div className="mt-4 flex space-x-4">
-                {/* Iconos de redes sociales */}
+                {/* Social media icons */}
                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
                     <FaFacebook 
                         className="w-6 h-6 text-gray-400 hover:text-white transition" 

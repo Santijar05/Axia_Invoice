@@ -38,7 +38,18 @@ export default function CustomersWidget() {
   
   // Prepare chart data for customer segments
   const chartData = {
-    labels: data.segments.map(segment => segment.name),
+    labels: data.segments.map(segment => {
+      switch(segment.name) {
+        case "New (1 purchase)":
+          return t('segments.new');
+        case "Regular (2-3 purchases)":
+          return t('segments.regular');
+        case "Frequent (4+ purchases)":
+          return t('segments.frequent');
+        default:
+          return segment.name;
+      }
+    }),
     datasets: [
       {
         label: t('customerCount'),
@@ -93,7 +104,7 @@ export default function CustomersWidget() {
       </div>
       
       <div className="mt-6">
-        <h3 className="text-sm font-medium text-gray-400 mb-2">{t('segments')}</h3>
+        <h3 className="text-sm font-medium text-gray-400 mb-2">{t('segmentsTitle')}</h3>
         <div className="bg-black/30 p-4 rounded-lg h-64">
           <PieChart
             labels={chartData.labels}

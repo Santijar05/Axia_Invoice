@@ -76,8 +76,14 @@ export default function ProfitabilityWidget() {
             costBreakdown.map((item, index) => (
               <div key={index} className="bg-black/20 rounded-lg p-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-300">{item.category}</span>
-                  <span className="text-sm font-medium text-white">{formatCurrency(item.amount)}</span>
+                  <span className="text-sm text-gray-300">
+                    {item.category === 'Cost of Goods' && t('costOfGoods')}
+                    {item.category === 'Operational Expenses' && t('operationalExpenses')}
+                    {item.category === 'Net Profit' && t('netProfitCategory')}
+                  </span>
+                  <span className="text-sm font-bold">
+                    {formatCurrency(item.amount)} ({item.percentage.toFixed(1)}%)
+                  </span>
                 </div>
               </div>
             ))
