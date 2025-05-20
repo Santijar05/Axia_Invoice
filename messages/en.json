@@ -572,7 +572,8 @@
     "supplier": "Suppliers",
     "users": "Users",
     "customers": "Customers",
-    "employees": "Employees"
+    "employees": "Employees",
+    "dashboard": "Dashboard"
   },
 
   "saleInvoice": {
@@ -898,6 +899,57 @@
 
   "TableFilter": {
     "filter": "Order by"
-  }
+  },
 
+  "dashboard": {
+    "title": "Dashboard",
+    "errorLoading": "Error loading data",
+    "retry": "Retry",
+    "sales": {
+      "title": "Sales Analysis",
+      "totalRevenue": "Total Revenue",
+      "totalSales": "Total Sales",
+      "revenue": "Revenue",
+      "count": "Count",
+      "week": "Week",
+      "month": "Month"
+    },
+    "products": {
+      "title": "Best Selling Products",
+      "units": "units",
+      "revenue": "Revenue"
+    },
+    "inventory": {
+      "title": "Inventory Summary",
+      "totalProducts": "Total Products",
+      "totalStock": "Total Stock",
+      "inventoryValue": "Inventory Value",
+      "lowStockItems": "Low Stock Items",
+      "lowStockAlert": "Critical Stock Products",
+      "noData": "No inventory data available"
+    },
+    "customers": {
+      "title": "Customer Analysis",
+      "totalCustomers": "Total Customers",
+      "newCustomers": "New Customers",
+      "repeatRate": "Repeat Rate",
+      "customerCount": "Customer Count",
+      "averageOrderValue": "Average Order Value",
+      "segments": "Segments",
+      "topCustomers": "Top Customers",
+      "orders": "Orders",
+      "spent": "Spent",
+      "noData": "No customer data available"
+    },
+    "profitability": {
+      "title": "Profitability Analysis",
+      "revenue": "Revenue",
+      "cogs": "Cost of Goods",
+      "grossProfit": "Gross Profit",
+      "netProfit": "Net Profit",
+      "profitMargin": "Profit Margin",
+      "costBreakdown": "Cost Breakdown",
+      "noData": "No profitability data available"
+    }
+  }
 }

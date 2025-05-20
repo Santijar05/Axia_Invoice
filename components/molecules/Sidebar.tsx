@@ -12,7 +12,8 @@ import {
   ChevronUp, 
   HandCoins, 
   ArchiveRestore, 
-  LogOut
+  LogOut,
+  BarChart2
 } from "lucide-react";
 
 import { useUserStore } from "@/store/UserStore";
@@ -173,6 +174,12 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
         ],
+      },
+      { 
+        icon: BarChart2, 
+        label: t("dashboard"),
+        href: `/${locale}/admin/dashboard`,
+        allowedRoles: ["ADMIN", "SUPERADMIN"]
       },
     ] : []),
   ];

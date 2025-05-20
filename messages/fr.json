@@ -581,7 +581,8 @@
     "supplier": "Fournisseurs",
     "users": "Utilisateurs",
     "customers": "Clients",
-    "employees": "Employés"
+    "employees": "Employés",
+    "dashboard": "Tableau de Bord"
   },
 
   "saleInvoice": {
@@ -907,5 +908,57 @@
 
   "TableFilter": {
     "filter": "Trier par"
+  },
+
+  "dashboard": {
+    "title": "Tableau de Bord",
+    "errorLoading": "Erreur lors du chargement des données",
+    "retry": "Réessayer",
+    "sales": {
+      "title": "Analyse des Ventes",
+      "totalRevenue": "Revenu Total",
+      "totalSales": "Ventes Totales",
+      "revenue": "Revenu",
+      "count": "Nombre",
+      "week": "Semaine",
+      "month": "Mois"
+    },
+    "products": {
+      "title": "Produits les Plus Vendus",
+      "units": "unités",
+      "revenue": "Revenu"
+    },
+    "inventory": {
+      "title": "Résumé de l'Inventaire",
+      "totalProducts": "Total des Produits",
+      "totalStock": "Stock Total",
+      "inventoryValue": "Valeur de l'Inventaire",
+      "lowStockItems": "Articles à Faible Stock",
+      "lowStockAlert": "Produits à Stock Critique",
+      "noData": "Aucune donnée d'inventaire disponible"
+    },
+    "customers": {
+      "title": "Analyse des Clients",
+      "totalCustomers": "Total des Clients",
+      "newCustomers": "Nouveaux Clients",
+      "repeatRate": "Taux de Fidélité",
+      "customerCount": "Nombre de Clients",
+      "averageOrderValue": "Valeur Moyenne des Commandes",
+      "segments": "Segments",
+      "topCustomers": "Meilleurs Clients",
+      "orders": "Commandes",
+      "spent": "Dépensé",
+      "noData": "Aucune donnée client disponible"
+    },
+    "profitability": {
+      "title": "Analyse de la Rentabilité",
+      "revenue": "Revenu",
+      "cogs": "Coût des Marchandises",
+      "grossProfit": "Bénéfice Brut",
+      "netProfit": "Bénéfice Net",
+      "profitMargin": "Marge de Bénéfice",
+      "costBreakdown": "Décomposition des Coûts",
+      "noData": "Aucune donnée de rentabilité disponible"
+    }
   }
 }

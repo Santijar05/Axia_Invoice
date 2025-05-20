@@ -581,7 +581,8 @@
     "supplier": "Proveedores",
     "users": "Usuarios",
     "customers": "Clientes",
-    "employees": "Empleados"
+    "employees": "Empleados",
+    "dashboard": "Panel de Control"
   },
 
   "saleInvoice": {
@@ -907,6 +908,52 @@
 
   "TableFilter": {
     "filter": "Ordenar por"
+  },
+
+  "dashboard": {
+    "title": "Panel de Control",
+    "errorLoading": "Error al cargar los datos",
+    "retry": "Reintentar",
+    "sales": {
+      "title": "Análisis de Ventas",
+      "totalRevenue": "Ingreso Total",
+      "totalSales": "Ventas Totales",
+      "revenue": "Ingresos",
+      "count": "Cantidad",
+      "week": "Semana",
+      "month": "Mes"
+    },
+    "products": {
+      "title": "Productos Más Vendidos",
+      "units": "unidades",
+      "revenue": "Ingresos"
+    },
+    "inventory": {
+      "title": "Resumen de Inventario",
+      "totalProducts": "Total de Productos",
+      "totalStock": "Stock Total",
+      "inventoryValue": "Valor del Inventario",
+      "lowStockItems": "Artículos con Bajo Stock",
+      "lowStockAlert": "Productos con Stock Crítico",
+      "noData": "No hay datos de inventario disponibles"
+    },
+    "customers": {
+      "title": "Análisis de Clientes",
+      "totalCustomers": "Total de Clientes",
+      "newCustomers": "Nuevos Clientes",
+      "customerCount": "Cantidad de Clientes",
+      "averageOrderValue": "Valor Promedio de Pedido",
+      "segments": "Segmentos",
+      "noData": "No hay datos de clientes disponibles"
+    },
+    "profitability": {
+      "title": "Análisis de Rentabilidad",
+      "grossProfit": "Beneficio Bruto",
+      "netProfit": "Beneficio Neto",
+      "profitMargin": "Margen de Beneficio",
+      "costBreakdown": "Desglose de Costos",
+      "noData": "No hay datos de rentabilidad disponibles"
+    }
   }
 
 }
