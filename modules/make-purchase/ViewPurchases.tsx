@@ -7,20 +7,20 @@ import { useRouter } from "next/navigation";
 import Toolbar from "@/components/organisms/ToolBar";
 import EmptyState from '@/components/molecules/EmptyState';
 import CustomTable from "@/components/organisms/CustomTable";
-import { deleteSaleInvoice, getListSaleInvoices } from "@/lib/api-saleInvoce";
+import { deletePurchaseInvoice, getListSalePurchases } from "@/lib/api-purchase";
 
-export default function ScreenInvoices() {
+export default function ViewPurchases() {
     const router = useRouter();
     const locale = useLocale();
     const [invoices, setInvoices] = useState<{ [key: string]: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const initialFetchDone = useRef(false);
-    const t = useTranslations("saleInvoice");
+    const t = useTranslations("purchases");
 
     const tableHeaders = [
         { label: t("headers.id"), key: "id"},
-        { label: t("headers.client"), key: "cliente"},
+        { label: t("headers.supplier"), key: "proveedor"},
         { label: t("headers.date"), key: "fecha"},
         { label: t("headers.total"), key: "total"},
     ];
@@ -35,10 +35,11 @@ export default function ScreenInvoices() {
     const formatAndSetInvoices = (invoiceList: any[]) => {
         const formatted = invoiceList.map((invoice) => ({
             id: invoice.id,
-            cliente: `${invoice.client?.firstName || "Nombre"} ${invoice.client?.lastName || "Desconocido"}`,
+            proveedor: `${invoice.supplier?.name || "Nombre"}`,
             fecha: new Date(invoice.date).toLocaleDateString(),
             total: `$${(invoice.totalPrice || 0).toFixed(2)}`,
         }));
+
         setInvoices(formatted);
     };
 
@@ -47,7 +48,7 @@ export default function ScreenInvoices() {
 
         setIsLoading(true);
         try {
-            const res = await getListSaleInvoices();
+            const res = await getListSalePurchases();
             if (res && Array.isArray(res)) {
                 formatAndSetInvoices(res);
             }
@@ -59,12 +60,12 @@ export default function ScreenInvoices() {
     };
 
     const handleViewInvoice = (invoiceId: string) => {
-        router.push(`/${locale}/sales/sales-invoices/${invoiceId}`);
+        router.push(`/${locale}/shopping/view-purchases/${invoiceId}`);
     };
 
     const handleDeleteInvoice = async (invoiceId: string) => {
         try {
-            await deleteSaleInvoice(invoiceId);
+            await deletePurchaseInvoice(invoiceId);
             setInvoices((prev) => prev.filter((inv) => inv.id !== invoiceId));
         } catch (err) {
             console.error("Error eliminando la factura:", err);

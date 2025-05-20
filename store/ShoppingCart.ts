@@ -1,21 +1,24 @@
-import { Supplier } from "@/types/Api";
+import { SupplierDAO } from "@/types/Api";
 import { create } from "zustand";
 
 type Product = {
-  id: number;
+  id: string;
   name: string;
-  price: number;
-  basePrice: number;
+  salePrice: number;
+  purchasePrice: number;
   quantity: number;
   tax: number;
-  supplier: Supplier;
+  supplier: SupplierDAO;
+  tenantId: string;
+  stock: number;
 };
 
 type CartState = {
   cart: Product[];
   addToCart: (product: Product) => void;
-  removeFromCart: (id: number) => void;
+  removeFromCart: (id: string) => void;
   clearCart: () => void;
+  updateProduct: (updatedProduct: Product) => void;
 };
 
 export const useShoppingCart = create<CartState>((set) => ({
@@ -32,13 +35,20 @@ export const useShoppingCart = create<CartState>((set) => ({
       }
       console.log("Producto añadido:", product);
       console.log("Estado actual del carrito:", [...state.cart, product]);
-      return { cart: [...state.cart, { ...product, quantity: 1 }] };
+      return { cart: [...state.cart, { ...product }] };
     }),
 
   removeFromCart: (id) =>
     set((state) => ({
-      cart: state.cart.filter((product) => product.id !== id),
+      cart: state.cart.filter((product) => (product.id) !== id),
     })),
     
   clearCart: () => set({ cart: [] }),
+
+  updateProduct: (updatedProduct) =>
+    set((state) => ({
+      cart: state.cart.map((product) =>
+        product.id === updatedProduct.id ? { ...product, ...updatedProduct } : product
+      ),
+    })),
 }));

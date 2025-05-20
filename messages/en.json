@@ -112,7 +112,13 @@
     "next": "Next",
     "page": "Page",
     "of": "of",
-    "delete_confirmation": "Are you sure you want to delete this?"
+    
+    "delete_confirmation": "Are you sure you want to delete this ",
+    "clients": "client",
+    "employees": "employee",
+    "products": "product",
+    "suppliers": "supplier",
+    "invoices": "invoice"
   },
 
   "EmployeeDetailClient": {
@@ -269,7 +275,14 @@
     "action": "Action",
     "delete": "Remove",
     "total": "Total",
-    "clearCart": "Clear Cart"
+    "clearCart": "Clear Cart",
+
+    "supplierLabel": "Supplier",
+    "supplierPlaceholder": "Search suppliers...",
+    "confirmPurchase": "Confirm purchase",
+    "supplier": "Supplier",
+    "noSupplier": "No supplier",
+    "edit": "Edit Product"
   },
 
   "supplier": {
@@ -559,6 +572,7 @@
     "makeSales": "Make Sales",
     "viewSales": "View Sales",
     "shopping": "Purchases",
+    "viewPurchase": "View purchases",
     "makePurchase": "Make Purchase",
     "supplier": "Suppliers",
     "users": "Users",
@@ -572,11 +586,60 @@
     "empty": "No invoices registered.",
     "tableTitle": "Invoice List",
     "headers": {
+      "id": "Invoice ID",
       "client": "Client",
       "date": "Date",
       "total": "Total"
     },
     "deleteError": "An error occurred while deleting the invoice."
+  },
+
+  "purchases": {
+    "title": "Purchase Management",
+    "loading": "Loading purchases...",
+    "empty": "No purchases recorded.",
+    "tableTitle": "Purchase List",
+    "headers": {
+      "id": "Purchase ID",
+      "date": "Date",
+      "total": "Total",
+      "supplier": "Supplier"
+    },
+    "deleteError": "An error occurred while deleting the purchase record."
+  },
+
+  "notFoundPurchase": {
+    "description": "Sorry, we couldn't find this purchase record",
+    "button": "Back to Purchases"
+  },
+  
+  "purchaseDetail": {
+    "title": "Invoice Detail",
+    "backButton": "Back",
+    "invoiceId": "Invoice ID",
+    "date": "Date",
+    "electronic": "Electronic Invoice",
+    "yes": "Yes",
+    "no": "No",
+    "supplierSection": "Supplier",
+    "supplier": {
+      "name": "Name",
+      "nit": "NIT",
+      "phone": "Phone",
+      "address": "Address",
+      "supplierId": "Supplier ID"
+    },
+    "companySection": "Company",
+    "company": {
+      "name": "Name",
+      "nit": "NIT",
+      "address": "Address",
+      "phone": "Phone"
+    },
+    "productsSection": "Products",
+    "noProducts": "No associated products.",
+    "product": "Product",
+    "quantity": "Quantity"
   },
 
   "invoiceDetail": {

@@ -1,34 +1,43 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 import Image from "next/image";
 
 import SearchBarUniversal from "@/components/molecules/SearchBar";
+import { Compra, ProductDAO, SaleItemForAPI } from "@/types/Api";
 import CustomButton from "@/components/atoms/CustomButton";
 import { useShoppingCart } from "@/store/ShoppingCart";
+import { crearCompra } from "@/lib/api-purchase";
 import Input from "@/components/atoms/Input";
-import { ProductDAO } from "@/types/Api";
 
 export default function ScreenPurchase() {
-  const { cart, addToCart, removeFromCart, clearCart } = useShoppingCart();
+  const { user } = useAuth();
+  
   const [selectedProduct, setSelectedProduct] = useState<ProductDAO | null>(null);
+  const [selectedSupplier, setSelectedSupplier] = useState<any | null>(null);
+  const { cart, addToCart, removeFromCart, clearCart } = useShoppingCart();
   const [purchasePrice, setPurchasePrice] = useState<number>(0);
+  const [searchResetKey, setSearchResetKey] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const isSupplierDisabled = cart.length > 0;
   const t = useTranslations("purchase");
 
-  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const total = cart.reduce((acc, item) => acc + item.purchasePrice * item.quantity, 0);
 
   const handleAddToCart = (item: any) => {
     const product = item as ProductDAO;
     addToCart({
-      id: parseInt(product.id),
+      id: product.id,
       quantity: quantity,
       tax: product.tax,
       name: product.name,
       supplier: product.supplier,
-      price: product.salePrice,
-      basePrice: product.purchasePrice,
+      salePrice: product.salePrice,
+      purchasePrice: product.purchasePrice,
+      tenantId: user?.tenantId || '',
+      stock: product.stock
     });
   };
 
@@ -39,6 +48,33 @@ export default function ScreenPurchase() {
       minimumFractionDigits: 0,
     });
   };
+
+  const handleConfirmPurchase = async () => {
+    const productsForAPI: SaleItemForAPI[] = cart.map(item => ({
+      tenantId: user?.tenantId || '', 
+      productId: item.id.toString() || '',
+      quantity: item.quantity
+    }));
+
+    try {
+      const compra: Compra = {
+        tenantId: user?.tenantId || '',
+        supplierId: cart[0]?.supplier?.id, 
+        totalPrice: total,
+        electronicBill: false,
+        products: productsForAPI
+      };
+
+      const created = await crearCompra(compra);
+      console.log("Compra creada:", created);
+      clearCart();
+      alert("¡Compra realizada con éxito!");
+    } catch (error) {
+      console.error("Error al crear la compra:", error);
+      alert("Hubo un error al realizar la compra.");
+    }
+  };
+
 
   return (
     <div className="relative w-full min-h-screen text-white flex justify-center">
@@ -62,22 +98,43 @@ export default function ScreenPurchase() {
             <h2 className="text-xl font-semibold mb-4 text-white">{t("addItem")}</h2>
             
             <div className="flex flex-col gap-4">
-              <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-white">{t("productLabel")}</label>
+
+              <div className="flex flex-col w-full">
+                <label className="mb-1 text-sm font-medium text-white">{t("supplierLabel")}</label>
                   
                 <SearchBarUniversal 
                   onAddToCart={(item) => {
-                    const product = item as ProductDAO;
-                    setSelectedProduct(product);
-                    setPurchasePrice(product.purchasePrice);
+                    const supplier = item as any; 
+                    setSelectedSupplier(supplier.id);
+                    clearCart(); 
                   }} 
                   showResults={true}
-                  placeholder={t("productPlaceholder")}
-                  searchType="products"
+                  placeholder={t("supplierPlaceholder")}
+                  searchType="suppliers"
+                  disabled={isSupplierDisabled}
                 />
               </div>
 
               <div className="flex flex-row space-x-7">
+
+                <div className="flex flex-col w-full">
+                  <label className="mb-1 text-sm font-medium text-white">{t("productLabel")}</label>
+                    
+                  <SearchBarUniversal 
+                    resetTrigger={searchResetKey}
+                    onAddToCart={(item) => {
+                      const product = item as ProductDAO;
+                      setSelectedProduct(product);
+                      setPurchasePrice(product.purchasePrice);
+                    }} 
+                    showResults={true}
+                    placeholder={t("productPlaceholder")}
+                    searchType="products"
+                    supplierIdFilter={selectedSupplier}
+                  />
+
+                </div>
+
                 <div className="flex flex-col w-full">
                   <label className="mb-1 text-sm font-medium text-white">{t("quantityLabel")}</label>
                   <Input
@@ -85,16 +142,6 @@ export default function ScreenPurchase() {
                     value={quantity}
                     onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
                     placeholder={t("quantityPlaceholder")}
-                  />
-                </div>
-
-                <div className="flex flex-col w-full">
-                  <label className="mb-1 text-sm font-medium text-white">{t("purchasePriceLabel")}</label>
-                  <Input
-                    type="number"
-                    value={purchasePrice}
-                    onChange={(e) => setPurchasePrice(parseFloat(e.target.value))}
-                    placeholder={t("pricePlaceholder")}
                   />
                 </div>
               </div>
@@ -106,7 +153,7 @@ export default function ScreenPurchase() {
                   handleAddToCart(selectedProduct);
                   setSelectedProduct(null);
                   setQuantity(1);
-                  setPurchasePrice(0);
+                  setSearchResetKey(prev => prev + 1);
                 }}
                 disabled={!selectedProduct}
               >
@@ -140,11 +187,11 @@ export default function ScreenPurchase() {
                     <tr key={item.id}>
                       <td className="px-4 py-2">{item.name}</td>
                       <td className="px-4 py-2">{item.quantity}</td>
-                      <td className="px-4 py-2">{formatCurrency(item.basePrice)}</td>
+                      <td className="px-4 py-2">{formatCurrency(item.purchasePrice)}</td>
                       <td className="px-4 py-2">{item.tax}%</td>
-                      <td className="px-4 py-2">{formatCurrency(item.price)}</td>
-                      <td className="px-4 py-2">{formatCurrency(item.quantity * item.price)}</td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2">{formatCurrency(item.salePrice)}</td>
+                      <td className="px-4 py-2">{formatCurrency(item.quantity * item.salePrice)}</td>
+                      <td className="px-4 py-2 flex space-x-2">
                         <button
                           onClick={() => removeFromCart(item.id)}
                           className="text-red-400 hover:text-red-600 px-3 py-1 rounded hover:bg-red-900/30 transition-colors"
@@ -171,6 +218,15 @@ export default function ScreenPurchase() {
             
           )}
         </div>
+
+        <CustomButton
+          text={t("confirmPurchase")}
+          onClickButton={handleConfirmPurchase}
+          style={`px-6 py-2 bg-homePrimary border text-white rounded-md hover:bg-homePrimary-400 disabled:bg-gray-500 transition-colors w-full`}
+          typeButton="button"
+          disabled={cart.length === 0}
+        />
+
       </div>
     </div>
   );

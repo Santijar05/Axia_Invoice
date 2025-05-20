@@ -40,8 +40,7 @@ export function middleware(request: NextRequest) {
       USER: [
         "/employee", 
         "/store/products", 
-        "/sales/make-sales",
-        "/shopping/make-purchase",
+        "/sales/make-sales"
       ],
 
       ADMIN: [
@@ -52,6 +51,7 @@ export function middleware(request: NextRequest) {
         "/sales/make-sales", 
         "/sales/sales-invoices", 
         "/shopping/make-purchase", 
+        "/shopping/view-purchases",
         "/shopping/suppliers", 
         "/users/customers", 
         "/users/employees"
@@ -65,6 +65,7 @@ export function middleware(request: NextRequest) {
         "/sales/make-sales", 
         "/sales/sales-invoices", 
         "/shopping/make-purchase", 
+        "/shopping/view-purchases",
         "/shopping/suppliers", 
         "/users/customers", 
         "/users/employees"

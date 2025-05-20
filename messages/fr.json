@@ -112,7 +112,13 @@
     "next": "Suivant",
     "page": "Page",
     "of": "de",
-    "delete_confirmation": "Êtes-vous sûr de vouloir supprimer cela?"
+
+    "delete_confirmation": "Êtes-vous sûr de vouloir supprimer ce ",
+    "clients": "client",
+    "employees": "employé",
+    "products": "produit",
+    "suppliers": "fournisseur",
+    "invoices": "facture"
   },
 
   "EmployeeDetailClient": {
@@ -276,7 +282,14 @@
     "action": "Action",
     "delete": "Supprimer",
     "total": "Total",
-    "clearCart": "Vider le Panier"
+    "clearCart": "Vider le Panier",
+
+    "supplierLabel": "Fournisseur",
+    "supplierPlaceholder": "Rechercher des fournisseurs...",
+    "confirmPurchase": "Confirmer l'achat",
+    "supplier": "Fournisseur",
+    "noSupplier": "Sans fournisseur",
+    "edit": "Modifier le produit"
   },
 
   "supplier": {
@@ -568,6 +581,7 @@
     "makeSales": "Effectuer des ventes",
     "viewSales": "Consulter les ventes",
     "shopping": "Achats",
+    "viewPurchase": "Voir les achats",
     "makePurchase": "Effectuer un achat",
     "supplier": "Fournisseurs",
     "users": "Utilisateurs",
@@ -581,11 +595,60 @@
     "empty": "Aucune facture enregistrée.",
     "tableTitle": "Liste des Factures",
     "headers": {
+      "id": "ID de facture",
       "client": "Client",
       "date": "Date",
       "total": "Total"
     },
     "deleteError": "Une erreur s'est produite lors de la suppression de la facture."
+  },
+
+  "purchases": {
+    "title": "Gestion des achats",
+    "loading": "Chargement des achats ...",
+    "empty": "Aucun achat enregistré.",
+    "tableTitle": "Liste des achats",
+    "headers": {
+      "id": "ID d'achat",
+      "date": "Date",
+      "total": "Total",
+      "supplier": "Fournisseur"
+    },
+    "deleteError": "Une erreur s'est produite lors de la suppression de l'enregistrement d'achat."
+  },
+
+  "notFoundPurchase": {
+    "description": "Désolé, nous n'avons pas pu trouver cet enregistrement d'achat",
+    "button": "Retour aux Achats"
+  },
+
+  "purchaseDetail": {
+    "title": "Détail de la facture",
+    "backButton": "Retour",
+    "invoiceId": "ID de Facture",
+    "date": "Date",
+    "electronic": "Facture électronique",
+    "yes": "Oui",
+    "no": "Non",
+    "supplierSection": "Fournisseur",
+    "supplier": {
+      "name": "Nom",
+      "nit": "NIT",
+      "phone": "Téléphone",
+      "address": "Adresse",
+      "supplierId": "ID Fournisseur"
+    },
+    "companySection": "Entreprise",
+    "company": {
+      "name": "Nom",
+      "nit": "NIT",
+      "address": "Adresse",
+      "phone": "Téléphone"
+    },
+    "productsSection": "Produits",
+    "noProducts": "Aucun produit associé.",
+    "product": "Produit",
+    "quantity": "Quantité"
   },
 
   "invoiceDetail": {

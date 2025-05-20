@@ -149,6 +149,13 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
         ] : []),
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [
           { 
+            label: t("viewPurchase"),
+            href: `/${locale}/shopping/view-purchases`,
+            allowedRoles: ["ADMIN", "SUPERADMIN"]
+          }
+        ] : []),
+        ...(role === "ADMIN" || role === "SUPERADMIN" ? [
+          { 
             label: t("supplier"),
             href: `/${locale}/shopping/suppliers`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
