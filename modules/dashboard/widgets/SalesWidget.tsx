@@ -6,11 +6,11 @@ import LineChart from '../charts/LineChart'
 import { envVariables } from '@/utils/config'
 import { formatCurrency } from '@/utils/format'
 
-import { SalesMetricData } from '@/types/Api'
+import { SalesMetricsData } from '@/types/Api'
 
 export default function SalesWidget() {
   const t = useTranslations('dashboard.sales')
-  const [salesData, setSalesData] = useState<SalesMetricData[]>([])
+  const [salesData, setSalesData] = useState<SalesMetricsData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedPeriod, setSelectedPeriod] = useState('month')
   

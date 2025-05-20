@@ -19,7 +19,11 @@ export default function ScreenInvoices() {
 
     const initialFetchDone = useRef(false);
 
-    const tableHeaders = ["Cliente", "Fecha", "Total"];
+    const tableHeaders = [
+        { key: "cliente", label: t("customer") },
+        { key: "fecha", label: t("date") },
+        { key: "total", label: t("total") }
+    ];
 
     useEffect(() => {
         if (!initialFetchDone.current) {
@@ -31,7 +35,7 @@ export default function ScreenInvoices() {
     const formatAndSetInvoices = (invoiceList: any[]) => {
         const formatted = invoiceList.map((invoice) => ({
             id: invoice.id,
-            cliente: `${invoice.client?.firstName || "Nombre"} ${invoice.client?.lastName || "Desconocido"}`,
+            cliente: `${invoice.client?.firstName || t("name")} ${invoice.client?.lastName || t("unknown")}`,
             fecha: new Date(invoice.date).toLocaleDateString(),
             total: `$${(invoice.totalPrice || 0).toFixed(2)}`,
         }));
@@ -48,7 +52,7 @@ export default function ScreenInvoices() {
                 formatAndSetInvoices(res);
             }
         } catch (err) {
-            console.error('Error al obtener facturas:', err);
+            console.error(t("fetchError"), err);
         } finally {
             setIsLoading(false);
         }
@@ -63,25 +67,25 @@ export default function ScreenInvoices() {
             await deleteSaleInvoice(invoiceId);
             setInvoices((prev) => prev.filter((inv) => inv.id !== invoiceId));
         } catch (err) {
-            console.error("Error eliminando la factura:", err);
-            alert("Ocurrió un error al eliminar la factura.");
+            console.error(t("deleteError"), err);
+            alert(t("deleteErrorAlert"));
         }
     };
 
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Gestión de Facturas"
+                title={t("management")}
                 onAddNew={() => router.push(`/${locale}/sales/make-sales`)}
             />
 
             {isLoading ? (
-                <p className="text-gray-500 text-sm mb-2 mt-4">Cargando facturas...</p>
+                <p className="text-gray-500 text-sm mb-2 mt-4">{t("loading")}</p>
             ) : invoices.length === 0 ? (
-                <EmptyState message="No hay facturas registradas." />
+                <EmptyState message={t("noInvoices")} />
             ) : (
                 <CustomTable
-                    title="Lista de Facturas"
+                    title={t("invoiceList")}
                     headers={tableHeaders}
                     options={true}
                     data={invoices}
@@ -91,7 +95,7 @@ export default function ScreenInvoices() {
                         delete: handleDeleteInvoice,
                     }}
                     actionLabels={{
-                        view: "Ver Detalles"
+                        view: t("viewDetails")
                     }}
                 />
             )}
