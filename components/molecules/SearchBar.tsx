@@ -15,6 +15,7 @@ import {
   SupplierDAO, 
   ClientDAO 
 } from "@/types/Api";
+import { useTranslations } from "next-intl";
 
 interface SearchBarUniversalProps {
   onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[]) => void;
@@ -49,6 +50,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   const [results, setResults] = useState<(ProductDAO | EmployeeDAO | SupplierDAO | ClientDAO)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("searchBar");
 
   useEffect(() => {
     if (searchTerm === "") {
