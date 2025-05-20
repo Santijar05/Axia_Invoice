@@ -16,13 +16,12 @@ import Select from "@/components/atoms/select";
 import { 
   ProductDAO, 
   ProductFormProps, 
-  Supplier, 
   SupplierDAO 
 } from "@/types/Api";
 
 type ProductFormData = {
   id: string;
-  supplier: Supplier;
+  supplier: SupplierDAO;
   name: string;
   stock: number;
   tax: number;
@@ -90,7 +89,7 @@ const ProductForm = forwardRef<HTMLFormElement, ProductFormProps>(
         const productData: ProductDAO = {
           ...data,
           tenantId, 
-          supplier: selectedSupplier ?? ({} as Supplier),
+          supplier: selectedSupplier ?? ({} as SupplierDAO),
           id: "", 
         };
 

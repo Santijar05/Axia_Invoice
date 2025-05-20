@@ -13,7 +13,13 @@ import CustomTable from "@/components/organisms/CustomTable";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import { getListCustomers, deleteCustomers } from "@/request/users";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
-import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
+import { 
+    ClientDAO, 
+    CreatedInvoice, 
+    EmployeeDAO, 
+    ProductDAO, 
+    SupplierDAO 
+} from "@/types/Api";
 
 export default function ScreenCustomers() {
     const router = useRouter();
@@ -80,7 +86,7 @@ export default function ScreenCustomers() {
         });
     };
 
-    const handleClientsFound = useCallback((results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+    const handleClientsFound = useCallback((results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] | CreatedInvoice[]) => {
         const clientsResults = results.filter((result): result is ClientDAO => 
             'firstName' in result && 'lastName' in result && 'identification' in result
         );

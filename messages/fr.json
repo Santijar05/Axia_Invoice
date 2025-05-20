@@ -121,7 +121,13 @@
     "next": "Suivant",
     "page": "Page",
     "of": "de",
-    "delete_confirmation": "Êtes-vous sûr de vouloir supprimer cela?"
+
+    "delete_confirmation": "Êtes-vous sûr de vouloir supprimer ce ",
+    "clients": "client",
+    "employees": "employé",
+    "products": "produit",
+    "suppliers": "fournisseur",
+    "invoices": "facture"
   },
 
   "EmployeeDetailClient": {
@@ -285,7 +291,14 @@
     "action": "Action",
     "delete": "Supprimer",
     "total": "Total",
-    "clearCart": "Vider le Panier"
+    "clearCart": "Vider le Panier",
+
+    "supplierLabel": "Fournisseur",
+    "supplierPlaceholder": "Rechercher des fournisseurs...",
+    "confirmPurchase": "Confirmer l'achat",
+    "supplier": "Fournisseur",
+    "noSupplier": "Sans fournisseur",
+    "edit": "Modifier le produit"
   },
 
   "supplier": {
@@ -575,6 +588,7 @@
     "makeSales": "Effectuer des ventes",
     "viewSales": "Consulter les ventes",
     "shopping": "Achats",
+    "viewPurchase": "Voir les achats",
     "makePurchase": "Effectuer un achat",
     "supplier": "Fournisseurs",
     "users": "Utilisateurs",
@@ -586,6 +600,7 @@
   "saleInvoice": {
     "title": "Factures de Vente",
     "headers": {
+      "id": "ID de facture",
       "client": "Client",
       "date": "Date",
       "total": "Total"
@@ -593,7 +608,57 @@
     "tableTitle": "Liste des Factures",
     "loading": "Chargement des factures...",
     "empty": "Aucune facture n'a été enregistrée.",
+    "searchPlaceholder": "Recherche par clients...",
     "deleteError": "Une erreur s'est produite lors de la suppression de la facture."
+  },
+
+  "purchases": {
+    "title": "Gestion des achats",
+    "loading": "Chargement des achats ...",
+    "empty": "Aucun achat enregistré.",
+    "tableTitle": "Liste des achats",
+    "headers": {
+      "id": "ID d'achat",
+      "date": "Date",
+      "total": "Total",
+      "supplier": "Fournisseur"
+    },
+    "searchPlaceholder": "Recherche par fournisseurs",
+    "deleteError": "Une erreur s'est produite lors de la suppression de l'enregistrement d'achat."
+  },
+
+  "notFoundPurchase": {
+    "description": "Désolé, nous n'avons pas pu trouver cet enregistrement d'achat",
+    "button": "Retour aux Achats"
+  },
+
+  "purchaseDetail": {
+    "title": "Détail de la facture",
+    "backButton": "Retour",
+    "invoiceId": "ID de Facture",
+    "date": "Date",
+    "electronic": "Facture électronique",
+    "yes": "Oui",
+    "no": "Non",
+    "supplierSection": "Fournisseur",
+    "supplier": {
+      "name": "Nom",
+      "nit": "NIT",
+      "phone": "Téléphone",
+      "address": "Adresse",
+      "supplierId": "ID Fournisseur"
+    },
+    "companySection": "Entreprise",
+    "company": {
+      "name": "Nom",
+      "nit": "NIT",
+      "address": "Adresse",
+      "phone": "Téléphone"
+    },
+    "productsSection": "Produits",
+    "noProducts": "Aucun produit associé.",
+    "product": "Produit",
+    "quantity": "Quantité"
   },
 
   "invoiceDetail": {
@@ -868,10 +933,8 @@
       "discord": "Discord",
       "github": "Github"
     },
-    "brand": {
-      "logoAlt": "Axia Invoice",
-      "description": "Innover la gestion d'entreprise: votre allié en facturation, inventaire et analyse de données."
-    },
+    "brandsection1": "Innover en gestion d'entreprise : votre allié",
+    "brandsection2": "dans la facturation, l'inventaire et l'analyse des données.",
     "copyrightText": "Tous droits réservés par Juan Campos Santi Jime."
   },
 
@@ -1020,9 +1083,42 @@
     "connectionError": "Erreur de connexion. Veuillez réessayer.",
     "logoAlt": "Axia Logo"
   },
+
   "errors": {
-  "notFound": "404",
-  "pageNotFound": "Désolé, nous n'avons pas pu trouver cette page",
-  "returnHome": "Retourner à l'accueil"
+    "notFound": "404",
+    "pageNotFound": "Désolé, nous n'avons pas pu trouver cette page",
+    "returnHome": "Retourner à l'accueil"
+  },
+
+  "Lenguages": {
+    "español": "Espagnol",
+    "ingles": "Anglais",
+    "frances": "Français"
+  },
+
+  "notFoundHome": {
+    "description": "Désolé, nous n'avons pas pu trouver cette page.",
+    "button": "Retour à l'accueil"
+  },
+
+  "notFoundClient": {
+    "description": "Désolé, nous n'avons pas pu trouver ce client.",
+    "button": "Retour aux clients"
+  },
+
+  "notFoundEmployee": {
+    "description": "Désolé, nous n'avons pas pu trouver cet employé.",
+    "button": "Retour aux employés"
+  },
+
+  "notFoundProducts": {
+    "description": "Désolé, nous n'avons pas pu trouver ce produit",
+    "button": "Retour aux Produits"
+  },
+
+  "notFoundInvoice": {
+    "description": "Désolé, nous n'avons pas pu trouver cette facture",
+    "button": "Retour aux Factures"
   }
+
 }

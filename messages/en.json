@@ -24,16 +24,7 @@
       "passwordMax": "Password must not exceed 50 characters"
     }
   },  
-
-  "EmployeeDashboard": {
-    "latestProducts": "Latest Products",
-    "distributor": "Distributor",
-    "product": "Product",
-    "brand": "Brand",
-    "stock": "Stock",
-    "price": "Price"
-  },
-
+  
   "Employees": {
     "title": "Employee Management",
     "addNew": "New Employee",
@@ -121,7 +112,13 @@
     "next": "Next",
     "page": "Page",
     "of": "of",
-    "delete_confirmation": "Are you sure you want to delete this?"
+    
+    "delete_confirmation": "Are you sure you want to delete this ",
+    "clients": "client",
+    "employees": "employee",
+    "products": "product",
+    "suppliers": "supplier",
+    "invoices": "invoice"
   },
 
   "EmployeeDetailClient": {
@@ -278,7 +275,14 @@
     "action": "Action",
     "delete": "Remove",
     "total": "Total",
-    "clearCart": "Clear Cart"
+    "clearCart": "Clear Cart",
+
+    "supplierLabel": "Supplier",
+    "supplierPlaceholder": "Search suppliers...",
+    "confirmPurchase": "Confirm purchase",
+    "supplier": "Supplier",
+    "noSupplier": "No supplier",
+    "edit": "Edit Product"
   },
 
   "supplier": {
@@ -569,6 +573,7 @@
     "makeSales": "Make Sales",
     "viewSales": "View Sales",
     "shopping": "Purchases",
+    "viewPurchase": "View purchases",
     "makePurchase": "Make Purchase",
     "supplier": "Suppliers",
     "users": "Users",
@@ -580,14 +585,62 @@
   "saleInvoice": {
     "title": "Sales Invoices",
     "headers": {
-      "client": "Customer",
+      "id": "Invoice ID",
+      "client": "Client",
       "date": "Date",
       "total": "Total"
     },
-    "tableTitle": "Invoice List",
-    "loading": "Loading invoices...",
-    "empty": "No invoices have been registered.",
+    "searchPlaceholder": "Search by client...",
     "deleteError": "An error occurred while deleting the invoice."
+  },
+
+  "purchases": {
+    "title": "Purchase Management",
+    "loading": "Loading purchases...",
+    "empty": "No purchases recorded.",
+    "tableTitle": "Purchase List",
+    "headers": {
+      "id": "Purchase ID",
+      "date": "Date",
+      "total": "Total",
+      "supplier": "Supplier"
+    },
+    "searchPlaceholder": "Search by suppliers...",
+    "deleteError": "An error occurred while deleting the purchase record."
+  },
+
+  "notFoundPurchase": {
+    "description": "Sorry, we couldn't find this purchase record",
+    "button": "Back to Purchases"
+  },
+  
+  "purchaseDetail": {
+    "title": "Invoice Detail",
+    "backButton": "Back",
+    "invoiceId": "Invoice ID",
+    "date": "Date",
+    "electronic": "Electronic Invoice",
+    "yes": "Yes",
+    "no": "No",
+    "supplierSection": "Supplier",
+    "supplier": {
+      "name": "Name",
+      "nit": "NIT",
+      "phone": "Phone",
+      "address": "Address",
+      "supplierId": "Supplier ID"
+    },
+    "companySection": "Company",
+    "company": {
+      "name": "Name",
+      "nit": "NIT",
+      "address": "Address",
+      "phone": "Phone"
+    },
+    "productsSection": "Products",
+    "noProducts": "No associated products.",
+    "product": "Product",
+    "quantity": "Quantity"
   },
 
   "invoiceDetail": {
@@ -878,10 +931,8 @@
       "discord": "Discord",
       "github": "Github"
     },
-    "brand": {
-      "logoAlt": "Axia Invoice",
-      "description": "Innovating business management: your ally in invoicing, inventory, and data analysis."
-    },
+    "brandsection1": "Innovating business management: your ally",
+    "brandsection2": "in billing, inventory, and data analysis",
     "copyrightText": "All Rights Reserved by Juan Campos Santi Jime."
   },
 
@@ -922,6 +973,37 @@
 
   "TableFilter": {
     "filter": "Order by"
+  },
+
+  "Lenguages": {
+    "español": "Spanish",
+    "ingles": "English",
+    "frances": "French"
+  },
+
+  "notFoundHome": {
+    "description": "Sorry, we couldn't find this page.",
+    "button": "Return to Home"
+  },
+
+  "notFoundClient": {
+    "description": "Sorry we couldnt find this client",
+    "button": "Return to Clients"
+  },
+
+  "notFoundEmployee": {
+    "description": "Sorry, we couldn't find this employee.",
+    "button": "Return to Employees"
+  },
+
+  "notFoundProducts": {
+    "description": "Sorry we couldnt find this product",
+    "button": "Return to Producst"
+  },
+
+  "notFoundInvoice": {
+    "description": "Sorry we couldnt find this invoice",
+    "button": "Return to Invoices"
   },
 
   "dashboard": {

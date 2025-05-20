@@ -13,16 +13,21 @@ import {
   ProductDAO, 
   EmployeeDAO, 
   SupplierDAO, 
-  ClientDAO 
+  ClientDAO, 
+  CreatedInvoice
 } from "@/types/Api";
 import { useTranslations } from "next-intl";
+import { getListInvoicesByClientName } from "@/lib/api-saleInvoce";
 
 interface SearchBarUniversalProps {
-  onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[]) => void;
+  onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] | CreatedInvoice[]) => void;
   onAddToCart?: (item: ProductDAO | ClientDAO | SupplierDAO | EmployeeDAO) => void;
   onSearchTermChange?: (term: string) => void;
+  disabled?: boolean;
   showResults?: boolean;
+  resetTrigger?: number;
   placeholder?: string;
+  supplierIdFilter?: string | null; 
   searchType: "employees" | "products" | "suppliers" | "clients" | "invoices";
 }
 
@@ -43,11 +48,14 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   onSearchTermChange,
   showResults = false,
   placeholder = "Buscar...",
-  searchType
+  disabled,
+  searchType,
+  resetTrigger,
+  supplierIdFilter
 }) => {
   const [showResultsInternal, setShowResultsInternal] = useState(showResults);
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState<(ProductDAO | EmployeeDAO | SupplierDAO | ClientDAO)[]>([]);
+  const [results, setResults] = useState<(ProductDAO | EmployeeDAO | SupplierDAO | ClientDAO | CreatedInvoice)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const t = useTranslations("searchBar");
@@ -58,6 +66,15 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
       if (onResultsFound) onResultsFound([]);
     }
   }, [searchTerm, onResultsFound]);
+
+  useEffect(() => {
+    if (resetTrigger !== undefined) {
+      setSearchTerm("");
+      setResults([]);
+      setShowResultsInternal(false);
+    }
+  }, [resetTrigger]);
+
 
   const debounceSearch = useMemo(
     () =>
@@ -72,14 +89,21 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
         setError(null);
 
         try {
-          let fetchedResults: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] = [];
+          let fetchedResults: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] | CreatedInvoice[] = [];
           
           if (searchType === "products") {
             fetchedResults = await getListproductsByName(term) || [];
+
+            if (supplierIdFilter){
+              fetchedResults = fetchedResults.filter((product) => product.supplier?.id === supplierIdFilter);
+            }
+
           } else if (searchType === "clients") {
             fetchedResults = (await getListClientsByName(term)) || [];
           } else if (searchType === "suppliers") {
             fetchedResults = await getListSuppliersByName(term) || [];
+          } else if (searchType === "invoices") {
+            fetchedResults = await getListInvoicesByClientName(term) || [];
           } else {
             fetchedResults = await getListEmployeesByName(term) || [];
           }
@@ -104,7 +128,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
           setIsLoading(false);
         }
       }, 500),
-    [onResultsFound, searchType]
+    [onResultsFound, searchType, supplierIdFilter]
   );
 
   useEffect(() => {
@@ -130,6 +154,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
           icon={Search}
           placeholder={placeholder}
           value={searchTerm}
+          disable={disabled}
           onChange={handleSearch}
         />
       </div>
@@ -181,7 +206,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                     </div>
                   </div>
 
-                  {(onAddToCart && (searchType === "products" || searchType === "clients")) && (
+                  {(onAddToCart && (searchType === "products" || searchType === "clients" || searchType === "suppliers")) && (
                     <CustomButton
                       text="Agregar"
                       style="c text-white hover:bg-homePrimary-400 text-sm px-3 py-1"

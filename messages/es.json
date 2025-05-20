@@ -121,7 +121,13 @@
     "next": "Siguiente",
     "page": "Página",
     "of": "de",
-    "delete_confirmation": "¿Estás seguro de que deseas eliminar este?"
+    "delete_confirmation": "¿Estás seguro de que deseas eliminar este ",
+    
+    "clients": "cliente ",
+    "employees": "empleado",
+    "products": "producto",
+    "suppliers": "proveedor",
+    "invoices": "factura"
   },
 
   "EmployeeDetailClient": {
@@ -285,7 +291,14 @@
     "action": "Acción",
     "delete": "Eliminar",
     "total": "Total",
-    "clearCart": "Vaciar Carrito"
+    "clearCart": "Vaciar Carrito",
+
+    "supplierLabel": "Proveedor",
+    "supplierPlaceholder": "Buscar proveedores...",
+    "confirmPurchase": "Confirmar compra",
+    "supplier": "Proveedor",
+    "noSupplier": "Sin proveedor",
+    "edit": "Editar Producto"
   },
 
   "supplier": {
@@ -574,6 +587,7 @@
     "sales": "Ventas",
     "makeSales": "Hacer ventas",
     "viewSales": "Ver ventas",
+    "viewPurchase": "Ver compras",
     "shopping": "Compras",
     "makePurchase": "Hacer compra",
     "supplier": "Proveedores",
@@ -586,6 +600,7 @@
   "saleInvoice": {
     "title": "Facturas de Venta",
     "headers": {
+      "id": "ID de factura",
       "client": "Cliente",
       "date": "Fecha",
       "total": "Total"
@@ -593,7 +608,57 @@
     "tableTitle": "Lista de Facturas",
     "loading": "Cargando facturas...",
     "empty": "No se han registrado facturas.",
+    "searchPlaceholder": "Bucar por clientes...",
     "deleteError": "Ocurrió un error al eliminar la factura."
+  },
+
+  "purchases":{
+    "title": "Gestión de Compras",
+    "loading": "Cargando compras ...",
+    "empty": "No hay compras registradas.",
+    "tableTitle": "Lista de Compras",
+    "headers": {
+      "id": "Id de compra",
+      "date": "Fecha",
+      "total": "Total",
+      "supplier": "Proveedor"
+    },
+    "searchPlaceholder": "Bucar por proveedores...",
+    "deleteError": "Ocurrió un error al eliminar el registro de compra."
+  },
+
+  "notFoundPurchase": {
+    "description": "Lo sentimos, no pudimos encontrar este registro de compra",
+    "button": "Volver a Compras"
+  },
+
+  "purchaseDetail": {
+    "title": "Detalle de la factura",
+    "backButton": "Volver",
+    "invoiceId": "ID de Factura",
+    "date": "Fecha",
+    "electronic": "Factura electrónica",
+    "yes": "Sí",
+    "no": "No",
+    "supplierSection": "Proveedor",
+    "supplier": {
+      "name": "Nombre",
+      "nit": "NIT",
+      "phone": "Telefono",
+      "address": "Dirección",
+      "supplierId": "ID Proveedor"
+    },
+    "companySection": "Empresa",
+    "company": {
+      "name": "Nombre",
+      "nit": "NIT",
+      "address": "Dirección",
+      "phone": "Teléfono"
+    },
+    "productsSection": "Productos",
+    "noProducts": "No hay productos asociados.",
+    "product": "Producto",
+    "quantity": "Cantidad"
   },
 
   "invoiceDetail": {
@@ -914,10 +979,8 @@
       "discord": "Discord",
       "github": "Github"
     },
-    "brand": {
-      "logoAlt": "Axia Invoice",
-      "description": "Innovando la gestión empresarial: tu aliado en facturación, inventario y análisis de datos."
-    },
+    "brandsection1": "Innovando la gestión empresarial: tu aliado",
+    "brandsection2": "en facturación, inventario y análisis de datos.",
     "copyrightText": "Todos los derechos reservados por Juan Campos Santi Jime."
   },
 
@@ -958,6 +1021,37 @@
 
   "TableFilter": {
     "filter": "Ordenar por"
+  },
+
+  "Lenguages": {
+    "español": "Español",
+    "ingles": "Inglés",
+    "frances": "Francés"
+  },
+
+  "notFoundHome": {
+    "description": "Lo sentimos, no pudimos encontrar esta página.",
+    "button": "Volver al inicio"
+  },
+  
+  "notFoundClient": {
+    "description": "Lo sentimos, no pudimos encontrar a este cliente.",
+    "button": "Volver a Clientes"
+  },
+
+  "notFoundEmployee": {
+    "description": "Lo sentimos, no pudimos encontrar a este empleado.",
+    "button": "Volver a Empleados"
+  },
+
+  "notFoundProducts": {
+    "description": "Lo sentimos, no pudimos encontrar este producto",
+    "button": "Volver a Productos"
+  },
+
+  "notFoundInvoice": {
+    "description": "Lo sentimos, no pudimos encontrar esta factura",
+    "button": "Volver a Facturas"
   },
 
   "dashboard": {

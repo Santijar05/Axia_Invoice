@@ -1,12 +1,18 @@
-import Image from "next/image";
 import React from "react";
-import { useTranslations } from "next-intl"; 
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { 
+    FaFacebook, 
+    FaTwitter, 
+    FaLinkedin, 
+    FaInstagram 
+} from "react-icons/fa";
+
 import axiaLogo from '@/public/Images/logo_blanco.png';
 
 export const BrandSection: React.FC = () => {
-    const t = useTranslations("footer");
-
+    const t = useTranslations("footer"); 
+    
     return (
         <div className="md:col-span-2">
             <div className="mb-4">
@@ -19,7 +25,7 @@ export const BrandSection: React.FC = () => {
             </div>
 
             <p className="text-sm text-gray-400">
-                {t("brand.description")}
+                {t("brandsection1")} <br></br> {t("brandsection2")}
             </p>
             
             <div className="mt-4 flex space-x-4">

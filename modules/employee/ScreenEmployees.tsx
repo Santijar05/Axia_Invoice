@@ -14,22 +14,28 @@ import SearchBarUniversal from "@/components/molecules/SearchBar";
 import { getListEmployees, deleteEmployees } from "@/request/users";
 import EmployeeDetailModal from "./EmployeeDetail/EmployeeDetailModal";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
-import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
+import { 
+    ClientDAO, 
+    CreatedInvoice, 
+    EmployeeDAO, 
+    ProductDAO, 
+    SupplierDAO 
+} from "@/types/Api";
 
 export default function ScreenEmployees() {
     const router = useRouter();
     const initialFetchDone = useRef(false);
     const t = useTranslations("Employees");
 
-    const [employees, setEmployees] = useState<{ [key: string]: string }[]>([]);
-    const [initialEmployees, setInitialEmployees] = useState<{ [key: string]: string }[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+        const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [employees, setEmployees] = useState<{ [key: string]: string }[]>([]);
     const [currentEmployee, setCurrentEmployee] = useState<EmployeeDAO | null>(null);
+    const [initialEmployees, setInitialEmployees] = useState<{ [key: string]: string }[]>([]);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
-    const [searchTerm, setSearchTerm] = useState("");
     
     useEffect(() => {
         if (!initialFetchDone.current) {
@@ -79,7 +85,7 @@ export default function ScreenEmployees() {
         });
     };
 
-    const handleEmployeesFound = useCallback((results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+    const handleEmployeesFound = useCallback((results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] | CreatedInvoice[]) => {
         const employeeResults = results.filter((result): result is EmployeeDAO => 
             'name' in result && 'role' in result
         );

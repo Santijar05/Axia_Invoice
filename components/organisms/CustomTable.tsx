@@ -68,7 +68,7 @@ export default function CustomTable({
 
   const handleDelete = (id: string) => {
     if (customActions?.delete) {
-      if (confirm(`${t('delete_confirmation'+ contextType)}?`)) {
+      if (confirm(`${t('delete_confirmation') + t(contextType)}?`)) {
         customActions.delete(id);
       }
     } else {

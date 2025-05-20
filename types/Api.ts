@@ -3,6 +3,38 @@ export interface UserDataLogin {
     password: string;
 }
 
+export type Compra = {
+    tenantId: string;
+    supplierId: string;
+    totalPrice: number;
+    electronicBill?: boolean;
+    products: SaleItemForAPI[];
+};
+
+export interface Purchase {
+    id: string;
+    tenantId: string;
+    supplierId: string;
+    date: string; 
+    totalPrice: number;
+    createdAt: string;
+    updatedAt: string;
+    tenant: Tenant;
+    supplier: SupplierDAO;
+    products: PurchaseProduct[];
+}
+
+export type CreatedPurchase = {
+    id: string;
+    date: string;
+    totalPrice: number;
+    electronicBill: boolean;
+    supplierId: string;
+    supplier: SupplierDAO;
+    tenantId: string;
+    purchaseProducts: SaleProduct[];
+};
+
 export interface SaleProduct {
     productId: string;
     quantity: number;
@@ -15,6 +47,7 @@ export interface CreatedInvoice {
     electronicBill: boolean;
     clientId: string;
     tenantId: string;
+    client: ClientDAO;
     invoiceProducts: SaleProduct[];
 }
 
@@ -76,6 +109,15 @@ export interface InvoiceProduct {
     product?: ProductDAO; 
 }
 
+export interface PurchaseProduct {
+    id: string;
+    tenantId: string;
+    productId: string;
+    purchaseInvoiceId: string;
+    quantity: number;
+    product?: ProductDAO; 
+}
+
 export interface EmployeeDAO {
     id: string;
     name: string;
@@ -110,13 +152,9 @@ export interface UserDataRegister {
     password: string;
 }
 
-export interface Supplier {
-    name:string
-}
-
 export interface ProductDAO {
     tenantId: string;
-    supplier: Supplier;
+    supplier: SupplierDAO;
     name: string;
     id: string;
     salePrice: number;

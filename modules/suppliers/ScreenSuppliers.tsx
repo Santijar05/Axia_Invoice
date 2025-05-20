@@ -12,7 +12,6 @@ import TableFilter from "@/components/molecules/TableFilter";
 import EmptyState from '@/components/molecules/EmptyState';
 import SupplierDetail from "./SupplierDetail/SupplierDetail";
 import Toolbar from "@/components/organisms/ToolBar";
-import ChatBot from "@/modules/suppliers/ChatBot";
 import SupplierFormEdit from "./SupplierFormEdit";
 import { SupplierDAO } from "@/types/Api";
 import SupplierForm from "./SupplierForm";
@@ -253,8 +252,6 @@ export default function ScreenSuppliers() {
                 isOpen={isViewModalOpen}
                 onClose={() => setIsViewModalOpen(false)}
             />
-
-            <ChatBot />
         </div>
     );
 }
