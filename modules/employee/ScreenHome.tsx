@@ -29,13 +29,13 @@ export default function DashboardPage() {
       <div className="pt-10">
 
         <CustomTable 
-          title={t("latestProducts")}
+          title={t("latestProducts")} 
           headers={[
-            t("distributor"),
-            t("product"),
-            t("brand"),
-            t("stock"),
-            t("price")
+            { key: "distributor", label: t("distributor") },
+            { key: "product", label: t("product") },
+            { key: "brand", label: t("brand") },
+            { key: "stock", label: t("stock") },
+            { key: "price", label: t("price") }
           ]}
           options={false} 
           data={tableData}

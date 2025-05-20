@@ -8,7 +8,7 @@ import SearchBarUniversal from "@/components/molecules/SearchBar";
 import CustomButton from "@/components/atoms/CustomButton";
 import { useShoppingCart } from "@/store/ShoppingCart";
 import Input from "@/components/atoms/Input";
-import { ProductDAO } from "@/types/Api";
+import { ProductDAO, ClientDAO, EmployeeDAO, SupplierDAO } from "@/types/Api";
 
 export default function ScreenPurchase() {
   const { cart, addToCart, removeFromCart, clearCart } = useShoppingCart();
@@ -19,17 +19,20 @@ export default function ScreenPurchase() {
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  const handleAddToCart = (item: any) => {
-    const product = item as ProductDAO;
-    addToCart({
-      id: parseInt(product.id),
-      quantity: quantity,
-      tax: product.tax,
-      name: product.name,
-      supplier: product.supplier,
-      price: product.salePrice,
-      basePrice: product.purchasePrice,
-    });
+  const handleAddToCart = (item: ProductDAO | ClientDAO | EmployeeDAO | SupplierDAO) => {
+    // Type guard to ensure we're dealing with a ProductDAO
+    if ('salePrice' in item && 'name' in item) {
+      const product = item as ProductDAO;
+      addToCart({
+        id: parseInt(product.id),
+        name: product.name,
+        price: product.salePrice,
+        quantity: 1,
+        basePrice: product.purchasePrice,
+        tax: product.tax,
+        supplier: product.supplier
+      });
+    }
   };
 
   const formatCurrency = (value: number) => {
