@@ -158,6 +158,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
                         <>
                           <span>Precio: ${(item as ProductDAO).salePrice}</span>
                           <span className="ml-2">Stock: {(item as ProductDAO).stock}</span>
+                          <span className="ml-2 font-semibold text-gray-400">Proveedor: {(item as ProductDAO).supplier?.name}</span>
                         </>
                       ) : searchType === "employees" ? (
                         <>

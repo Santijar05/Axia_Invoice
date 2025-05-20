@@ -1,27 +1,28 @@
 import { z } from "zod";
+import { useTranslations } from "next-intl";
 
-export const registerScheme = z.object({
+export const registerScheme = (t: ReturnType<typeof useTranslations>) => z.object({
 	name: z.string()
-			.nonempty({ message: "Name is required" })
-            .min(4, {message: "Username must be at least 4 characters long"})
+			.nonempty({ message: t("errors.nameRequired") })
+            .min(4, {message: t("errors.nameMin")})
             .max(40)
 			.refine(
 				(value) => /^[a-zA-Z]+$/.test(value ?? ""),
-				{ message: "Username cannot contain special characters or spaces or numbers" }
+				{ message: t("errors.nameFormat") }
 			  ),
 		
 	email: z.string()
-			.nonempty({ message: "Email is required" })
-			.email({message: "Please enter a valid email"})
+			.nonempty({ message: t("errors.emailRequired") })
+			.email({message: t("errors.emailInvalid") })
 			.max(40),
 
 	password: z.string()
-				.nonempty({ message: "Password is required" })
-				.min(8, {message: "Password must be at least 8 characters long"})
+				.nonempty({ message: t("errors.passwordRequired") })
+				.min(8, {message: t("errors.passwordMin") })
 			    .max(20)
 				.refine(
 					(value) => /^[a-zA-Z0-9]+$/.test(value ?? ""), 
-					{ message: "Password must contain at least one letter, one number, and one special character from the allowed list (@, ., -, _, !, #, $, %, &)" }
+					{ message: t("errors.passwordFormat") }
 				),
  
 /* 	confirmPassword: z.string()

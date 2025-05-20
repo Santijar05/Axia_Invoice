@@ -1,19 +1,20 @@
 import { z } from "zod";
+import { useTranslations } from "next-intl";
 
-export const productSchema = z.object({
+export const productSchema = (t: ReturnType<typeof useTranslations>) => z.object({
   name: z.string()
-    .nonempty("El nombre es requerido"),
+    .nonempty(t("errors.name.required")),
   
-  stock: z.number({invalid_type_error: "El stock debe ser un número",})
-    .min(0, "El stock no puede ser negativo"),
+  stock: z.number({invalid_type_error: t("errors.stock.number"),})
+    .min(1, t("errors.stock.min")),
   
-  tax: z.number({ invalid_type_error: "El impuesto debe ser un número",})
-    .min(0, "El impuesto no puede ser negativo")
-    .max(100, "El impuesto no puede ser mayor a 100"),
+  tax: z.number({ invalid_type_error: t("errors.tax.number"),})
+    .min(0, t("errors.tax.min"))
+    .max(100, t("errors.tax.max")),
   
-  purchasePrice: z.number({invalid_type_error: "El precio de compra debe ser un número",})
-    .min(0, "El precio de compra no puede ser negativo"),
+  purchasePrice: z.number({invalid_type_error: t("errors.purchasePrice.number"),})
+    .min(1, t("errors.purchasePrice.min")),
   
-  salePrice: z.number({invalid_type_error: "El precio de venta debe ser un número",})
-    .min(0, "El precio de venta no puede ser negativo"),
+  salePrice: z.number({invalid_type_error: t("errors.salePrice.number"),})
+    .min(1, t("errors.salePrice.min")),
 });

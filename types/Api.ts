@@ -113,6 +113,7 @@ export interface UserDataRegister {
 export interface Supplier {
     name:string
 }
+
 export interface ProductDAO {
     tenantId: string;
     supplier: Supplier;
@@ -158,4 +159,107 @@ export interface SaleItemForAPI {
     tenantId: string;
     productId: string;
     quantity: number;
+}
+
+// Interfaces de Analytics
+export interface SalesMetricsData {
+  period: string;
+  revenue: number;
+  count: number;
+}
+
+export interface TopProductData {
+  productName: string;
+  totalSold: number;
+  revenue: number;
+}
+
+export interface InventorySummaryData {
+  summary: {
+    totalProducts: number;
+    totalStock: number;
+    inventoryValue: number;
+    avgStockPerProduct: number;
+    lowStockCount: number;
+  };
+  lowStockProducts: Array<{
+    id: string;
+    name: string;
+    stock: number;
+    purchasePrice: number;
+    salePrice: number;
+  }>;
+}
+
+export interface CustomerMetricsData {
+  totalCustomers: number;
+  newCustomers: number;
+  totalRevenue: number;
+  averageOrderValue: number;
+  segments: Array<{
+    name: string;
+    count: number;
+  }>;
+}
+
+export interface DashboardMetricsData {
+  sales: {
+    count: number;
+    total: number;
+  };
+  purchases: {
+    count: number;
+    total: number;
+  };
+  productsTotal: number;
+  clientsTotal: number;
+}
+
+export interface ProfitabilityMetricsData {
+  grossProfit: number;
+  netProfit: number;
+  profitMargin: number;
+  yearOverYearChange: number;
+  costBreakdown: Array<{
+    category: string;
+    amount: number;
+  }>;
+}
+
+export interface InventoryHealthData {
+  lowStockProducts: Array<{
+    id: string;
+    name: string;
+    stock: number;
+    purchasePrice: number;
+  }>;
+  turnoverRate: number;
+  totalStockValue: number;
+}
+
+export interface ProductPerformanceData {
+  topProducts: Array<{
+    id: string;
+    name: string;
+    totalSold: number;
+    revenue: number;
+    profit: number;
+  }>;
+  averageOrderValue: number;
+  orderCount: number;
+}
+
+export interface CustomerInsightsData {
+  customerAcquisition: Array<{
+    month: string;
+    newCustomers: number;
+  }>;
+  topCustomers: Array<{
+    id: string;
+    name: string;
+    orderCount: number;
+    totalSpent: number;
+  }>;
+  repeatPurchaseRate: number;
+  totalCustomers: number;
 }

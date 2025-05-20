@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginScheme } from "../../../schemes/loginScheme"; 
 import CustomButton from "../../../components/atoms/CustomButton";
 import { AppleIcon, GoogleIcon } from "../../../components/atoms/icons";
+import { useLocale, useTranslations } from 'next-intl';
 
 type LoginFormData = {
   email: string;
@@ -17,12 +18,16 @@ type LoginFormData = {
 };
 
 const LoginForm: React.FC = () => {
+  const locale = useLocale();
+  const t = useTranslations('login');
+  const loginValidationSchema = loginScheme(t);
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginScheme),
+    resolver: zodResolver(loginValidationSchema),
   });
 
   const [loading, setLoading] = useState(false);
@@ -42,11 +47,11 @@ const LoginForm: React.FC = () => {
 
         // Redirigir según el rol del usuario
         if (userRole === "ADMIN" || userRole === "SUPERADMIN") {
-          router.push("/admin");
+          router.push(`/${locale}/admin`);
         } else if (userRole === "USER") {
-          router.push("/employee");
-        }else {
-          router.push("/");
+          router.push(`/${locale}/employee`);
+        } else {
+          router.push(`/${locale}/`);
         }
       } else {
         // Manejar respuesta de error

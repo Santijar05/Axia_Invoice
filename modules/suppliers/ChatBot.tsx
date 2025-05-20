@@ -1,19 +1,32 @@
-import { useState } from 'react';
-import { TrendingUp, PackageSearch, BadgeDollarSign, CreditCard, Truck, Star, ArrowLeft, MessageSquare } from 'lucide-react'; 
+import { useEffect, useState } from 'react';
+import { 
+    TrendingUp, 
+    PackageSearch, 
+    BadgeDollarSign,
+    CreditCard, 
+    Truck, 
+    Star, 
+    ArrowLeft, 
+    MessageSquare 
+} from 'lucide-react'; 
 
+import { useAuth } from '@/context/AuthContext';
 import { ProductDAO } from '@/types/Api';
 import CustomButton from '../../components/atoms/CustomButton';
 import SearchBarUniversal from '../../components/molecules/SearchBar';
-import { findBetterSuppliers } from '@/lib/api-suppliers';
+import { findBetterSuppliers, getSectorTrends } from '@/lib/api-suppliers';
 
 type Filters = "Mejor precio" | "Mejores condiciones de pago" | "Mejor tiempo de entrega" | "Mejor reputación";
 type Answers = {
     searchType: "Tendencias de proveedores en el sector" | "Buscar proveedores con mejores precios o planes" | null;
     product: ProductDAO | null;
     filters: Filters[];
+    region?: string;
+    companySize?: string;
 };
 
 export default function ChatBot() {
+    const { user } = useAuth();
     const [supplierResults, setSupplierResults] = useState<any[]>([]);
     const [isLoadingResults, setIsLoadingResults] = useState<boolean>(false);
 
@@ -24,6 +37,15 @@ export default function ChatBot() {
         product: null,
         filters: [],
     });
+
+    // Estados para País, Estado y Ciudad
+    const [availableCountries, setAvailableCountries] = useState<string[]>([]);
+    const [availableStates, setAvailableStates] = useState<string[]>([]);
+    const [availableCities, setAvailableCities] = useState<string[]>([]);
+
+    const [country, setCountry] = useState<string>('');
+    const [stateSelected, setStateSelected] = useState<string>('');
+    const [citySelected, setCitySelected] = useState<string>('');
 
     const searchTypeOptions = [
         {
@@ -44,6 +66,67 @@ export default function ChatBot() {
         { label: "Mejor tiempo de entrega", value: "Mejor tiempo de entrega" as Filters, icon: Truck },
         { label: "Mejor reputación", value: "Mejor reputación" as Filters, icon: Star },
     ];    
+
+    useEffect(() => {
+        async function fetchCountries() {
+            try {
+                const res = await fetch('https://countriesnow.space/api/v0.1/countries/positions');
+                const data = await res.json();
+                const countriesList = data.data.map((item: any) => item.name);
+                setAvailableCountries(countriesList);
+            } catch (error) {
+                console.error('Error fetching countries:', error);
+            }
+        }
+        fetchCountries();
+    }, []);
+
+    useEffect(() => {
+        async function fetchStates() {
+            if (!country) return;
+
+            try {
+                const res = await fetch('https://countriesnow.space/api/v0.1/countries/states', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ country: country }),
+                });
+
+                const data = await res.json();
+                const statesList = data.data.states.map((item: any) => item.name);
+                setAvailableStates(statesList);
+                setStateSelected('');
+                setCitySelected('');
+                setAvailableCities([]);
+
+            } catch (error) {
+                console.error('Error fetching states:', error);
+            }
+        }
+        fetchStates();
+    }, [country]);
+
+    useEffect(() => {
+        async function fetchCities() {
+            if (!country || !stateSelected) return;
+
+            try {
+                const res = await fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ country: country, state: stateSelected }),
+                });
+
+                const data = await res.json();
+                const citiesList = data.data;
+                setAvailableCities(citiesList);
+                setCitySelected('');
+            } catch (error) {
+                console.error('Error fetching cities:', error);
+            }
+        }
+        fetchCities();
+    }, [stateSelected]);
 
     const toggleChatWindow = () => {
         if (isChatOpen) {
@@ -67,15 +150,15 @@ export default function ChatBot() {
     };
 
     const handleAnswer = async (question: keyof Answers, answer: any): Promise<void> => {  
-        const newAnswers = { ...answers, [question]: answer }; // crear una copia actualizada
+        const newAnswers = { ...answers, [question]: answer }; 
     
-        setAnswers(newAnswers); // actualizar el estado
+        setAnswers(newAnswers); 
     
         if (question === "searchType") {
             if (answer === "Buscar proveedores con mejores precios o planes") {
-                setStep(2); // continuar flujo normal
-            } else {
-                setStep(4); // directamente ir al final si es tendencias
+                setStep(2); 
+            } else if (answer === "Tendencias de proveedores en el sector") {
+                setStep(5); 
             }
             return;
         }
@@ -101,8 +184,29 @@ export default function ChatBot() {
                 }
             }
         }
-    };    
 
+        if (newAnswers.searchType === "Tendencias de proveedores en el sector") {
+            if (question === "region") {
+                setStep(6);
+            } else if (question === "companySize") {
+                setStep(4);
+
+                if (newAnswers.region && answer) { // Si ya tiene región y companySize
+                    try {
+                        setIsLoadingResults(true);
+                        const trends = await getSectorTrends(user?.tenantId ?? '', newAnswers.region, answer);
+                        console.log('Tendencias del sector:', trends);
+                       
+                    } catch (error) {
+                        console.error('Error obteniendo tendencias:', error);
+                    } finally {
+                        setIsLoadingResults(false);
+                    }
+                }
+            }
+        }
+    } 
+    
     return (
         <div className="fixed bottom-4 right-4">
 
@@ -204,6 +308,89 @@ export default function ChatBot() {
                                     ) : (
                                         <p>Gracias por tu respuesta. Estamos procesando tu búsqueda...</p>
                                     )}
+                                </div>
+                            )}
+
+                            {step === 5 && (
+                                <div className="space-y-3">
+                                    <p>5. ¿En qué región opera tu empresa?</p>
+
+                                    <select
+                                        className="w-full p-2 border rounded bg-black text-white"
+                                        value={country}
+                                        onChange={(e) => setCountry(e.target.value)}
+                                    >
+                                        <option value="">Seleccionar país</option>
+                                        {availableCountries.map((c) => (
+                                            <option key={c} value={c}>{c}</option>
+                                        ))}
+                                    </select>
+
+                                    {country && (
+                                        <select
+                                            className="w-full p-2 border rounded bg-black text-white"
+                                            value={stateSelected}
+                                            onChange={(e) => setStateSelected(e.target.value)}
+                                        >
+                                            <option value="">Seleccionar departamento/estado</option>
+                                            {availableStates.map((s) => (
+                                                <option key={s} value={s}>{s}</option>
+                                            ))}
+                                        </select>
+                                    )}
+
+                                    {stateSelected && (
+                                        <select
+                                            className="w-full p-2 border rounded bg-black text-white"
+                                            value={citySelected}
+                                            onChange={(e) => setCitySelected(e.target.value)}
+                                        >
+                                        <option value="">Seleccionar ciudad</option>
+                                        {availableCities.map((c) => (
+                                            <option key={c} value={c}>{c}</option>
+                                        ))}
+                                        </select>
+                                    )}
+
+                                    {citySelected && (
+                                        <CustomButton
+                                            text="Confirmar región"
+                                            onClickButton={() => {
+                                                handleAnswer("region", `${citySelected}, ${stateSelected}, ${country}`);
+                                            }}
+                                            style="bg-homePrimary text-white w-full hover:bg-blue-800"
+                                            icon={MessageSquare}
+                                        />
+                                    )}
+
+                                    <CustomButton
+                                        text="Volver"
+                                        onClickButton={handleBack}
+                                        style="text-gray-500 w-full"
+                                        icon={ArrowLeft}
+                                    />
+                                </div>
+                            )}
+
+                            {step === 6 && (
+                                <div className="space-y-3">
+                                    <p>6. ¿Cuál es el tamaño de tu empresa?</p>
+
+                                    {["Microempresa", "Pequeña empresa", "Mediana empresa", "Gran empresa"].map((size) => (
+                                        <CustomButton
+                                            key={size}
+                                            text={size}
+                                            onClickButton={() => handleAnswer("companySize", size)}
+                                            style="bg-homePrimary text-white w-full hover:bg-blue-800"
+                                        />
+                                    ))}
+
+                                    <CustomButton
+                                        text="Volver"
+                                        onClickButton={handleBack}
+                                        style="text-gray-500 w-full"
+                                        icon={ArrowLeft}
+                                    />
                                 </div>
                             )}
 

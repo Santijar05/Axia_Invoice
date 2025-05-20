@@ -1,30 +1,29 @@
-// ScreenMakeSale.tsx
 'use client';
 
-import { useState } from 'react';
 import Image from "next/image";
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import InvoiceModal from './InvoiceModal';
 import Input from '@/components/atoms/Input';
-import { ClientDAO, ProductDAO, SaleItem, Venta } from '@/types/Api';
-import { crearFacturaVenta } from '@/lib/api-saleInvoce';
+import { ProductDAO, SaleItem } from '@/types/Api';
 import SearchBarUniversal from '@/components/molecules/SearchBar';
 import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
 
 export default function ScreenMakeSale() {
+  const t = useTranslations("makeSale");
+
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [tenantIdProduct, settenantIdProduct] = useState('');
-  const [clientes, setClientes] = useState<ClientDAO[]>([]);
   const [items, setItems] = useState<SaleItem[]>([]);
-  const [clientId, setClientId] = useState('');
+  const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [nextId, setNextId] = useState(1);
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState(0);
   const [name, setName] = useState('');
   const [tax, setTax] = useState(0);
-  const [productId, setProductId] = useState('');
-  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
 
   const resetSaleForm = () => {
     setItems([]);
@@ -49,7 +48,7 @@ export default function ScreenMakeSale() {
       const updatedItems = [...items];
       const existingItem = updatedItems[existingIndex];
       if (existingItem.quantity + quantity > stock) {
-        alert(`No hay suficiente stock. Disponible: ${stock}`);
+        alert(`${t("notEnoughStock")} ${stock}`);
         return;
       }
       existingItem.quantity += quantity;
@@ -57,7 +56,7 @@ export default function ScreenMakeSale() {
       setItems(updatedItems);
     } else {
       if (quantity > stock) {
-        alert(`No hay suficiente stock. Disponible: ${stock}`);
+        alert(`${t("notEnoughStock")} ${stock}`);
         return;
       }
 
@@ -109,7 +108,7 @@ export default function ScreenMakeSale() {
 
   const handleCompleteSale = async () => {
     if (items.length === 0) {
-      alert('Agrega productos antes de completar la venta.');
+      alert(t("addBeforeComplete"));
       return;
     }
 
@@ -118,7 +117,7 @@ export default function ScreenMakeSale() {
 
   const handleSuccessSale = () => {
     resetSaleForm();
-    alert('Venta completada con éxito.');
+    alert(t("success"));
     window.location.reload();
     setIsInvoiceModalOpen(false);
   };
@@ -136,17 +135,17 @@ export default function ScreenMakeSale() {
       <div className="relative w-full my-6 bg-blac bg-opacity-50 rounded-lg shadow-lg mt-5">
 
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-white">Nueva venta</h2>  
+          <h2 className="text-2xl font-semibold text-white">{t('title')}</h2>  
         </div>
 
         <div className="flex flex-row gap-6 flex-wrap mt-12">
         
           <div className="flex-1 min-w-[300px] border border-gray-600 bg-transparent p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4 text-white">Añadir Items</h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">{t('addItems')}</h2>
 
             <div className="flex flex-col gap-4">
               <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-white">Producto</label>
+                <label className="mb-1 text-sm font-medium text-white">{t('product')}</label>
                 
                 <SearchBarUniversal
                   searchType="products"
@@ -161,29 +160,29 @@ export default function ScreenMakeSale() {
                   }}
                   
                   showResults={true}
-                  placeholder="Buscar productos para comprar..."
+                  placeholder={t('searchPlaceholder')}
                 />
 
               </div>
 
               <div className="flex flex-row space-x-7">
                 <div className="flex flex-col w-full">
-                  <label className="mb-1 text-sm font-medium text-white">Cantidad</label>
+                  <label className="mb-1 text-sm font-medium text-white">{t("quantity")}</label>
                   <Input
                     type="number"
                     value={quantity}
                     onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
-                    placeholder="Ingrese la cantidad"
+                    placeholder={t('quantityPlaceholder')}
                   />
                 </div>
 
                 <div className="flex flex-col w-full">
-                  <label className="mb-1 text-sm font-medium text-white">Precio sin impuesto</label>
+                  <label className="mb-1 text-sm font-medium text-white">{t("apricewTx")}</label>
                   <Input
                     type="number"
                     value={price}
                     disabled={true}
-                    placeholder="Ingrese el precio"
+                    placeholder={t('pricePlaceholder')}
                   />
                 </div>
               </div>
@@ -193,7 +192,7 @@ export default function ScreenMakeSale() {
                 disabled={!name}
                 className="px-6 py-2 bg-homePrimary text-white rounded-md hover:bg-homePrimary-400 disabled:bg-gray-500 transition-colors w-full"
               >
-                Añadir producto
+                {t('addProduct')}
               </button>
             </div>
           </div>
@@ -205,13 +204,13 @@ export default function ScreenMakeSale() {
               <table className="min-w-full divide-y divide-gray-700">
                 <thead>
                   <tr className="text-left">
-                    <th className="px-4 py-2">Producto</th>
-                    <th className="px-4 py-2">Cantidad</th>
-                    <th className="px-4 py-2">Precio sin imp.</th>
-                    <th className="px-4 py-2">Impuesto %</th>
-                    <th className="px-4 py-2">Precio c/imp.</th>
-                    <th className="px-4 py-2">Subtotal</th>
-                    <th className="px-4 py-2">Acción</th>
+                    <th className="px-4 py-2">{t('table.product')}</th>
+                    <th className="px-4 py-2">{t('table.quantity')}</th>
+                    <th className="px-4 py-2">{t('table.priceNoTax')}</th>
+                    <th className="px-4 py-2">{t('table.tax')}</th>
+                    <th className="px-4 py-2">{t('table.priceWithTax')}</th>
+                    <th className="px-4 py-2">{t('table.subtotal')}</th>
+                    <th className="px-4 py-2">{t('table.action')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700">
@@ -228,7 +227,7 @@ export default function ScreenMakeSale() {
                           onClick={() => handleRemoveItem(item.id)}
                           className="text-red-400 hover:text-red-600 px-3 py-1 rounded hover:bg-red-900/30 transition-colors"
                         >
-                          Eliminar
+                          {t('remove')}
                         </button>
                       </td>
                     </tr>
@@ -237,22 +236,22 @@ export default function ScreenMakeSale() {
               </table>
             ) : (
               <div className="flex items-center justify-center h-full">
-                <p className="text-gray-400 italic py-20">No hay productos aún.</p>
+                <p className="text-gray-400 italic py-20">{t('noItems')}</p>
               </div>
             )}
           </div>
 
           <div className="pt-4 space-y-2 text-right">
             <div className="flex justify-between">
-              <span className="font-medium">Subtotal:</span>
+              <span className="font-medium">{t('subtotal')}:</span>
               <span>{formatCurrency(calculateSubtotal())}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-medium">Total Impuestos:</span>
+              <span className="font-medium">{t('totalTaxes')}:</span>
               <span>{formatCurrency(calculateTaxTotal())}</span>
             </div>
             <div className="flex justify-between text-lg font-bold mt-2">
-              <span>Total a pagar:</span>
+              <span>{t('totalToPay')}:</span>
               <span>{formatCurrency(calculateTotal())}</span>
             </div>
 
@@ -261,7 +260,7 @@ export default function ScreenMakeSale() {
               disabled={items.length === 0}
               className="w-full px-6 py-3 mt-4 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-500 transition-colors text-lg font-medium"
             >
-              Finalizar venta
+              {t('completeSale')}
             </button>
           </div>
         </div>
@@ -270,7 +269,7 @@ export default function ScreenMakeSale() {
       <CustomModalNoButton
         isOpen={isInvoiceModalOpen}
         onClose={() => setIsInvoiceModalOpen(false)}
-        title="Confirmar Venta"
+        title={t('confirmSale')}
       >
         <InvoiceModal
           subtotal={calculateSubtotal()}

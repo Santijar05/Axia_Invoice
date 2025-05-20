@@ -1,5 +1,6 @@
 import React, { forwardRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie"; 
 
@@ -30,6 +31,9 @@ interface CustomerFormProps {
 }
 
 const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuccess, client }, ref) => {
+    const t = useTranslations("customerEdit");
+    const editCustomerSchema = customertEditSchema(t); 
+
     const {
         register,
         handleSubmit,
@@ -37,8 +41,8 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
         setValue,
         formState: { errors, isSubmitting },
     } = useForm<CustomerFormData>({
-        resolver: zodResolver(customertEditSchema),
-    });
+        resolver: zodResolver(editCustomerSchema),
+    }); 
 
     useEffect(() => {
         if (client) {
@@ -60,7 +64,7 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
         const authToken = Cookies.get("authToken");
     
         if (!client?.id) {
-            alert("ID de cliente no disponible");
+            alert(t("alerts.noClientId"));
             return;
         }
     
@@ -78,10 +82,10 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
     
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || "Error al actualizar el cliente");
+                throw new Error(errorData.message || t("alerts.updateError"));
             }
     
-            alert("Cliente actualizado correctamente");
+            alert(t("alerts.updateSuccess"));
             if (onSuccess) onSuccess();
             
         } catch (error) {
@@ -94,20 +98,20 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
         <form ref={ref} onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4"> 
             {client?.id && (
                 <div className="col-span-2">
-                    <label className="text-sm font-semibold text-gray-500">ID</label>
+                    <label className="text-sm font-semibold text-gray-500">{t("fields.id")}</label>
                     <Input 
                         value={client.id}
                         type="text" 
                         disabled={true}
-                        placeholder="Ej. 123456789"
+                        placeholder={t("placeholders.id")}
                     />
                 </div>
             )}
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Identificación*</label>
+                <label className="text-sm font-semibold text-gray-500">{t("fields.identification")}*</label>
                 <Input 
-                    placeholder="Ej. 123456789" 
+                    placeholder={t("placeholders.identification")}
                     type="text" 
                     {...register("identification")} 
                     disabled={!!client?.id} 
@@ -116,9 +120,9 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Nombre*</label>
+                <label className="text-sm font-semibold text-gray-500">{t("fields.firstName")}*</label>
                 <Input 
-                    placeholder="Ej. Juan" 
+                    placeholder={t("placeholders.firstName")}
                     type="text" 
                     {...register("firstName")} 
                 />
@@ -126,9 +130,9 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Apellido*</label>
+                <label className="text-sm font-semibold text-gray-500">{t("fields.lastName")}*</label>
                 <Input 
-                    placeholder="Ej. Pérez" 
+                    placeholder={t("placeholders.lastName")}
                     type="text" 
                     {...register("lastName")} 
                 />
@@ -136,9 +140,9 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Email*</label>
+                <label className="text-sm font-semibold text-gray-500">{t("fields.email")}*</label>
                 <Input 
-                    placeholder="Ej. juan.perez@email.com" 
+                    placeholder={t("placeholders.email")}
                     type="email" 
                     {...register("email")} 
                 />
@@ -146,8 +150,18 @@ const CustomerFormEdit = forwardRef<HTMLFormElement, CustomerFormProps>(({ onSuc
             </div>
             
             <div className="col-span-2 flex justify-end gap-2 mt-4">
-                <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
-                <CustomButton text={isSubmitting ? 'Procesando...' : client?.id ? 'Actualizar Cliente' : 'Crear Cliente'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
+                <CustomButton text={t("buttons.close")} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
+                <CustomButton
+                    text={
+                    isSubmitting
+                        ? t("buttons.processing")
+                        : client?.id
+                        ? t("buttons.update")
+                        : t("buttons.create")
+                    }
+                    style="border text-white bg-homePrimary hover:bg-blue-500"
+                    typeButton="submit"
+                />
             </div>
         </form>
     );

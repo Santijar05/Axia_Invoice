@@ -1,10 +1,14 @@
+import { Supplier } from "@/types/Api";
 import { create } from "zustand";
 
 type Product = {
   id: number;
   name: string;
   price: number;
+  basePrice: number;
   quantity: number;
+  tax: number;
+  supplier: Supplier;
 };
 
 type CartState = {

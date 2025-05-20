@@ -1,120 +1,100 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+ import { NextRequest, NextResponse } from "next/server";
+import createIntlMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 import { jwtDecode } from "jwt-decode";
 
-export async function middleware(request: Request) {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-  const url = new URL(request.url);
-  const pathname = url.pathname;
+const intlMiddleware = createIntlMiddleware(routing);
 
-  console.log("Middleware ejecutado en:", pathname);
-  console.log("Token presente:", authToken ? "Sí" : "No");
+export function middleware(request: NextRequest) {
+  const intlResponse = intlMiddleware(request);
+
+  const pathnameParts = request.nextUrl.pathname.split('/');
+  const locale = pathnameParts[1] ?? routing.defaultLocale;
+  const pathname = '/' + pathnameParts.slice(2).join('/');
+
+  const authToken = request.cookies.get("authToken")?.value;
+
+  console.log("Locale:", locale);
+  console.log("Pathname:", pathname);
+  console.log("Token:", authToken ? "Sí" : "No");
 
   const publicRoutes = ["/login", "/register"];
   const routesClients = ["/", "/aboutus", "/contactus"];
 
-  // Permitir acceso a rutas públicas y rutas de clientes sin token
+  // Rutas públicas y de clientes sin token
   if ((publicRoutes.includes(pathname) || routesClients.includes(pathname)) && !authToken) {
-    return NextResponse.next();
+    return intlResponse;
   }
 
-  // Si no hay token y la ruta no es pública ni de clientes, redirigir a /login
+  // Si no hay token y no es pública: redirige
   if (!authToken) {
-    console.log("Sin token. Redirigiendo a /login.");
-    return NextResponse.redirect(new URL("/login", request.url));
+    console.log("🔁 Sin token. Redirigiendo a /login");
+    return NextResponse.redirect(new URL(`/${locale}/login`, request.nextUrl.origin));
   }
 
   try {
     const decoded: any = jwtDecode(authToken);
     const userRole = decoded.role;
 
-    console.log("Token decodificado:", decoded);
-    console.log("Rol del usuario:", userRole)
-
-    // Evitar que usuarios autenticados entren a rutas públicas
-    if (publicRoutes.includes(pathname)) {
-      console.log("Usuario autenticado intentó acceder a ruta pública:", pathname);
-      if (userRole === "ADMIN" || userRole === "SUPERADMIN") {
-        return NextResponse.redirect(new URL("/admin", request.url));
-      } else {
-        return NextResponse.redirect(new URL("/employee", request.url));
-      }
-    }
-
     const allowedRoutes = {
       USER: [
-        "/employee",
-        "/store/products",
+        "/employee", 
+        "/store/products", 
         "/sales/make-sales",
+        "/shopping/make-purchase",
       ],
+
       ADMIN: [
-        "/admin",
-        "/box/cash-history",
-        "/box/manage-cash",
-        "/store/products",
-        "/sales/make-sales",
-        "/sales/sales-invoices",
-        "/shopping/make-purchase",
-        "/shopping/suppliers",
-        "/users/customers",
-        "/users/employees",
+        "/admin", 
+        "/box/cash-history", 
+        "/box/manage-cash", 
+        "/store/products", 
+        "/sales/make-sales", 
+        "/sales/sales-invoices", 
+        "/shopping/make-purchase", 
+        "/shopping/suppliers", 
+        "/users/customers", 
+        "/users/employees"
       ],
-      SUPERADMIN: [
-        "/admin",
-        "/box/cash-history",
-        "/box/manage-cash",
-        "/store/products",
-        "/sales/make-sales",
-        "/sales/sales-invoices",
-        "/shopping/suppliers",
-        "/shopping/make-purchase",
-        "/users/customers",
-        "/users/employees",
-        "/sales/view-sales",
+
+      SUPERADMIN:[
+        "/admin", 
+        "/box/cash-history", 
+        "/box/manage-cash", 
+        "/store/products", 
+        "/sales/make-sales", 
+        "/sales/sales-invoices", 
+        "/shopping/make-purchase", 
+        "/shopping/suppliers", 
+        "/users/customers", 
+        "/users/employees"
       ],
+    
     };
 
-    if (userRole in allowedRoutes) {
-      const userRoutes = allowedRoutes[userRole as keyof typeof allowedRoutes];
+    const userRoutes = allowedRoutes[userRole as keyof typeof allowedRoutes];
 
-      if (!userRoutes.some(route => pathname.startsWith(route))) {
-        console.log(`${userRole} intentó acceder a una ruta no permitida:`, pathname);
-        return NextResponse.redirect(new URL(userRole === "ADMIN" || userRole === "SUPERADMIN" ? "/admin" : "/employee", request.url));
+    const fallback = userRole === "ADMIN" || userRole === "SUPERADMIN" ? "/admin" : "/employee";
+
+    // Solo redirige si NO está en la ruta esperada
+    if (!userRoutes?.some(route => pathname.startsWith(route))) {
+      if (pathname !== fallback) {
+        return NextResponse.redirect(new URL(`/${locale}${fallback}`, request.nextUrl.origin));
       }
-    } else {
-      console.log("Rol desconocido. Redirigiendo a /login.");
-      return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    // Crear una respuesta con la cookie del rol
-    const response = NextResponse.next();
+    const response = intlResponse;
     response.headers.set("Set-Cookie", `userRole=${userRole}; Path=/; SameSite=Strict`);
-    console.log("Cookie userRole en el middleware:", cookieStore.get("userRole")?.value);
-
     return response;
 
   } catch (error) {
     console.error("Error al decodificar el token:", error);
-    const response = NextResponse.redirect(new URL("/login", request.url));
-    response.headers.set("Set-Cookie", "authToken=; Path=/; HttpOnly; Max-Age=0"); // Eliminar cookie
+    const response = NextResponse.redirect(new URL(`/${locale}/login`, request.nextUrl.origin));
+    response.headers.set("Set-Cookie", "authToken=; Path=/; HttpOnly; Max-Age=0");
     return response;
   }
 }
 
 export const config = {
-  matcher: [
-    "/login", 
-    "/register", 
-    "/employee",
-    "/store/:path*",
-    "/sales/:path*",
-    "/admin",
-    "/box/:path*",
-    "/shopping/:path*",
-    "/users/:path*",
-    "/", 
-    "/aboutus", 
-    "/contactus"
-  ],
+  matcher: '/((?!api|trpc|_next|_vercel|.*\\..*).*)'
 };

@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Filter } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
+interface HeaderItem {
+  label: string; // texto visible, traducido
+  key: string;   // clave de acceso a los datos (en inglés, como en la DB)
+}
 
 interface TableFilterProps {
-  headers: string[];
+  headers: HeaderItem[];
   onSort: (field: string, direction: 'asc' | 'desc') => void;
 }
 
 const TableFilter: React.FC<TableFilterProps> = ({ headers, onSort }) => {
+  const t = useTranslations("TableFilter");
+
   const [isOpen, setIsOpen] = useState(false);
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -29,7 +37,7 @@ const TableFilter: React.FC<TableFilterProps> = ({ headers, onSort }) => {
           onClick={() => setIsOpen(!isOpen)}
         >
           <Filter className="h-5 w-5 text-gray-400" aria-hidden="true" />
-          Ordenar por
+          {t("filter")}
           {isOpen ? (
             <ChevronUp className="h-4 w-4 ml-1" />
           ) : (
@@ -41,18 +49,18 @@ const TableFilter: React.FC<TableFilterProps> = ({ headers, onSort }) => {
       {isOpen && (
         <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            {headers.map((header) => (
+            {headers.map(({label, key}) => (
               <a
-                key={header}
+                key={key}
                 href="#"
-                className={`block px-4 py-2 text-sm ${sortField === header.toLowerCase() ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} hover:bg-gray-100`}
+                className={`block px-4 py-2 text-sm ${sortField === key.toLowerCase() ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} hover:bg-gray-100`}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleSort(header.toLowerCase());
+                  handleSort(key.toLowerCase());
                 }}
               >
-                {header}
-                {sortField === header.toLowerCase() && (
+                {label}
+                {sortField === key.toLowerCase() && (
                   <span className="ml-2">
                     {sortDirection === 'asc' ? '↑' : '↓'}
                   </span>

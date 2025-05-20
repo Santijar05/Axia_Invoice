@@ -3,15 +3,16 @@
 import { jsPDF } from 'jspdf';
 import { useState } from 'react';
 import autoTable from 'jspdf-autotable';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 
 import { ClientDAO } from '@/types/Api';
+import { createPayment } from '@/lib/api-sales';
 import Select from '@/components/atoms/select';
+import { crearFacturaVenta } from '@/lib/api-saleInvoce';
 import { SaleItem, SaleItemForAPI } from '@/types/Api';
 import SearchBarUniversal from '@/components/molecules/SearchBar';
-import { createPayment } from '@/lib/api-sales';
 import { ToggleSwitch } from '@/components/molecules/ToggleSwitch';
-import { crearFacturaVenta } from '@/lib/api-saleInvoce';
 
 interface InvoiceModalProps {
   subtotal: number;
@@ -30,13 +31,15 @@ export default function InvoiceModal({
   onSuccess,
   onCancel
 }: InvoiceModalProps) {
+  const t = useTranslations("invoiceModal");
+
   const { user } = useAuth();
   const [selectedClient, setSelectedClient] = useState<ClientDAO | null>(null);
   const [isElectronicBill, setIsElectronicBill] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('CASH');
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   const formatCurrency = (value: number) => {
     return value.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
@@ -48,34 +51,41 @@ export default function InvoiceModal({
     const doc = new jsPDF();
 
     doc.setFontSize(18);
-    doc.text("Factura de Venta", 20, 20);
+    doc.text(t('pdf.title'), 20, 20);
 
     doc.setFontSize(10);
-    doc.text(user?.name || "Nombre Empresa", 20, 30);
-    doc.text(`NIT: ${user?.tenantId || 'XXX.XXX.XXX-X'}`, 20, 35);
-    doc.text("Dirección: Calle X #X-XX", 20, 40);
-    doc.text("Teléfono: XXX-XXX-XXX", 20, 45);
+    doc.text(user?.name || t('pdf.companyName'), 20, 30);
+    doc.text(`${t('pdf.nit')}: ${user?.tenantId || 'XXX.XXX.XXX-X'}`, 20, 35);
+    doc.text(`${t('pdf.address')}: Calle X #X-XX`, 20, 40);
+    doc.text(`${t('pdf.phone')}: XXX-XXX-XXX`, 20, 45);
 
-    doc.text("Cliente:", 20, 50);
+    doc.text(`${t('pdf.client')}:`, 20, 50);
     doc.text(
       `${selectedClient.firstName} ${selectedClient.lastName}`,
       20,
       55
     );
 
-    doc.text(`Fecha: ${new Date().toLocaleDateString('es-CO')}`, 140, 20);
+    doc.text(`${t('pdf.date')}: ${new Date().toLocaleDateString('es-CO')}`, 140, 20);
     doc.text(
-      `Método de Pago: ${paymentMethod === 'CASH' ? 'Efectivo' : paymentMethod === 'CARD' ? 'Tarjeta' : 'Transferencia'}`,
+      `${t('pdf.paymentMethod')}: ${t(`paymentMethods.${paymentMethod}`)}`,
       140,
       25
     );
 
     doc.setFontSize(12);
-    doc.text("Descripción de Productos", 20, 70);
+    doc.text(t('pdf.productDescription'), 20, 70);
 
-    const tableHeaders = ["Producto", "Cant.", "Precio Unit.", "Impuesto", "Subtotal"];
+    const tableHeaders = [
+      t('pdf.headers.product'),
+      t('pdf.headers.quantity'),
+      t('pdf.headers.unitPrice'),
+      t('pdf.headers.tax'),
+      t('pdf.headers.subtotal'),
+    ];
+    
     const tableData = items.map((item) => [
-      item.name || 'Producto',
+      item.name || t('pdf.headers.product'),
       item.quantity.toString(),
       formatCurrency(item.basePrice || item.price),
       item.tax.toString(),
@@ -92,10 +102,10 @@ export default function InvoiceModal({
     });
 
     const finalY = (doc as any).lastAutoTable.finalY + 10;
-    doc.text(`Subtotal: ${formatCurrency(subtotal)}`, 140, finalY);
-    doc.text(`Impuestos: ${formatCurrency(taxTotal)}`, 140, finalY + 5);
+    doc.text(`${t('labels.subtotal')}: ${formatCurrency(subtotal)}`, 140, finalY);
+    doc.text(`${t('labels.tax')}: ${formatCurrency(taxTotal)}`, 140, finalY + 5);
     doc.setFontSize(14);
-    doc.text(`TOTAL: ${formatCurrency(total)}`, 140, finalY + 15);
+    doc.text(`${t('labels.total')}: ${formatCurrency(total)}`, 140, finalY + 15);
 
     const pdfBlob = doc.output('blob');
     const url = URL.createObjectURL(pdfBlob);
@@ -104,14 +114,12 @@ export default function InvoiceModal({
 
   const handleProcessSale = async () => {
     if (!selectedClient) {
-      setError('Debe seleccionar un cliente');
+      setError(t('errors.noClient'));
       return;
     }
 
-    console.log('User en InvoiceModal:', user);
-    
     if (!user?.tenantId) {
-      setError('Error de autenticación');
+      setError(t('errors.auth'));
       return;
     }
     
@@ -144,7 +152,7 @@ export default function InvoiceModal({
       
     } catch (error) {
       console.error('Error processing sale:', error);
-      setError(error instanceof Error ? error.message : 'Error procesando la venta');
+      setError(error instanceof Error ? error.message :  t('errors.sale'));
     } finally {
       setIsLoading(false);
     }
@@ -156,40 +164,40 @@ export default function InvoiceModal({
 
   return (
     <div className="p-4">
-      <h2 className="text-lg font-semibold mb-4 text-white">Detalles de la Venta</h2>
+      <h2 className="text-lg font-semibold mb-4 text-white">{t('title')}</h2>
       
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-white">Cliente</label>
+        <label className="block text-sm font-medium mb-1 text-white">{t('client')}</label>
         <SearchBarUniversal
           searchType="clients"
           onAddToCart={(item) => setSelectedClient(item as ClientDAO)} 
 
           showResults={true}
-          placeholder="Cliente que realiza la compra"
+          placeholder={t('clientPlaceholder')}
         />
       </div>
       
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-white">Método de Pago</label>
+        <label className="block text-sm font-medium mb-1 text-white">{t('payment')}</label>
         <Select
           value={paymentMethod}
           onChange={(e: any) => setPaymentMethod(e.target.value)}
           className="w-full p-2 border rounded"
 
           options={[
-            { value: "CASH", label: "Efectivo" },
-            { value: "CARD", label: "Tarjeta" },
-            { value: "TRANSFER", label: "Transferencia" }
+            { value: "CASH", label: t("paymentMethods.CASH") },
+            { value: "CARD", label: t("paymentMethods.CARD") },
+            { value: "TRANSFER", label: t("paymentMethods.TRANSFER") }
           ]}
-          placeholder="Selecciona un método de pago"
+          placeholder={t('paymentPlaceholder')}
         />
       </div>
       
       <div className="mb-4">
         <div className="flex items-center justify-between">
-          <span className='text-white'>Generar Factura Electrónica</span>
+          <span className='text-white'>{t('electronicBill')}</span>
           <ToggleSwitch
-            options={['No', 'Sí']}
+            options={[t('toggle.no'), t('toggle.yes')]}
             activeIndex={isElectronicBill ? 1 : 0} 
             onChange={(index) => setIsElectronicBill(index === 1)} 
           />
@@ -198,11 +206,11 @@ export default function InvoiceModal({
       
       <div className="space-y-2 my-4">
         <div className="flex justify-between">
-          <span className='text-white'>Subtotal:</span>
+          <span className='text-white'>{t('labels.subtotal')}:</span>
           <span className='text-white'>{formatCurrency(subtotal)}</span>
         </div>
         <div className="flex justify-between">
-          <span className='text-white'>Impuestos:</span>
+          <span className='text-white'>{t('labels.tax')}:</span>
           <span className='text-white'>{formatCurrency(taxTotal)}</span>
         </div>
         <div className="flex justify-between font-bold">
@@ -217,7 +225,7 @@ export default function InvoiceModal({
 
       {pdfUrl ? (
         <div className="mt-6">
-          <h3 className="text-lg font-medium mb-3">Vista previa de la factura</h3>
+          <h3 className="text-lg font-medium mb-3">{t('preview.title')}</h3>
           <iframe
             src={pdfUrl}
             width="100%"
@@ -231,7 +239,7 @@ export default function InvoiceModal({
               className="px-4 py-2 text-white border border-gray-300 rounded hover:bg-gray-100"
               disabled={isLoading}
             >
-              Finalizar
+              {t('preview.finish')}
             </button>
             <a
               href={pdfUrl}
@@ -239,7 +247,7 @@ export default function InvoiceModal({
               className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
               onClick={handleDownloadAndClose}
             >
-              Descargar Factura y Finalizar
+              {t('preview.download')}
             </a>
           </div>
         </div>
@@ -250,14 +258,14 @@ export default function InvoiceModal({
             className="px-4 py-2 border border-gray-300 rounded text-white hover:bg-gray-100"
             disabled={isLoading}
           >
-            Cancelar
+            {t('cancel')}
           </button>
           <button
             onClick={handleProcessSale}
             className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-400"
             disabled={isLoading || !selectedClient}
           >
-            {isLoading ? 'Procesando...' : 'Completar Venta'}
+            {isLoading ? t('processing') : t('submit')}
           </button>
         </div>
       )}
