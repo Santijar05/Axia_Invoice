@@ -37,6 +37,18 @@ export const deleteSaleInvoice = async (id: string): Promise<void> => {
   });
 };
 
+export const getListInvoicesByClientName = async (name: string): Promise<CreatedInvoice[]> => {
+  const url = `${envVariables.API_URL}/sale-invoices/search?name=${encodeURIComponent(name)}`;
+  console.log('Searching invoices by name:', url);
+
+  return fetchWithCredentials<CreatedInvoice[]>(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 // Función para obtener facturas sin autenticación (para SSG)
 export const getPublicSaleInvoices = async () => {
   const url = `${envVariables.API_URL}/sale-invoices/public/list`;

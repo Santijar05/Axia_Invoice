@@ -15,7 +15,14 @@ import TableFilter from "@/components/molecules/TableFilter";
 import SearchBarUniversal from "@/components/molecules/SearchBar";
 import ProductDetailModal from "./ProductDetail/ProductDetailModal";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
-import { ClientDAO, EmployeeDAO, ProductDAO, ProductFormProps, SupplierDAO } from "@/types/Api";
+import { 
+    ClientDAO, 
+    CreatedInvoice, 
+    EmployeeDAO, 
+    ProductDAO, 
+    ProductFormProps, 
+    SupplierDAO 
+} from "@/types/Api";
 
 export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     const router = useRouter();
@@ -99,7 +106,7 @@ export default function ScreenProducts({ onSuccess }: ProductFormProps) {
     };
 
     // Mejora handleProductsFound para ser más explícito sobre cuándo regresar a initialProducts
-    const handleProductsFound = (results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+    const handleProductsFound = (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] | CreatedInvoice[]) => {
         const productResults = results.filter((result): result is ProductDAO => 
             'name' in result && 'stock' in result
         );

@@ -600,6 +600,7 @@
       "date": "Date",
       "total": "Total"
     },
+    "searchPlaceholder": "Recherche par clients...",
     "deleteError": "Une erreur s'est produite lors de la suppression de la facture."
   },
 
@@ -614,6 +615,7 @@
       "total": "Total",
       "supplier": "Fournisseur"
     },
+    "searchPlaceholder": "Recherche par fournisseurs",
     "deleteError": "Une erreur s'est produite lors de la suppression de l'enregistrement d'achat."
   },
 

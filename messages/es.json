@@ -600,6 +600,7 @@
       "date": "Fecha",
       "total": "Total"
     },
+    "searchPlaceholder": "Bucar por clientes...",
     "deleteError": "Ocurrió un error al eliminar la factura."
   },
 
@@ -614,6 +615,7 @@
       "total": "Total",
       "supplier": "Proveedor"
     },
+    "searchPlaceholder": "Bucar por proveedores...",
     "deleteError": "Ocurrió un error al eliminar el registro de compra."
   },
 

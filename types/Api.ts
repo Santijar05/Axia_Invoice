@@ -29,7 +29,8 @@ export type CreatedPurchase = {
     date: string;
     totalPrice: number;
     electronicBill: boolean;
-    clientId: string;
+    supplierId: string;
+    supplier: SupplierDAO;
     tenantId: string;
     purchaseProducts: SaleProduct[];
 };
@@ -46,6 +47,7 @@ export interface CreatedInvoice {
     electronicBill: boolean;
     clientId: string;
     tenantId: string;
+    client: ClientDAO;
     invoiceProducts: SaleProduct[];
 }
 

@@ -591,6 +591,7 @@
       "date": "Date",
       "total": "Total"
     },
+    "searchPlaceholder": "Search by client...",
     "deleteError": "An error occurred while deleting the invoice."
   },
 
@@ -605,6 +606,7 @@
       "total": "Total",
       "supplier": "Supplier"
     },
+    "searchPlaceholder": "Search by suppliers...",
     "deleteError": "An error occurred while deleting the purchase record."
   },
 

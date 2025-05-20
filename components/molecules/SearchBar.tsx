@@ -13,11 +13,13 @@ import {
   ProductDAO, 
   EmployeeDAO, 
   SupplierDAO, 
-  ClientDAO 
+  ClientDAO, 
+  CreatedInvoice
 } from "@/types/Api";
+import { getListInvoicesByClientName } from "@/lib/api-saleInvoce";
 
 interface SearchBarUniversalProps {
-  onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[]) => void;
+  onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] | CreatedInvoice[]) => void;
   onAddToCart?: (item: ProductDAO | ClientDAO | SupplierDAO | EmployeeDAO) => void;
   onSearchTermChange?: (term: string) => void;
   disabled?: boolean;
@@ -52,7 +54,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
 }) => {
   const [showResultsInternal, setShowResultsInternal] = useState(showResults);
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState<(ProductDAO | EmployeeDAO | SupplierDAO | ClientDAO)[]>([]);
+  const [results, setResults] = useState<(ProductDAO | EmployeeDAO | SupplierDAO | ClientDAO | CreatedInvoice)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -85,7 +87,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
         setError(null);
 
         try {
-          let fetchedResults: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] = [];
+          let fetchedResults: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] | CreatedInvoice[] = [];
           
           if (searchType === "products") {
             fetchedResults = await getListproductsByName(term) || [];
@@ -98,6 +100,8 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
             fetchedResults = (await getListClientsByName(term)) || [];
           } else if (searchType === "suppliers") {
             fetchedResults = await getListSuppliersByName(term) || [];
+          } else if (searchType === "invoices") {
+            fetchedResults = await getListInvoicesByClientName(term) || [];
           } else {
             fetchedResults = await getListEmployeesByName(term) || [];
           }
