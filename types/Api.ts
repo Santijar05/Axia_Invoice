@@ -223,6 +223,7 @@ export interface ProfitabilityMetricsData {
   costBreakdown: Array<{
     category: string;
     amount: number;
+    percentage: number; // Add this property
   }>;
 }
 

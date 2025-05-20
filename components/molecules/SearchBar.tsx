@@ -15,6 +15,7 @@ import {
   SupplierDAO, 
   ClientDAO 
 } from "@/types/Api";
+import { useTranslations } from "next-intl";
 
 interface SearchBarUniversalProps {
   onResultsFound?: (results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[]) => void;
@@ -49,6 +50,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
   const [results, setResults] = useState<(ProductDAO | EmployeeDAO | SupplierDAO | ClientDAO)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("searchBar");
 
   useEffect(() => {
     if (searchTerm === "") {
@@ -134,9 +136,9 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
 
       {showResultsInternal && (
         <div className="mt-2">
-          {isLoading && <p className="text-gray-500 text-sm">Buscando...</p>}
+          {isLoading && <p className="text-gray-500 text-sm">{t("searchBar.searching")}</p>}
           
-          {error && <p className="text-yellow-600 text-sm">{error}</p>}
+          {error && <p className="text-yellow-600 text-sm">{t("searchBar.error")}</p>}
 
           {searchTerm && results.length > 0 ? (
             <ul className="bg-black border border-gray-300 rounded-md shadow-sm max-h-60 overflow-auto">
@@ -205,7 +207,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
             </ul>
           ) : (
             searchTerm && !isLoading && !error && 
-            <p className="text-gray-500 text-sm">No se encontraron resultados.</p>
+            <p className="text-gray-500 text-sm">{t("searchBar.noResults")}</p>
           )}
         </div>
       )}
