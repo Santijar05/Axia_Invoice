@@ -57,9 +57,21 @@ export default function PieChart({
         callbacks: {
           label: function(context) {
             const label = context.label || '';
-            const value = context.raw || 0;
-            const total = context.chart.data.datasets[0].data.reduce((a, b) => a + (b as number), 0);
-            const percentage = Math.round(((value as number) / total) * 100);
+            // Ensure value is a number
+            const value = typeof context.raw === 'number' ? context.raw : 0;
+            
+            // Safely calculate total with null checks
+            const dataArray = context.chart.data.datasets[0].data || [];
+            const total = dataArray.reduce((acc, current) => {
+              const accValue = typeof acc === 'number' ? acc : 0; // Ensure acc is a number
+              const currentValue = typeof current === 'number' ? current : 0;
+              return accValue + currentValue;
+            }, 0);
+            
+            // Calculate percentage with type check on total
+            const totalAsNumber = typeof total === 'number' ? total : 0;
+            const percentage = totalAsNumber > 0 ? Math.round((value / totalAsNumber) * 100) : 0;
+            
             return `${label}: ${percentage}% (${value})`;
           }
         }

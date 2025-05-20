@@ -82,7 +82,8 @@ export default function LineChart({ labels, datasets, title, height = 300 }: Lin
       y: {
         grid: {
           color: 'rgba(255, 255, 255, 0.1)',
-          borderDash: [5, 5]
+          drawOnChartArea: true,
+          ...({borderDash: [5, 5]} as any)  
         },
         ticks: {
           color: '#fff',
