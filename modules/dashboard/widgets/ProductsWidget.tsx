@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { envVariables } from '@/utils/config'
 import { formatCurrency } from '@/utils/format'
-import { TopProductdata } from '@/types/Api'
+import { TopProductData } from '@/types/Api'
 
 export default function ProductsWidget() {
   const t = useTranslations('dashboard.products')
