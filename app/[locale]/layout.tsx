@@ -1,6 +1,14 @@
 import {NextIntlClientProvider, hasLocale} from 'next-intl';
 import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
+
+export const metadata = {
+  title: 'Axia Invoice',
+  icons: {
+    icon: '/Images/logo_blanco.png', 
+  },
+};
+
  
 export default async function LocaleLayout({
   children,
