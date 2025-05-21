@@ -65,14 +65,16 @@ const getEmployee = async (id: string): Promise<EmployeeDAO> => {
 
 export const generateStaticParams = async (): Promise<StaticParams[]> => {
     try {
-        console.log("Iniciando generación de páginas estáticas...");
+        /* console.log("Iniciando generación de páginas estáticas...");
         const employees = await getPublicEmployees();
         console.log(`Obtenidos ${employees.length} empleados para pre-renderizado`);
         
         return employees.slice(0, 5).map((employee: EmployeeDAO) => {
             console.log(`Generando página para empleado: ${employee.id}`);
             return { employeeId: employee.id };
-        });
+        }); */
+        console.log("Generación de páginas estáticas desactivada");
+        return [];
     } catch (error) {
         console.error("Error:", error);
         return [];
