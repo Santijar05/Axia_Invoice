@@ -65,14 +65,16 @@ const getCustomer = async (id: string): Promise<ClientDAO> => {
 
 export const generateStaticParams = async (): Promise<StaticParams[]> => {
     try {
-        console.log("Iniciando generación de páginas estáticas...");
+        /* console.log("Iniciando generación de páginas estáticas...");
         const customers = await getPublicClients();
         console.log(`Obtenidos ${customers.length} clientes para pre-renderizado`);
         
         return customers.slice(0, 5).map((customer: ClientDAO) => {
             console.log(`Generando página para cliente: ${customer.id}`);
             return { customerId: customer.id };
-        });
+        }); */
+        console.log("Generación de páginas estáticas desactivada");
+        return [];
     } catch (error) {
         console.error("Error:", error);
         return [];

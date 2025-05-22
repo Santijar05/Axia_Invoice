@@ -65,14 +65,16 @@ const getInvoice = async (id: string): Promise<Purchase> => {
 
 export const generateStaticParams = async (): Promise<StaticParams[]> => {
     try {
-        console.log("Iniciando generación de páginas estáticas...");
+/*         console.log("Iniciando generación de páginas estáticas...");
         const invoices = await getPublicPurchaseInvoices();
         console.log(`Obtenidas ${invoices.length} compras para pre-renderizado`);
 
         return invoices.slice(0, 5).map((invoice: Purchase) => {
             console.log(`Generando página para compra: ${invoice.id}`);
             return { invoiceId: invoice.id };
-        });
+        }); */
+        console.log("Generación de páginas estáticas desactivada");
+        return [];
     } catch (error) {
         console.error("Error generando rutas estáticas para compras:", error);
         return [];

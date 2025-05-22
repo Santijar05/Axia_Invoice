@@ -65,14 +65,16 @@ const getProduct = async (id: string): Promise<ProductDAO> => {
 
 export const generateStaticParams = async (): Promise<StaticParams[]> => {
     try {
-        console.log("Iniciando generación de páginas estáticas...");
+/*         console.log("Iniciando generación de páginas estáticas...");
         const products = await getPublicProducts();
         console.log(`Obtenidos ${products.length} productos para pre-renderizado`);
         
         return products.slice(0, 5).map((product : ProductDAO) => {
             console.log(`Generando página para producto: ${product.id}`);
             return { productId: product.id };
-        });
+        }); */
+        console.log("Generación de páginas estáticas desactivada");
+        return [];
     } catch (error) {
         console.error("Error:", error);
         return [];
