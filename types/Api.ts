@@ -3,6 +3,38 @@ export interface UserDataLogin {
     password: string;
 }
 
+export type Compra = {
+    tenantId: string;
+    supplierId: string;
+    totalPrice: number;
+    electronicBill?: boolean;
+    products: SaleItemForAPI[];
+};
+
+export interface Purchase {
+    id: string;
+    tenantId: string;
+    supplierId: string;
+    date: string; 
+    totalPrice: number;
+    createdAt: string;
+    updatedAt: string;
+    tenant: Tenant;
+    supplier: SupplierDAO;
+    products: PurchaseProduct[];
+}
+
+export type CreatedPurchase = {
+    id: string;
+    date: string;
+    totalPrice: number;
+    electronicBill: boolean;
+    supplierId: string;
+    supplier: SupplierDAO;
+    tenantId: string;
+    purchaseProducts: SaleProduct[];
+};
+
 export interface SaleProduct {
     productId: string;
     quantity: number;
@@ -15,6 +47,7 @@ export interface CreatedInvoice {
     electronicBill: boolean;
     clientId: string;
     tenantId: string;
+    client: ClientDAO;
     invoiceProducts: SaleProduct[];
 }
 
@@ -76,6 +109,15 @@ export interface InvoiceProduct {
     product?: ProductDAO; 
 }
 
+export interface PurchaseProduct {
+    id: string;
+    tenantId: string;
+    productId: string;
+    purchaseInvoiceId: string;
+    quantity: number;
+    product?: ProductDAO; 
+}
+
 export interface EmployeeDAO {
     id: string;
     name: string;
@@ -110,12 +152,9 @@ export interface UserDataRegister {
     password: string;
 }
 
-export interface Supplier {
-    name:string
-}
 export interface ProductDAO {
     tenantId: string;
-    supplier: Supplier;
+    supplier: SupplierDAO;
     name: string;
     id: string;
     salePrice: number;
@@ -158,4 +197,108 @@ export interface SaleItemForAPI {
     tenantId: string;
     productId: string;
     quantity: number;
+}
+
+// Interfaces de Analytics
+export interface SalesMetricsData {
+  period: string;
+  revenue: number;
+  count: number;
+}
+
+export interface TopProductData {
+  productName: string;
+  totalSold: number;
+  revenue: number;
+}
+
+export interface InventorySummaryData {
+  summary: {
+    totalProducts: number;
+    totalStock: number;
+    inventoryValue: number;
+    avgStockPerProduct: number;
+    lowStockCount: number;
+  };
+  lowStockProducts: Array<{
+    id: string;
+    name: string;
+    stock: number;
+    purchasePrice: number;
+    salePrice: number;
+  }>;
+}
+
+export interface CustomerMetricsData {
+  totalCustomers: number;
+  newCustomers: number;
+  totalRevenue: number;
+  averageOrderValue: number;
+  segments: Array<{
+    name: string;
+    count: number;
+  }>;
+}
+
+export interface DashboardMetricsData {
+  sales: {
+    count: number;
+    total: number;
+  };
+  purchases: {
+    count: number;
+    total: number;
+  };
+  productsTotal: number;
+  clientsTotal: number;
+}
+
+export interface ProfitabilityMetricsData {
+  grossProfit: number;
+  netProfit: number;
+  profitMargin: number;
+  yearOverYearChange: number;
+  costBreakdown: Array<{
+    category: string;
+    amount: number;
+    percentage: number; // Add this property
+  }>;
+}
+
+export interface InventoryHealthData {
+  lowStockProducts: Array<{
+    id: string;
+    name: string;
+    stock: number;
+    purchasePrice: number;
+  }>;
+  turnoverRate: number;
+  totalStockValue: number;
+}
+
+export interface ProductPerformanceData {
+  topProducts: Array<{
+    id: string;
+    name: string;
+    totalSold: number;
+    revenue: number;
+    profit: number;
+  }>;
+  averageOrderValue: number;
+  orderCount: number;
+}
+
+export interface CustomerInsightsData {
+  customerAcquisition: Array<{
+    month: string;
+    newCustomers: number;
+  }>;
+  topCustomers: Array<{
+    id: string;
+    name: string;
+    orderCount: number;
+    totalSpent: number;
+  }>;
+  repeatPurchaseRate: number;
+  totalCustomers: number;
 }

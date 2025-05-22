@@ -1,16 +1,28 @@
-// ScreenMakeSale.tsx
 'use client';
 
-import { useState } from 'react';
 import Image from "next/image";
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import InvoiceModal from './InvoiceModal';
 import Input from '@/components/atoms/Input';
+<<<<<<< HEAD
 import { ProductDAO, SaleItem, Venta } from '@/types/Api';
+=======
+import { ProductDAO, SaleItem } from '@/types/Api';
+>>>>>>> 1e7d804b8989f66f1ef475474988582f7e647346
 import SearchBarUniversal from '@/components/molecules/SearchBar';
 import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
+import SaleTable from "./SaleComponents/SaleTable";
+import SaleSummary from "./SaleComponents/SaleSummary";
+import SaleForm from "./SaleComponents/SaleForm";
 
 export default function ScreenMakeSale() {
+<<<<<<< HEAD
+=======
+  const t = useTranslations("makeSale");
+
+>>>>>>> 1e7d804b8989f66f1ef475474988582f7e647346
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [tenantIdProduct, settenantIdProduct] = useState('');
@@ -46,7 +58,7 @@ export default function ScreenMakeSale() {
       const updatedItems = [...items];
       const existingItem = updatedItems[existingIndex];
       if (existingItem.quantity + quantity > stock) {
-        alert(`No hay suficiente stock. Disponible: ${stock}`);
+        alert(`${t("notEnoughStock")} ${stock}`);
         return;
       }
       existingItem.quantity += quantity;
@@ -54,7 +66,7 @@ export default function ScreenMakeSale() {
       setItems(updatedItems);
     } else {
       if (quantity > stock) {
-        alert(`No hay suficiente stock. Disponible: ${stock}`);
+        alert(`${t("notEnoughStock")} ${stock}`);
         return;
       }
 
@@ -106,7 +118,7 @@ export default function ScreenMakeSale() {
 
   const handleCompleteSale = async () => {
     if (items.length === 0) {
-      alert('Agrega productos antes de completar la venta.');
+      alert(t("addBeforeComplete"));
       return;
     }
 
@@ -115,7 +127,7 @@ export default function ScreenMakeSale() {
 
   const handleSuccessSale = () => {
     resetSaleForm();
-    alert('Venta completada con éxito.');
+    alert(t("success"));
     window.location.reload();
     setIsInvoiceModalOpen(false);
   };
@@ -133,10 +145,11 @@ export default function ScreenMakeSale() {
       <div className="relative w-full my-6 bg-blac bg-opacity-50 rounded-lg shadow-lg mt-5">
 
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-white">Nueva venta</h2>  
+          <h2 className="text-2xl font-semibold text-white">{t('title')}</h2>  
         </div>
 
         <div className="flex flex-row gap-6 flex-wrap mt-12">
+<<<<<<< HEAD
         
           <div className="flex-1 min-w-[300px] border border-gray-600 bg-transparent p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4 text-white">Añadir Items</h2>
@@ -197,51 +210,31 @@ export default function ScreenMakeSale() {
               </button>
             </div>
           </div>
+=======
+          <SaleForm
+            quantity={quantity}
+            price={price}
+            name={name}
+            setQuantity={setQuantity}
+            setName={setName}
+            setPrice={setPrice}
+            setStock={setStock}
+            setTax={setTax}
+            setSelectedProductId={setSelectedProductId}
+            setTenantIdProduct={settenantIdProduct}
+            handleAddItem={handleAddItem}
+          />
+>>>>>>> 1e7d804b8989f66f1ef475474988582f7e647346
         </div>
 
         <div className="mt-6 border border-gray-600 bg-transparent shadow-md rounded-lg p-6 w-full text-white min-h-[600px] max-h-[600px] flex flex-col">
-          <div className="overflow-x-auto border-b border-gray-700 flex-grow">
-            {items.length > 0 ? (
-              <table className="min-w-full divide-y divide-gray-700">
-                <thead>
-                  <tr className="text-left">
-                    <th className="px-4 py-2">Producto</th>
-                    <th className="px-4 py-2">Cantidad</th>
-                    <th className="px-4 py-2">Precio sin imp.</th>
-                    <th className="px-4 py-2">Impuesto %</th>
-                    <th className="px-4 py-2">Precio c/imp.</th>
-                    <th className="px-4 py-2">Subtotal</th>
-                    <th className="px-4 py-2">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-700">
-                  {items.map((item) => (
-                    <tr key={item.id}>
-                      <td className="px-4 py-2">{item.name}</td>
-                      <td className="px-4 py-2">{item.quantity}</td>
-                      <td className="px-4 py-2">{formatCurrency(item.basePrice)}</td>
-                      <td className="px-4 py-2">{item.tax}%</td>
-                      <td className="px-4 py-2">{formatCurrency(item.price)}</td>
-                      <td className="px-4 py-2">{formatCurrency(item.quantity * item.price)}</td>
-                      <td className="px-4 py-2">
-                        <button
-                          onClick={() => handleRemoveItem(item.id)}
-                          className="text-red-400 hover:text-red-600 px-3 py-1 rounded hover:bg-red-900/30 transition-colors"
-                        >
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-gray-400 italic py-20">No hay productos aún.</p>
-              </div>
-            )}
-          </div>
+          <SaleTable
+            items={items}
+            handleRemoveItem={handleRemoveItem}
+            formatCurrency={formatCurrency}
+          />
 
+<<<<<<< HEAD
           <div className="pt-4 space-y-2 text-right">
             <div className="flex justify-between">
               <span className="font-medium">Subtotal:</span>
@@ -263,13 +256,23 @@ export default function ScreenMakeSale() {
               Finalizar venta
             </button>
           </div>
+=======
+          <SaleSummary
+            subtotal={calculateSubtotal()}
+            taxTotal={calculateTaxTotal()}
+            total={calculateTotal()}
+            onCompleteSale={handleCompleteSale}
+            disabled={items.length === 0}
+            formatCurrency={formatCurrency}
+          />
+>>>>>>> 1e7d804b8989f66f1ef475474988582f7e647346
         </div>
       </div>
 
       <CustomModalNoButton
         isOpen={isInvoiceModalOpen}
         onClose={() => setIsInvoiceModalOpen(false)}
-        title="Confirmar Venta"
+        title={t('confirmSale')}
       >
         <InvoiceModal
           subtotal={calculateSubtotal()}

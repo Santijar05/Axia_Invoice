@@ -1,11 +1,13 @@
-import React, { forwardRef } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { employeeSchema } from "@/schemes/employeeScheme";
-import Input from "@/components/atoms/Input";
 import Cookies from "js-cookie"; 
 import { jwtDecode } from "jwt-decode";
+import React, { forwardRef } from "react";
+import { useForm } from "react-hook-form";
+import { useTranslations } from 'next-intl';
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import Input from "@/components/atoms/Input";
 import { createEmployee } from "@/request/users";
+import { employeeSchema } from "@/schemes/employeeScheme";
 import CustomButton from "@/components/atoms/CustomButton";
 
 type EmployeeFormData = {
@@ -23,13 +25,16 @@ interface EmployeeFormProps {
 }
 
 const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess, onClose }, ref) => {
+    const t = useTranslations("EmployeeForm");
+    const createEmployeeSchema = employeeSchema(t);
+
     const {
         register,
         handleSubmit,
         reset, 
         formState: { errors },
     } = useForm<EmployeeFormData>({
-        resolver: zodResolver(employeeSchema),
+        resolver: zodResolver(createEmployeeSchema),
     });
 
     const onSubmit = async (data: EmployeeFormData) => {
@@ -47,6 +52,7 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
             tenantId,
             id: "", 
         };
+
         console.log("Datos enviados:", formData);
         
         try {                
@@ -55,7 +61,7 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
 
             if (response.status === 201) {
                 const responseData = await response.json();
-                alert("Empleado creado exitosamente");
+                alert(t("success"));
                 console.log("Empleado creado:", responseData);
                 reset(); 
                 onSuccess?.();
@@ -66,22 +72,22 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
             }
         } catch (error) {
             console.error("Error en onSubmit:", error);
-            alert("Error de conexión. Inténtalo nuevamente.");
+            alert(t("connectionError"));
         }   
     };
 
     return (
         <form ref={ref} onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4"> 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Código</label>
-                <Input placeholder="AUTOGENERADO" type="text" disabled={true} />
+                <label className="text-sm font-semibold text-gray-500">{t("codeLabel")}</label>
+                <Input placeholder={t("codePlaceholder")} type="text" disabled={true} />
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Nombre</label>
+                <label className="text-sm font-semibold text-gray-500">{t("nameLabel")}</label>
                 <Input 
                     className="text-homePrimary-200 bg-transparent" 
-                    placeholder="Ej. Juan" 
+                    placeholder={t("namePlaceholder")}
                     type="text" 
                     {...register("name")} 
                 />
@@ -89,10 +95,10 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Correo electrónico</label>
+                <label className="text-sm font-semibold text-gray-500">{t("namePlaceholder")}</label>
                 <Input 
                     className="text-homePrimary-200 bg-transparent" 
-                    placeholder="Ej. Juan@gmail.com" 
+                    placeholder={t("emailPlaceholder")}
                     type="email" 
                     {...register("email")} 
                 />
@@ -100,10 +106,10 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Contraseña</label>
+                <label className="text-sm font-semibold text-gray-500">{t("passwordLabel")}</label>
                 <Input 
                     className="text-homePrimary-200 bg-transparent" 
-                    placeholder="Contraseña" 
+                    placeholder={t("passwordPlaceholder")}
                     type="password" 
                     {...register("password")} 
                 />
@@ -111,10 +117,10 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
             </div>
 
             <div>
-                <label className="text-sm font-semibold text-gray-500">Rol</label>
+                <label className="text-sm font-semibold text-gray-500">{t("roleLabel")}</label>
                 <Input 
                     className="text-homePrimary-200 bg-transparent" 
-                    placeholder="Ej. admin" 
+                    placeholder={t("rolePlaceholder")} 
                     type="text" 
                     {...register("role")} 
                 />
@@ -122,8 +128,8 @@ const EmployeeForm = forwardRef<HTMLFormElement, EmployeeFormProps>(({ onSuccess
             </div>
 
             <div className="col-span-2 flex justify-end gap-2 mt-4">
-                <CustomButton text="Cerrar" style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
-                <CustomButton text={ 'Crear Cliente'} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
+                <CustomButton text={t("closeButton")} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="button" onClickButton={onSuccess}  />
+                <CustomButton text={t("createButton")} style="border text-white bg-homePrimary hover:bg-blue-500" typeButton="submit" />
             </div>    
         </form>
     );

@@ -1,11 +1,14 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from "react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 import CustomButton from "@/components/atoms/CustomButton";
 
 export default function ContentHero() {
+  const t = useTranslations("home.contentHero");
+
   const [isVisible, setIsVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -58,15 +61,15 @@ export default function ContentHero() {
           style={{ transitionDelay: "150ms" }}
         >
           <h2 className="text-homePrimary-100 text-4xl font-bold mb-4 leading-tight">
-            Revolutionizing Financial Management
+            {t("title")}
           </h2>
 
           <p className="text-gray-300 mb-6 text-lg leading-relaxed">
-            At Axia we transform accounting and electronic billing with innovative and secure solutions. We optimize business processes to drive growth and productivity for our clients in a constantly evolving financial world.
+            {t("description")}
           </p>
 
           <CustomButton 
-            text="Get Started Now" 
+            text={t("buttonText")} 
             style="bg-homePrimary hover:bg-primary text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105" 
           />
         </div>

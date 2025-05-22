@@ -1,8 +1,9 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
+import { Button } from './Button';
 import { PriceTag } from './PriceTag';
 import { FeatureItem } from './FeatureItem';
-import { Button } from './Button';
 
 interface PricingCardProps {
   title: string;
@@ -19,6 +20,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
   features,
   highlighted = false,
 }) => {
+  const t = useTranslations("home.pricing.card")
   return (
     <div
       className={`bg-black rounded-lg p-6 border flex flex-col justify-between ${
@@ -39,7 +41,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
       </div>
 
       <div className="mt-5">
-        <Button text="Get Started" primary={highlighted} />
+        <Button text={t("start")} primary={highlighted} />
       </div>
     </div>
   );

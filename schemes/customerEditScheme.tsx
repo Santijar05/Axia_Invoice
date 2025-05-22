@@ -1,26 +1,27 @@
 import { z } from "zod";
+import { useTranslations } from "next-intl";
 
-export const customertEditSchema = z.object({
+export const customertEditSchema = (t: ReturnType<typeof useTranslations>) => z.object({
     firstName: z.string()
-            .nonempty({ message: "Name is required" })
-            .min(4, {message: "Name must be at least 4 characters long"})
+            .nonempty({ message: t("errors.firstName.required") })
+            .min(4, {message: t("errors.firstName.min") })
             .max(40)
 			.refine(
 				(value) => /^[a-zA-Z]+$/.test(value ?? ""),
-				{ message: "Name cannot contain special characters or spaces or numbers" }
+				{ message: t("errors.firstName.invalid") }
 			),
 
     lastName: z.string()
-                .nonempty({ message: "Lastname is required" })
-                .min(4, {message: "Lastname must be at least 4 characters long"})
-                .max(40)
+                .nonempty({ message: t("errors.lastName.required") })
+                .min(4, {message: t("errors.lastName.min")})
+                .max(40, { message: t("errors.lastName.max") })
                 .refine(
                     (value) => /^[a-zA-Z]+$/.test(value ?? ""),
-                    { message: "Lastname cannot contain special characters or spaces or numbers" }
+                    { message: t("errors.lastName.invalid") }
                 ),
 
     email: z.string()
-			.nonempty({ message: "Email is required" })
-			.email({message: "Please enter a valid email"})
-			.max(40),
+			.nonempty({ message: t("errors.email.required") })
+			.email({message: t("errors.email.invalid") })
+			.max(40, t("errors.email.max")),
 });

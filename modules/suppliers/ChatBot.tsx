@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react';
-import { TrendingUp, PackageSearch, BadgeDollarSign, CreditCard, Truck, Star, ArrowLeft, MessageSquare } from 'lucide-react'; 
+import { 
+    TrendingUp, 
+    PackageSearch, 
+    BadgeDollarSign,
+    CreditCard, 
+    Truck, 
+    Star, 
+    ArrowLeft, 
+    MessageSquare 
+} from 'lucide-react'; 
 
+import { useAuth } from '@/context/AuthContext';
 import { ProductDAO } from '@/types/Api';
 import CustomButton from '../../components/atoms/CustomButton';
 import SearchBarUniversal from '../../components/molecules/SearchBar';
 import { findBetterSuppliers, getSectorTrends } from '@/lib/api-suppliers';
-import { useAuth } from '@/context/AuthContext';
 
 type Filters = "Mejor precio" | "Mejores condiciones de pago" | "Mejor tiempo de entrega" | "Mejor reputación";
 type Answers = {

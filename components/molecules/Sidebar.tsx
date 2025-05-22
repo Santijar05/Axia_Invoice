@@ -1,11 +1,23 @@
-import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { 
-  User, Home, Truck, ShoppingCart, ChevronDown, ChevronUp, HandCoins, ArchiveRestore, LogOut} from "lucide-react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { useTranslations, useLocale } from "next-intl";
+import React, { useState, useEffect } from "react";
+import { 
+  User, 
+  Home, 
+  Truck, 
+  ShoppingCart,
+  ChevronDown, 
+  ChevronUp, 
+  HandCoins, 
+  ArchiveRestore, 
+  LogOut,
+  BarChart2
+} from "lucide-react";
 
 import { useUserStore } from "@/store/UserStore";
+import LanguageSelector from "@/components/atoms/LanguageSelector";
 
 type MenuItem = {
   icon: React.ComponentType<{ className?: string }>;
@@ -22,6 +34,9 @@ type MenuItem = {
 type UserRole = "EMPLOYEE" | "ADMIN" | "SUPERADMIN" | null;
 
 export default function Sidebar({ isOpen }: { isOpen: boolean }) {
+  const t = useTranslations("sidebar");
+  const locale = useLocale();
+
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { role, setRole } = useUserStore();
@@ -59,33 +74,33 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
       <aside className={`bg-black min-h-[calc(100vh-64px)] flex flex-col items-center justify-center ${
         isOpen ? "w-56" : "w-14"
       }`}>
-        <div className="animate-pulse text-gray-500">Loading...</div>
+        <div className="animate-pulse text-gray-500">{t("loading")}</div>
       </aside>
     );
   }
 
-  const basePath = role === "EMPLOYEE" ? "/employee" : "/admin";
+  const basePath = role === "EMPLOYEE" ? `/${locale}/employee` : `/${locale}/admin`;
 
   const menuItems: MenuItem[] = [
     { 
       icon: Home, 
-      label: "Inicio", 
+      label: t("home"), 
       href: basePath,
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
     },
     ...(role === "ADMIN" || role === "SUPERADMIN" ? [
       { 
         icon: HandCoins, 
-        label: "Box",
+        label: t("box"),
         allowedRoles: ["ADMIN", "SUPERADMIN"],
         subOptions: [
           { 
-            label: "History Cash", 
+            label: t("historyCash"),
             href: `${basePath}/box/cash-history`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
           { 
-            label: "Manage Cash", 
+            label: t("manageCash"),
             href: `${basePath}/box/manage-cash`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
@@ -94,49 +109,56 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     ] : []),
     { 
       icon: ArchiveRestore, 
-      label: "Tienda",
+      label: t("store"),
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
-          label: "Productos", 
-          href: "/store/products",
+          label: t("products"), 
+          href: `/${locale}/store/products`,
           allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
       ],
     },
     { 
       icon: Truck, 
-      label: "Ventas",
+      label: t("sales"),
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
-          label: "Hacer ventas", 
-          href: "/sales/make-sales",
+          label: t("makeSales"),
+          href: `/${locale}/sales/make-sales`,
           allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
         },
         { 
-          label: "Ver ventas", 
-          href: "/sales/sales-invoices",
+          label: t("viewSales"),
+          href: `/${locale}/sales/sales-invoices`,
           allowedRoles: ["ADMIN", "SUPERADMIN"]
         },
       ],
     },
     { 
       icon: ShoppingCart, 
-      label: "Compras",
+      label: t("shopping"),
       allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
       subOptions: [
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [
           { 
-            label: "Make Purchase", 
-            href: "/shopping/make-purchase",
+            label: t("makePurchase"),
+            href: `/${locale}/shopping/make-purchase`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           }
         ] : []),
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [
           { 
-            label: "Supplier", 
-            href: "/shopping/suppliers",
+            label: t("viewPurchase"),
+            href: `/${locale}/shopping/view-purchases`,
+            allowedRoles: ["ADMIN", "SUPERADMIN"]
+          }
+        ] : []),
+        ...(role === "ADMIN" || role === "SUPERADMIN" ? [
+          { 
+            label: t("supplier"),
+            href: `/${locale}/shopping/suppliers`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           }
         ] : []),
@@ -145,20 +167,26 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     ...(role === "ADMIN" || role === "SUPERADMIN" ? [
       { 
         icon: User, 
-        label: "Usuarios",
+        label: t("users"),
         allowedRoles: ["ADMIN", "SUPERADMIN"],
         subOptions: [
           { 
-            label: "Clientes", 
-            href: "/users/customers",
+            label: t("customers"), 
+            href: `/${locale}/users/customers`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
           { 
-            label: "Empleados", 
-            href: "/users/employees",
+            label: t("employees"),
+            href: `/${locale}/users/employees`,
             allowedRoles: ["ADMIN", "SUPERADMIN"]
           },
         ],
+      },
+      { 
+        icon: BarChart2, 
+        label: t("dashboard"),
+        href: `/${locale}/admin/dashboard`,
+        allowedRoles: ["ADMIN", "SUPERADMIN"]
       },
     ] : []),
   ];
@@ -228,9 +256,15 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
           )}
         </div>
       ))}
+      <div className="w-full">
+        <div className={`flex items-center justify-between rounded-lg hover:bg-gray-700 transition-all cursor-pointer`}>
+          <LanguageSelector variant="sidebar" isCollapsed={!isOpen} />
+        </div>
+      </div>
+
       <div className="mt-auto p-2">
         <Link 
-          href="/login"
+          href={`/${locale}/login`}
           onClick={(e) => {
             e.preventDefault(); 
 
@@ -238,14 +272,14 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
 
             useUserStore.getState().setRole(null);
 
-            window.location.href = "/login";
+            window.location.href = `/${locale}/login`;
           }}
           className={`flex items-center gap-3 p-2 rounded-lg text-white transition-colors ${
             !isOpen ? "justify-center" : ""
           }`}
         >
-          <LogOut className="h-5 w-5 text-" />
-          {isOpen && <span className="text-gray-500">Cerrar sesión</span>}
+          <LogOut className="h-5 w-5 text-gray-500" />
+          {isOpen && <span className="text-gray-500">{t("logout")}</span>}
         </Link>
       </div>
     </aside>

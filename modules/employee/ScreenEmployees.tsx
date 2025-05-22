@@ -1,31 +1,41 @@
 'use client'
+
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-import CustomTable from "@/components/organisms/CustomTable";
-import Toolbar from "@/components/organisms/ToolBar";
-import { getListEmployees, deleteEmployees } from "@/request/users";
-import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
-import SearchBarUniversal from "@/components/molecules/SearchBar";
 import EmployeeForm from "./EmployeeForm";
-import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import EmployeeFormEdit from "./EmployeeFormEdit";
+import Toolbar from "@/components/organisms/ToolBar";
+import EmptyState from '@/components/molecules/EmptyState';
 import TableFilter from "@/components/molecules/TableFilter";
-import EmptyState from '@/components/molecules/EmptyState'; 
+import CustomTable from "@/components/organisms/CustomTable";
+import SearchBarUniversal from "@/components/molecules/SearchBar";
+import { getListEmployees, deleteEmployees } from "@/request/users";
 import EmployeeDetailModal from "./EmployeeDetail/EmployeeDetailModal";
+import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
+import { 
+    ClientDAO, 
+    CreatedInvoice, 
+    EmployeeDAO, 
+    ProductDAO, 
+    SupplierDAO 
+} from "@/types/Api";
 
 export default function ScreenEmployees() {
     const router = useRouter();
-    const [employees, setEmployees] = useState<{ [key: string]: string }[]>([]);
-    const [initialEmployees, setInitialEmployees] = useState<{ [key: string]: string }[]>([]);
+    const initialFetchDone = useRef(false);
+    const t = useTranslations("Employees");
+
+    const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+        const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [employees, setEmployees] = useState<{ [key: string]: string }[]>([]);
     const [currentEmployee, setCurrentEmployee] = useState<EmployeeDAO | null>(null);
+    const [initialEmployees, setInitialEmployees] = useState<{ [key: string]: string }[]>([]);
     const [currentSort, setCurrentSort] = useState<{field: string, direction: 'asc' | 'desc'} | null>(null);
-    const [searchTerm, setSearchTerm] = useState("");
-    const initialFetchDone = useRef(false);
     
     useEffect(() => {
         if (!initialFetchDone.current) {
@@ -52,7 +62,7 @@ export default function ScreenEmployees() {
                 }
             }
         } catch (err) {
-            console.error('Error al obtener empleados:', err);
+            console.error(t('employees.fetchError'), err);
         } finally {
             setIsLoading(false);
         }
@@ -75,7 +85,7 @@ export default function ScreenEmployees() {
         });
     };
 
-    const handleEmployeesFound = useCallback((results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+    const handleEmployeesFound = useCallback((results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] | CreatedInvoice[]) => {
         const employeeResults = results.filter((result): result is EmployeeDAO => 
             'name' in result && 'role' in result
         );
@@ -145,16 +155,21 @@ export default function ScreenEmployees() {
             fetchAllEmployees();
         })
         .catch((err) => {
-            console.error("Error al eliminar empleado:", err);
+            console.error(t('employees.deleteError'), err);
         });
     };
 
-    const tableHeaders = ["ID", "Name", "Role", "Email"];
+    const tableHeaders = [
+        { label: t("tableHeaders.id"), key: "id" },
+        { label: t("tableHeaders.name"), key: "name" },
+        { label: t("tableHeaders.role"), key: "role" },
+        { label: t("tableHeaders.email"), key: "email" },
+    ];
 
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Gestión de Empleados"
+                title={t("title")}
                 onAddNew={() => setIsAddModalOpen(true)} 
             />
             
@@ -164,7 +179,7 @@ export default function ScreenEmployees() {
                     setIsAddModalOpen(false);
                     fetchAllEmployees();
                 }} 
-                title="Agregar Nuevo Empleado"
+                title={t("addNew")}
             >
                 <EmployeeForm 
                     onSuccess={() => {
@@ -179,28 +194,28 @@ export default function ScreenEmployees() {
                     <SearchBarUniversal 
                         onResultsFound={handleEmployeesFound} 
                         showResults={false}
-                        placeholder="Buscar empleados..."
+                        placeholder={t("searchPlaceholder")}
                         searchType="employees"
                         onSearchTermChange={setSearchTerm}
                     />
                 </div>
                 <TableFilter 
-                    headers={tableHeaders} 
+                    headers={tableHeaders}
                     onSort={handleSort} 
                 />
             </div>
             
-            {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando empleados...</p>}
+            {isLoading && <p className="text-gray-500 text-sm mb-2">{t("loading")}</p>}
             
             {/* Show empty state when search has no results */}
             {searchTerm && searchTerm.length >= 2 && employees.length === 1 && employees[0].id === "no-results" ? (
                 <EmptyState
-                    message="No se encontraron empleados" 
+                    message={t("noResults")} 
                     searchTerm={searchTerm} 
                 />
             ) : (
                 <CustomTable
-                    title="Lista de Empleados"
+                    title={t("listTitle")}
                     headers={tableHeaders}
                     options={true}
                     data={employees.filter(e => e.id !== "no-results")}
@@ -216,7 +231,7 @@ export default function ScreenEmployees() {
             <CustomModalNoButton 
                 isOpen={isModalOpen} 
                 onClose={() => {setIsModalOpen(false); fetchAllEmployees();}} 
-                title="Editar Empleado"
+                title={t("edit")}
             >
                 <EmployeeFormEdit 
                     employee={currentEmployee || undefined}

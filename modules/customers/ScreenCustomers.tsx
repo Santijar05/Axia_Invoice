@@ -1,21 +1,31 @@
 'use client'
+
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations, useLocale } from "next-intl";
 
-import CustomTable from "@/components/organisms/CustomTable";
-import Toolbar from "@/components/organisms/ToolBar";
-import { ClientDAO, EmployeeDAO, ProductDAO, SupplierDAO } from "@/types/Api";
-import SearchBarUniversal from "@/components/molecules/SearchBar";
 import CustomerForm from "./CustomerForm";
-import { getListCustomers, deleteCustomers } from "@/request/users";
-import { getListClientsByName } from "@/lib/api-clients";
-import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
 import CustomerFormEdit from "./CustomerFormEdit";
+import Toolbar from "@/components/organisms/ToolBar";
+import EmptyState from '@/components/molecules/EmptyState'; 
 import TableFilter from "@/components/molecules/TableFilter";
-import EmptyState from '@/components/molecules/EmptyState'; // Import EmptyState component
+import CustomTable from "@/components/organisms/CustomTable";
+import SearchBarUniversal from "@/components/molecules/SearchBar";
+import { getListCustomers, deleteCustomers } from "@/request/users";
+import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
+import { 
+    ClientDAO, 
+    CreatedInvoice, 
+    EmployeeDAO, 
+    ProductDAO, 
+    SupplierDAO 
+} from "@/types/Api";
 
 export default function ScreenCustomers() {
     const router = useRouter();
+    const t = useTranslations("customers");
+    const locale = useLocale();
+
     const initialFetchDone = useRef(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,7 +86,7 @@ export default function ScreenCustomers() {
         });
     };
 
-    const handleClientsFound = useCallback((results: ClientDAO[] | EmployeeDAO[] | ProductDAO[] | SupplierDAO[]) => {
+    const handleClientsFound = useCallback((results: ProductDAO[] | EmployeeDAO[] | SupplierDAO[] | ClientDAO[] | CreatedInvoice[]) => {
         const clientsResults = results.filter((result): result is ClientDAO => 
             'firstName' in result && 'lastName' in result && 'identification' in result
         );
@@ -142,7 +152,7 @@ export default function ScreenCustomers() {
                 lastName: clientToView["last name"],
                 email: clientToView.email,
             });
-            router.push(`/users/customers/${clientId}`);
+            router.push(`/${locale}/users/customers/${clientId}`);
         }
     };
 
@@ -156,12 +166,18 @@ export default function ScreenCustomers() {
              });
     };
 
-    const tableHeaders = ["ID", "Identification", "First Name", "Last Name", "Email"];
+    const tableHeaders = [
+        { label: t("table.id"), key: "id"},
+        { label: t("table.identification"), key: "identification"},
+        { label: t("table.firstName"), key: "first name"},
+        { label: t("table.lastName"), key: "last name"},
+        { label: t("table.email"), key: "email"}
+    ];
 
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Gestión de Clientes"
+                title={t("title")}
                 onAddNew={() => setIsAddModalOpen(true)} 
             />
             
@@ -171,7 +187,7 @@ export default function ScreenCustomers() {
                     setIsAddModalOpen(false);
                     fetchAllClients();
                 }} 
-                title="Agregar Nuevo Cliente"
+                title={t("add")}
             >
                 <CustomerForm 
                     onSuccess={() => {
@@ -186,7 +202,7 @@ export default function ScreenCustomers() {
                     <SearchBarUniversal 
                         onResultsFound={handleClientsFound} 
                         showResults={false}
-                        placeholder="Buscar clientes..."
+                        placeholder={t("add")}
                         searchType="clients"
                         onSearchTermChange={setSearchTerm}
                     />
@@ -197,17 +213,17 @@ export default function ScreenCustomers() {
                 />
             </div>
             
-            {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando clientes...</p>}
+            {isLoading && <p className="text-gray-500 text-sm mb-2">{t("loading")}</p>}
             
             {/* Show empty state when search has no results */}
             {searchTerm && searchTerm.length >= 2 && clients.length === 1 && clients[0].id === "no-results" ? (
                 <EmptyState 
-                    message="No se encontraron clientes" 
+                    message={t("noResults")} 
                     searchTerm={searchTerm} 
                 />
             ) : (
                 <CustomTable
-                    title="Lista de Clientes"
+                    title={t("listTitle")}
                     headers={tableHeaders}
                     options={true}
                     data={clients.filter(c => c.id !== "no-results")}

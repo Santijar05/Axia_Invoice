@@ -1,16 +1,17 @@
 import { z } from "zod";
+import { useTranslations } from "next-intl";
 
-export const employeeSchema = z.object({
+export const employeeSchema = (t: ReturnType<typeof useTranslations>) => z.object({
     name: z.string()
-        .min(3, "El nombre debe tener al menos 2 caracteres")
-        .max(50, "El nombre no puede exceder 50 caracteres"),
+        .min(3, t("errors.nameMin"))
+        .max(50, t("errors.nameMax")),
     role: z.enum(["USER", "ADMIN"], {
-        required_error: "Debes seleccionar un rol",
+        required_error: t("errors.roleRequired"),
     }),
     email: z.string()
-        .email("Debe ser un email válido")
-        .max(100, "El email no puede exceder 100 caracteres"),
+        .email(t("errors.emailInvalid"))
+        .max(100, t("errors.emailMax")),
     password: z.string()
-        .min(6, "La contraseña debe tener al menos 6 caracteres")
-        .max(50, "La contraseña no puede exceder 50 caracteres"),
+            .min(6, t("errors.passwordMin"))
+            .max(50, t("errors.passwordMax")),
 });

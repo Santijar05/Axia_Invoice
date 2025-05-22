@@ -2,23 +2,24 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-import CustomTable from "@/components/organisms/CustomTable";
-import Toolbar from "@/components/organisms/ToolBar";
-import { getListSuppliers, deleteSupplier } from "@/lib/api-suppliers";
-import { SupplierDAO } from "@/types/Api";
-import SearchBarUniversal from "@/components/molecules/SearchBar";
-import SupplierForm from "./SupplierForm";
-import SupplierFormEdit from "./SupplierFormEdit";
 import CustomModalNoButton from "@/components/organisms/CustomModalNoButton";
+import { getListSuppliers, deleteSupplier } from "@/lib/api-suppliers";
+import SearchBarUniversal from "@/components/molecules/SearchBar";
+import CustomTable from "@/components/organisms/CustomTable";
 import TableFilter from "@/components/molecules/TableFilter";
 import EmptyState from '@/components/molecules/EmptyState';
 import SupplierDetail from "./SupplierDetail/SupplierDetail";
-import ChatBot from "@/modules/suppliers/ChatBot";
+import Toolbar from "@/components/organisms/ToolBar";
+import SupplierFormEdit from "./SupplierFormEdit";
+import { SupplierDAO } from "@/types/Api";
+import SupplierForm from "./SupplierForm";
 
 // Nuevo estado para controlar la visibilidad del chatbot
 export default function ScreenSuppliers() {
     const router = useRouter();
+    const t = useTranslations("supplier");
     
     const initialFetchDone = useRef(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -99,7 +100,7 @@ export default function ScreenSuppliers() {
             setSuppliers([{
                 id: "no-results",
                 nit: "",
-                name: `No se encontraron proveedores para: "${searchTerm}"`,
+                name: t("notFoundFor", { term: searchTerm }),
                 phone: "",
                 address: "",
             }]);
@@ -156,16 +157,22 @@ export default function ScreenSuppliers() {
                 fetchAllSuppliers();
             } catch (err) {
                 console.error("Error al eliminar proveedor:", err);
-                alert("No se pudo eliminar el proveedor");
+                alert(t("deleteError"));
             }
     };
 
-    const tableHeaders = ["ID", "NIT", "Name", "Phone", "Address"];
+    const tableHeaders = [
+        { label: t("id"), key: "id"},
+        { label: t("nit"), key: "nit"},
+        { label: t("name"), key: "name"},
+        { label: t("phone"), key: "phone"},
+        { label: t("address"), key: "address"}
+    ];
 
     return (
         <div className="container mx-auto">
             <Toolbar
-                title="Proveedores"
+                title={t("title")}
                 onAddNew={() => setIsAddModalOpen(true)}
             />
             
@@ -175,7 +182,7 @@ export default function ScreenSuppliers() {
                     setIsAddModalOpen(false);
                     fetchAllSuppliers();
                 }}
-                title="Nuevo Proveedor"
+                title={t("new")}
             >
                 <SupplierForm 
                     onSuccess={() => {
@@ -190,27 +197,27 @@ export default function ScreenSuppliers() {
                     <SearchBarUniversal 
                         onResultsFound={handleSuppliersFound} 
                         showResults={false}
-                        placeholder="Buscar proveedores..."
+                        placeholder={t("searchPlaceholder")}
                         searchType="suppliers"
                         onSearchTermChange={setSearchTerm}
                     />
                 </div>
                 <TableFilter 
-                    headers={tableHeaders} 
+                    headers={tableHeaders}
                     onSort={handleSort} 
                 />
             </div>
             
-            {isLoading && <p className="text-gray-500 text-sm mb-2">Cargando proveedores...</p>}
+            {isLoading && <p className="text-gray-500 text-sm mb-2">{t("loading")}</p>}
             
             {searchTerm && searchTerm.length >= 2 && suppliers.length === 1 && suppliers[0].id === "no-results" ? (
                 <EmptyState 
-                    message="No se encontraron proveedores" 
+                    message={t("noResults")} 
                     searchTerm={searchTerm} 
                 />
             ) : (
                 <CustomTable
-                    title="Lista de Proveedores"
+                    title={t("list")}
                     headers={tableHeaders}
                     options={true}
                     data={suppliers.filter(s => s.id !== "no-results")}
@@ -229,7 +236,7 @@ export default function ScreenSuppliers() {
                     setIsEditModalOpen(false); 
                     setTimeout(() => fetchAllSuppliers(), 0);
                 }}
-                title="Editar Proveedor"
+                title={t("edit")}
             >
                 <SupplierFormEdit 
                     supplier={currentSupplier || undefined}
@@ -245,8 +252,6 @@ export default function ScreenSuppliers() {
                 isOpen={isViewModalOpen}
                 onClose={() => setIsViewModalOpen(false)}
             />
-
-            <ChatBot />
         </div>
     );
 }
