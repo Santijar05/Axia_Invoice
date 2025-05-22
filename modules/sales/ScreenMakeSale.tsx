@@ -6,11 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import InvoiceModal from './InvoiceModal';
 import Input from '@/components/atoms/Input';
-<<<<<<< HEAD
-import { ProductDAO, SaleItem, Venta } from '@/types/Api';
-=======
 import { ProductDAO, SaleItem } from '@/types/Api';
->>>>>>> 1e7d804b8989f66f1ef475474988582f7e647346
 import SearchBarUniversal from '@/components/molecules/SearchBar';
 import CustomModalNoButton from '@/components/organisms/CustomModalNoButton';
 import SaleTable from "./SaleComponents/SaleTable";
@@ -18,11 +14,8 @@ import SaleSummary from "./SaleComponents/SaleSummary";
 import SaleForm from "./SaleComponents/SaleForm";
 
 export default function ScreenMakeSale() {
-<<<<<<< HEAD
-=======
   const t = useTranslations("makeSale");
 
->>>>>>> 1e7d804b8989f66f1ef475474988582f7e647346
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [tenantIdProduct, settenantIdProduct] = useState('');
@@ -149,68 +142,6 @@ export default function ScreenMakeSale() {
         </div>
 
         <div className="flex flex-row gap-6 flex-wrap mt-12">
-<<<<<<< HEAD
-        
-          <div className="flex-1 min-w-[300px] border border-gray-600 bg-transparent p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4 text-white">Añadir Items</h2>
-
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-white">Producto</label>
-                
-                <SearchBarUniversal
-                  searchType="products"
-                  onAddToCart={(item) => {
-                    const product = item as ProductDAO;  
-                    setName(product.name);
-                    setPrice(product.salePrice.toString());
-                    setStock(product.stock);
-                    setTax(product.tax);
-                    setSelectedProductId(product.id);
-                    settenantIdProduct(product.tenantId);
-                  }}
-                  
-                  showResults={true}
-                  placeholder="Buscar productos para comprar..."
-                />
-
-              </div>
-
-              <div className="flex flex-row space-x-7">
-                <div className="flex flex-col w-full">
-                <label htmlFor="cantidad" className="mb-1 text-sm font-medium text-white">
-                  Cantidad
-                </label>
-                <input
-                  id="cantidad"
-                  className="flex-1 outline-none bg-transparent text-white w-full"
-                  placeholder="Ingrese la cantidad"
-                  type="number"
-                  defaultValue={5}
-                />
-
-                </div>
-
-                <div className="flex flex-col w-full">
-                  <label className="mb-1 text-sm font-medium text-white">Precio sin impuesto</label>
-                  <Input
-                    type="number"
-                    value={price}
-                    disabled={true}
-                    placeholder="Ingrese el precio"
-                  />
-                </div>
-              </div>
-
-              <button
-                onClick={handleAddItem}
-                className="px-6 py-2 bg-homePrimary text-white rounded-md hover:bg-homePrimary-400 disabled:bg-gray-500 transition-colors w-full"
-              >
-                Añadir producto
-              </button>
-            </div>
-          </div>
-=======
           <SaleForm
             quantity={quantity}
             price={price}
@@ -224,7 +155,6 @@ export default function ScreenMakeSale() {
             setTenantIdProduct={settenantIdProduct}
             handleAddItem={handleAddItem}
           />
->>>>>>> 1e7d804b8989f66f1ef475474988582f7e647346
         </div>
 
         <div className="mt-6 border border-gray-600 bg-transparent shadow-md rounded-lg p-6 w-full text-white min-h-[600px] max-h-[600px] flex flex-col">
@@ -234,29 +164,6 @@ export default function ScreenMakeSale() {
             formatCurrency={formatCurrency}
           />
 
-<<<<<<< HEAD
-          <div className="pt-4 space-y-2 text-right">
-            <div className="flex justify-between">
-              <span className="font-medium">Subtotal:</span>
-              <span>{formatCurrency(calculateSubtotal())}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">Total Impuestos:</span>
-              <span>{formatCurrency(calculateTaxTotal())}</span>
-            </div>
-            <div className="flex justify-between text-lg font-bold mt-2">
-              <span>Total a pagar:</span>
-              <span>{formatCurrency(calculateTotal())}</span>
-            </div>
-
-            <button
-              onClick={handleCompleteSale}
-              className="w-full px-6 py-3 mt-4 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-500 transition-colors text-lg font-medium"
-            >
-              Finalizar venta
-            </button>
-          </div>
-=======
           <SaleSummary
             subtotal={calculateSubtotal()}
             taxTotal={calculateTaxTotal()}
@@ -265,7 +172,6 @@ export default function ScreenMakeSale() {
             disabled={items.length === 0}
             formatCurrency={formatCurrency}
           />
->>>>>>> 1e7d804b8989f66f1ef475474988582f7e647346
         </div>
       </div>
 

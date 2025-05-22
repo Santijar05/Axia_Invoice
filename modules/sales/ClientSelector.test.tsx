@@ -70,4 +70,5 @@ describe('ClientSelector', () => {
     
     expect(await screen.findByText('No se encontraron clientes')).toBeInTheDocument();
   });
+
 });

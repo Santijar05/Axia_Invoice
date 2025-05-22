@@ -11,12 +11,10 @@ import { employeeSchema } from "@/schemes/employeeScheme";
 import CustomButton from "@/components/atoms/CustomButton";
 
 type EmployeeFormData = {
-    tenantId: string;
     name: string; 
     email: string; 
     password: string;
-    role: string;
-    avatar: string; 
+    role: "USER" | "ADMIN";
 };
 
 interface EmployeeFormProps {

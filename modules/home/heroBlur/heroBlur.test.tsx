@@ -56,8 +56,8 @@ describe('HeroBlur Component', () => {
 
   it('renderiza el título y la descripción correctamente', () => {
     render(<HeroBlur />);
-    expect(screen.getByText(/Axia Invoice Simplifica tu facturación y contabilidad/i)).toBeInTheDocument();
-    expect(screen.getByText(/Emite facturas electrónicas, gestiona tus cobros y lleva tu contabilidad/i)).toBeInTheDocument();
+    expect(screen.getByText(/mocked-heroBlur.headline/i)).toBeInTheDocument();
+    expect(screen.getByText(/mocked-heroBlur.subheadline/i)).toBeInTheDocument();
   });
 
   it('renderiza las cuatro tarjetas de características', () => {
@@ -71,7 +71,7 @@ describe('HeroBlur Component', () => {
     act(() => {
       observerCallback?.([{ isIntersecting: true }] as IntersectionObserverEntry[]);
     });
-    const title = screen.getByText(/Axia Invoice Simplifica tu facturación y contabilidad/i);
+    const title = screen.getByText(/mocked-heroBlur.headline/i);
     expect(title).toHaveClass('opacity-100', 'translate-y-0');
   });
 

@@ -5,6 +5,7 @@ import '@testing-library/jest-dom';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(() => '/'),
 }));
 
 jest.mock('next/image', () => ({
@@ -34,17 +35,17 @@ describe('Navbar Component', () => {
     render(<Navbar />);
     
     expect(screen.getByAltText('Axia logo')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Inicio/i })).toHaveAttribute('href', '/');
-    expect(screen.getByText('Sobre Nosotros')).toHaveAttribute('href', '/aboutus');
+    expect(screen.getByRole('link', { name: /Inicio/i })).toHaveAttribute('href', '/en');
+    expect(screen.getByText('mocked-aboutus')).toHaveAttribute('href', '/en/aboutus');
   });
 
   it('el botón "Plataforma" ejecuta navigation.push', () => {
     render(<Navbar />);
-    const button = screen.getByText('Plataforma');
+    const button = screen.getByText('mocked-placeholderPlatform');
     
     fireEvent.click(button);
     expect(mockPush).toHaveBeenCalledTimes(1);
-    expect(mockPush).toHaveBeenCalledWith('/login');
+    expect(mockPush).toHaveBeenCalledWith('/en/login');
   });
 
   it('aplica clases Tailwind correctamente', () => {
@@ -62,5 +63,12 @@ describe('Navbar Component', () => {
     
     expect(mobileMenu.parentElement).toHaveClass('hidden');
     expect(mobileMenu.parentElement).toHaveClass('md:flex');
+  });
+
+  it('el botón "Plataforma" ejecuta navigation.push', () => {
+    render(<Navbar />);
+    const button = screen.getByText('mocked-placeholderPlatform');
+    fireEvent.click(button);
+    expect(mockPush).toHaveBeenCalled();
   });
 });

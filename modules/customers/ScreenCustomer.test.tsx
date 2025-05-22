@@ -133,7 +133,7 @@ jest.mock('@/components/molecules/SearchBar', () => {
 
 jest.mock('@/components/molecules/EmptyState', () => {
   return function MockEmptyState({ message }: any) {
-    return <div data-testid="empty-state">{message}</div>;
+    return <div data-testid="empty-state">{message || 'No se encontraron clientes'}</div>;
   };
 });
 
@@ -212,7 +212,7 @@ describe('ScreenCustomers', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('empty-state')).toBeInTheDocument();
-      expect(screen.getByTestId('empty-state')).toHaveTextContent(/No se encontraron clientes/i);
+      expect(screen.getByTestId('empty-state')).toHaveTextContent(/mocked-noResults/i);
     });
   });
 
@@ -226,7 +226,7 @@ describe('ScreenCustomers', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('modal')).toBeInTheDocument();
-      expect(screen.getByTestId('modal-title')).toHaveTextContent(/Agregar Nuevo Cliente/i);
+      expect(screen.getByTestId('modal-title')).toHaveTextContent(/mocked-add/i);
     });
   });
 
