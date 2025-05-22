@@ -31,7 +31,7 @@ type MenuItem = {
   allowedRoles?: string[];
 };
 
-type UserRole = "EMPLOYEE" | "ADMIN" | "SUPERADMIN" | null;
+type UserRole = "USER" | "ADMIN" | "SUPERADMIN" | null;
 
 export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   const t = useTranslations("sidebar");
@@ -79,14 +79,14 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     );
   }
 
-  const basePath = role === "EMPLOYEE" ? `/${locale}/employee` : `/${locale}/admin`;
+  const basePath = role === "USER" ? `/${locale}/employee` : `/${locale}/admin`;
 
   const menuItems: MenuItem[] = [
     { 
       icon: Home, 
       label: t("home"), 
       href: basePath,
-      allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
+      allowedRoles: ["USER", "ADMIN", "SUPERADMIN"]
     },
     ...(role === "ADMIN" || role === "SUPERADMIN" ? [
       { 
@@ -110,24 +110,24 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     { 
       icon: ArchiveRestore, 
       label: t("store"),
-      allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
+      allowedRoles: ["USER", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
           label: t("products"), 
           href: `/${locale}/store/products`,
-          allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
+          allowedRoles: ["USER", "ADMIN", "SUPERADMIN"]
         },
       ],
     },
     { 
       icon: Truck, 
       label: t("sales"),
-      allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
+      allowedRoles: ["USER", "ADMIN", "SUPERADMIN"],
       subOptions: [
         { 
           label: t("makeSales"),
           href: `/${locale}/sales/make-sales`,
-          allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"]
+          allowedRoles: ["USER", "ADMIN", "SUPERADMIN"]
         },
         { 
           label: t("viewSales"),
@@ -139,7 +139,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
     { 
       icon: ShoppingCart, 
       label: t("shopping"),
-      allowedRoles: ["EMPLOYEE", "ADMIN", "SUPERADMIN"],
+      allowedRoles: ["USER", "ADMIN", "SUPERADMIN"],
       subOptions: [
         ...(role === "ADMIN" || role === "SUPERADMIN" ? [
           { 
