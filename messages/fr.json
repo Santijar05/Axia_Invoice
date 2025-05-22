@@ -98,6 +98,7 @@
       "employees": "Éditer l'employé",
       "suppliers": "Éditer le fournisseur",
       "invoices": "Éditer la facture",
+      "purchase" : "Modifier l'achat",
       "default": "Éditer"
     },
     "view": {
@@ -106,6 +107,7 @@
       "employees": "Voir l'employé",
       "suppliers": "Voir le fournisseur",
       "invoices": "Voir la facture",
+      "purchase": "Voir l'achat",
       "default": "Voir"
     },
     "delete": {
@@ -114,6 +116,7 @@
       "employees": "Supprimer l'employé",
       "suppliers": "Supprimer le fournisseur",
       "invoices": "Supprimer la facture",
+      "purchase": "Supprimer l'achat",
       "default": "Supprimer"
     },
     "options": "Options",
@@ -293,12 +296,17 @@
     "total": "Total",
     "clearCart": "Vider le Panier",
 
+    "purchaseDate": "Date d'achat",
+
     "supplierLabel": "Fournisseur",
     "supplierPlaceholder": "Rechercher des fournisseurs...",
     "confirmPurchase": "Confirmer l'achat",
     "supplier": "Fournisseur",
     "noSupplier": "Sans fournisseur",
-    "edit": "Modifier le produit"
+    "edit": "Modifier le produit",
+    "loading": "Chargement",
+    "editPurchaseTitle": "Modifier l'achat",
+    "saveChanges": "Enregistrer"
   },
 
   "supplier": {

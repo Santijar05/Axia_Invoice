@@ -98,6 +98,7 @@
       "employees": "Editar empleado",
       "suppliers": "Editar proveedor",
       "invoices": "Editar factura",
+      "purchase": "Editar compra",
       "default": "Editar"
     },
     "view": {
@@ -106,6 +107,7 @@
       "employees": "Ver empleado",
       "suppliers": "Ver proveedor",
       "invoices": "Ver factura",
+      "purchase": "Ver compra",
       "default": "Ver"
     },
     "delete": {
@@ -114,6 +116,7 @@
       "employees": "Eliminar empleado",
       "suppliers": "Eliminar proveedor",
       "invoices": "Eliminar factura",
+      "purchase": "Eliminar compra",
       "default": "Eliminar"
     },
     "options": "Opciones",
@@ -293,12 +296,17 @@
     "total": "Total",
     "clearCart": "Vaciar Carrito",
 
+    "purchaseDate": "Fecha de la compra",
+
     "supplierLabel": "Proveedor",
     "supplierPlaceholder": "Buscar proveedores...",
     "confirmPurchase": "Confirmar compra",
     "supplier": "Proveedor",
     "noSupplier": "Sin proveedor",
-    "edit": "Editar Producto"
+    "edit": "Editar Producto",
+    "loading": "Cargando",
+    "editPurchaseTitle": "Editar compra",
+    "saveChanges": "Guardar"
   },
 
   "supplier": {

@@ -97,7 +97,7 @@ const LoginForm: React.FC = () => {
 
         <div className="w-full">
           <CustomButton 
-            text={loading ? t("loading") : t("login")}
+            text={loading ? t("loading") : t("loginButton")}
             style="w-full text-white bg-homePrimary"
             typeButton='submit'
             disabled={loading}

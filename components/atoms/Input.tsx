@@ -23,9 +23,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             type={type === "password" ? (showPassword ? "text" : "password") : type}
             placeholder={placeholder}
-            className={`flex-1 outline-none bg-transparent text-white w-full ${
+
+            className={`flex-1 outline-none text-white w-full ${
               disable ? "text-gray-500" : ""
-            }`}
+            } ${type === "date" ? "appearance-auto bg-gray-500" : "bg-transparent appearance-none"}`}
+            
             disabled={disable}
             {...rest}
           />

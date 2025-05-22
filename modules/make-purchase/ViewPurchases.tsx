@@ -141,7 +141,7 @@ export default function ViewPurchases() {
         <div className="container mx-auto">
             <Toolbar
                 title={t("title")}
-                onAddNew={() => router.push("/purchases/create")}
+                invoice={true}
             />
 
             <div className="flex justify-between items-center mb-4 mt-4">
@@ -173,10 +173,14 @@ export default function ViewPurchases() {
                     headers={tableHeaders}
                     options={true}
                     data={invoices.filter(i => i.id !== "no-results")}
-                    contextType="invoices"
+                    contextType="purchase"
                     customActions={{
                         view: handleViewInvoice,
                         delete: handleDeleteInvoice,
+                        edit: (invoiceId: string) => {
+                            console.log("hola desde view", invoiceId)
+                            router.push(`/${locale}/shopping/edit-purchase/${invoiceId}`);
+                        }
                     }}
                 />
             )}

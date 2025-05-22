@@ -19,7 +19,7 @@ interface CustomTableProps {
   options?: boolean;
   data?: { [key: string]: string }[];
   onRowClick?: (id: string) => void;
-  contextType?: 'clients' | 'employees' | 'products' | 'suppliers' | 'invoices';
+  contextType?: 'clients' | 'employees' | 'products' | 'suppliers' | 'invoices' | 'purchase';
   customActions?: {
     edit?: (id: string) => void;
     view?: (id: string) => void;

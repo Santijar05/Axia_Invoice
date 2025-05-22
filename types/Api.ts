@@ -4,11 +4,12 @@ export interface UserDataLogin {
 }
 
 export type Compra = {
-    tenantId: string;
-    supplierId: string;
-    totalPrice: number;
-    electronicBill?: boolean;
-    products: SaleItemForAPI[];
+  date?: string;
+  tenantId: string;
+  supplierId: string;
+  totalPrice: number;
+  electronicBill?: boolean;
+  products: SaleItemForAPI[];
 };
 
 export interface Purchase {
@@ -36,8 +37,8 @@ export type CreatedPurchase = {
 };
 
 export interface SaleProduct {
-    productId: string;
-    quantity: number;
+  productId: string;
+  quantity: number;
 }
 
 export interface CreatedInvoice {
@@ -194,9 +195,10 @@ export interface ProductFormProps {
 }
 
 export interface SaleItemForAPI {
-    tenantId: string;
-    productId: string;
-    quantity: number;
+  tenantId: string;
+  productId: string;
+  quantity: number;
+  product?: ProductDAO;
 }
 
 // Interfaces de Analytics

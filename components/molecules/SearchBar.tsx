@@ -161,9 +161,9 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
 
       {showResultsInternal && (
         <div className="mt-2">
-          {isLoading && <p className="text-gray-500 text-sm">{t("searchBar.searching")}</p>}
+          {isLoading && <p className="text-gray-500 text-sm">{t("searching")}</p>}
           
-          {error && <p className="text-yellow-600 text-sm">{t("searchBar.error")}</p>}
+          {error && <p className="text-yellow-600 text-sm">{t("error")}</p>}
 
           {searchTerm && results.length > 0 ? (
             <ul className="bg-black border border-gray-300 rounded-md shadow-sm max-h-60 overflow-auto">
@@ -232,7 +232,7 @@ const SearchBarUniversal: React.FC<SearchBarUniversalProps> = ({
             </ul>
           ) : (
             searchTerm && !isLoading && !error && 
-            <p className="text-gray-500 text-sm">{t("searchBar.noResults")}</p>
+            <p className="text-gray-500 text-sm">{t("noResults")}</p>
           )}
         </div>
       )}

@@ -98,6 +98,7 @@
       "employees": "Edit employee",
       "suppliers": "Edit supplier",
       "invoices": "Edit invoice",
+      "purchase": "Edit purchase",
       "default": "Edit"
     },
     "view": {
@@ -106,6 +107,7 @@
       "employees": "View employee",
       "suppliers": "View supplier",
       "invoices": "View invoice",
+      "purchase": "View purchase",
       "default": "View"
     },
     "delete": {
@@ -114,6 +116,7 @@
       "employees": "Delete employee",
       "suppliers": "Delete supplier",
       "invoices": "Delete invoice",
+      "purchase": "Delete purchase",
       "default": "Delete"
     },
     "options": "Options",
@@ -286,12 +289,17 @@
     "total": "Total",
     "clearCart": "Clear Cart",
 
+    "purchaseDate": "Purchase date",
+
     "supplierLabel": "Supplier",
     "supplierPlaceholder": "Search suppliers...",
     "confirmPurchase": "Confirm purchase",
     "supplier": "Supplier",
     "noSupplier": "No supplier",
-    "edit": "Edit Product"
+    "edit": "Edit Product",
+    "loading": "Loading",
+    "editPurchaseTitle": "Edit Purchase",
+    "saveChanges": "Save"
   },
 
   "supplier": {

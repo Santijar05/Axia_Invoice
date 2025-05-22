@@ -97,3 +97,34 @@ export const crearCompra = async (compra: Compra): Promise<CreatedPurchase> => {
 
     return facturaRes;
 };
+
+export const getPurchaseById = async (id: string): Promise<Compra> => {
+  let url = `${envVariables.API_URL}/purchase-invoices/${id}`;
+        
+  return fetchWithCredentials<Compra>(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export const actualizarCompra = async (id: string, compra: Compra): Promise<void> => {
+  const urlCompra = `${envVariables.API_URL}/purchase-invoices/${id}`;
+
+  const payload = {
+    supplierId: compra.supplierId,
+    date: compra.date,
+    totalPrice: compra.totalPrice,
+    products: compra.products.map((p) => ({
+      productId: p.productId,
+      quantity: p.quantity,
+    })),
+  };
+
+  await fetchWithCredentials<void>(urlCompra, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+};
