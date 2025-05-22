@@ -253,6 +253,8 @@ export interface DashboardMetricsData {
   };
   productsTotal: number;
   clientsTotal: number;
+  supplierTotal: number;  
+  pendingOrders: number;  
 }
 
 export interface ProfitabilityMetricsData {

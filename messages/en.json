@@ -772,14 +772,17 @@
   },
 
   "metrics": {
-    "purchasesOfMonth": "Purchases of the Month",
-    "salesOfDay": "Sales of the Day",
-    "productRotation": "Product Rotation",
-    "service": "Service",
+    "amount": "Amount",
+    "financialComparison": "Sales vs Purchases",
+    "entityDistribution": "Business Entity Distribution",
+    "totalSales": "Total Sales",
+    "totalPurchases": "Total Purchases",
     "suppliers": "Suppliers",
     "customers": "Customers",
-    "bestKnown30Days": "Best Known in 30 Days",
-    "pendingOrders": "Pending Orders"
+    "pendingOrders": "Pending Orders",
+    "sales": "Sales",
+    "purchases": "Purchases",
+    "count": "Count"
   },
 
   "login": {
@@ -948,6 +951,11 @@
       "discord": "Discord",
       "github": "Github"
     },
+    "brand": {
+      "name": "Axia Invoice",
+      "description": "Axia Invoice is a company dedicated to providing innovative solutions in electronic invoicing and accounting management. We are committed to simplifying the financial processes of our clients, offering tools that drive growth and productivity.",
+      "logoAlt": "Axia Invoice Logo"
+    },
     "brandsection1": "Innovating business management: your ally",
     "brandsection2": "in billing, inventory, and data analysis",
     "copyrightText": "All Rights Reserved by Juan Campos Santi Jime."
@@ -1082,6 +1090,7 @@
       "noData": "No profitability data available"
     }
   },
+  
 
   "searchBar": {
     "searching": "Searching...",

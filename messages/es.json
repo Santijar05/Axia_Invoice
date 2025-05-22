@@ -811,14 +811,17 @@
   },
 
   "metrics": {
-    "purchasesOfMonth": "Compras del Mes",
-    "salesOfDay": "Ventas del Día",
-    "productRotation": "Rotación de Producto",
-    "service": "Servicio",
+    "amount": "Cantidad",
+    "financialComparison": "Ventas vs Compras",
+    "entityDistribution": "Distribución de Entidades",
+    "totalSales": "Total de Ventas",
+    "totalPurchases": "Total de Compras",
     "suppliers": "Proveedores",
     "customers": "Clientes",
-    "bestKnown30Days": "Más Conocido en 30 Días",
-    "pendingOrders": "Órdenes Pendientes"
+    "pendingOrders": "Órdenes Pendientes",
+    "sales": "Ventas",
+    "purchases": "Compras",
+    "count": "Cantidad"
   },
 
   "login": {
@@ -986,6 +989,11 @@
       "twitter": "Twitter",
       "discord": "Discord",
       "github": "Github"
+    },
+    "brand": {
+      "name": "Axia Invoice",
+      "description": "Axia Invoice es una plataforma de gestión empresarial que simplifica la facturación, el inventario y el análisis de datos. Con herramientas intuitivas y potentes, Axia Invoice ayuda a las empresas a optimizar sus procesos y tomar decisiones informadas.",
+      "logoAlt": "Logo de Axia Invoice"
     },
     "brandsection1": "Innovando la gestión empresarial: tu aliado",
     "brandsection2": "en facturación, inventario y análisis de datos.",

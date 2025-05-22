@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useTranslations } from "next-intl";
 
-import MetricCards from "@/components/molecules/MetricCard"
+import MetricCharts from "@/components/molecules/MetricCharts"
 import CustomTable from "@/components/organisms/CustomTable"
 import { getListproducts } from "@/lib/api-products";
 import { ProductDAO } from "@/types/Api";
@@ -68,7 +68,7 @@ export default function DashboardPage() {
   return (
     <div className="p-4">
 
-      <MetricCards />
+      <MetricCharts />
       <div className="pt-10">
 
         <CustomTable 
