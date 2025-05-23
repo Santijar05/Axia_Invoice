@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from './Button';
 import { PriceTag } from './PriceTag';
 import { FeatureItem } from './FeatureItem';
+import Link from 'next/link';
 
 interface PricingCardProps {
   title: string;
@@ -41,7 +42,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
       </div>
 
       <div className="mt-5">
-        <Button text={t("start")} primary={highlighted} />
+        <Link href={'/es/contactus'}><Button text={t("start")} primary={highlighted} /></Link>
       </div>
     </div>
   );

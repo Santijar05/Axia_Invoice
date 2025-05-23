@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 import CustomButton from "@/components/atoms/CustomButton";
+import Link from "next/link";
 
 export default function ContentHero() {
   const t = useTranslations("home.contentHero");
@@ -68,10 +69,12 @@ export default function ContentHero() {
             {t("description")}
           </p>
 
-          <CustomButton 
-            text={t("buttonText")} 
-            style="bg-homePrimary hover:bg-primary text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105" 
-          />
+          <Link href={'/es/contactus'}>
+            <CustomButton 
+              text={t("buttonText")} 
+              style="bg-homePrimary hover:bg-primary text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105" 
+            />
+          </Link>
         </div>
 
         <div
