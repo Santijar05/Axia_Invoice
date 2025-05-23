@@ -38,15 +38,11 @@ export default function Hero() {
                     </p>
                     
                     <div className="mt-6 space-x-4 transition-opacity duration-1000 ease-in-out delay-500">
-                        <Link href={"/register"}> 
+                        <Link href={"/es/contactus"}> 
                             <button className="bg-homePrimary px-6 py-2 rounded-lg text-white font-semibold">
                                 {t("startButton")}
                             </button>
                         </Link>
-
-                        <button className="border border-homePrimary px-6 py-2 rounded-lg text-homePrimary font-semibold">
-                            {t("learnMoreButton")}
-                        </button>
                     </div>
                 </div>
 

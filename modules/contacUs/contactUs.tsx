@@ -1,7 +1,14 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
 
 export default function ContactUs() {
   const t = useTranslations('contactUs');
+
+  const onsubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert('Información enviada');
+  };
 
   return (
     <section
@@ -16,7 +23,7 @@ export default function ContactUs() {
           {t('description')}
         </p>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={onsubmit}>
           <div>
             <input
               type="text"
