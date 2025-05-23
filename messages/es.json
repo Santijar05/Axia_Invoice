@@ -544,7 +544,8 @@
     "units": "unidades",
     "purchasePrice": "Precio de compra",
     "salePrice": "Precio de venta",
-    "margin": "Margen"
+    "margin": "Margen",
+    "close": "Cerrar"
   },
 
   "toolbar": {
@@ -1097,6 +1098,7 @@
       "lowStockAlert": "Productos con Stock Crítico",
       "noData": "No hay datos de inventario disponibles"
     },
+
     "customers": {
       "title": "Análisis de Clientes",
       "totalCustomers": "Total de Clientes",
@@ -1111,6 +1113,7 @@
       },
       "noData": "No hay datos de clientes disponibles"
     },
+    
     "profitability": {
       "title": "Análisis de Rentabilidad",
       "grossProfit": "Beneficio Bruto",

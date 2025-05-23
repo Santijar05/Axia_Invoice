@@ -544,7 +544,8 @@
     "units": "unités",
     "purchasePrice": "Prix d'achat",
     "salePrice": "Prix de vente",
-    "margin": "Marge"
+    "margin": "Marge",
+    "close": "Fermer"
   },
 
   "toolbar": {

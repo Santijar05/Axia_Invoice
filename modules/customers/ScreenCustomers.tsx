@@ -242,7 +242,7 @@ export default function ScreenCustomers() {
                     setIsModalOpen(false); 
                     setTimeout(() => fetchAllClients(), 0);
                 }}
-                title="Editar Cliente"
+                title={t("edit")}
             >
                 <CustomerFormEdit 
                     client={currentClient ? {
