@@ -107,7 +107,7 @@ const LoginForm: React.FC = () => {
 
       <div className="w-full items-center pl-3 pr-3">
         <div className="flex justify-between w-full text-sm text-white mt-2">
-          <Link href="/register">{t("forgotPassword")}</Link>
+          <p>{t("forgotPassword")}</p>
         </div>
 
         <div className="relative flex items-center w-full my-4">
